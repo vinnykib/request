@@ -1,0 +1,10 @@
+{
+    "name": "vinny/request",
+    "description": "Request wordpress plugin",
+    "type": "project",
+    "license": "GPL",
+    "require": {},
+    "autoload": {
+        "psr-4": {"Includes\\":"./includes"}
+    }
+}
