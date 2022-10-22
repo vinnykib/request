@@ -1,0 +1,98 @@
+.rqt-container {
+    width: calc(100% - 60px);
+    min-width: 1000px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 5%), 0 8px 8px rgb(0 0 0 / 5%),
+      0 32px 32px rgb(0 0 0 / 5%), 0 64px 64px rgb(0 0 0 / 5%);
+    margin: 40px 40px 40px 20px;
+  }
+  .rqt-table {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-collapse: collapse;
+  }
+  .rqt-table tr:nth-child(even) {
+    background-color: #f4f3f3;
+  }
+  
+  .rqt-table tr:hover {
+    background-color: #ddd;
+  }
+  
+  .rqt-table th {
+    background-color: #2bb2bb;
+    color: white;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .rqt-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+  }
+  .page-item .page-link {
+    background-color: #2bb2bb;
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 5px;
+  }
+  .page-item {
+    display: inline-block;
+  }
+  
+  .rqt-panel-head {
+    padding: 20px 0;
+    background-color: #2bb2bb;
+    color: white;
+  }
+  .rqt-panel-head h3 {
+    margin-left: 20px;
+    font-size: 28px;
+    color: white;
+  }
+  .rqt-panel-body {
+    margin: 5px;
+  }
+  .rqt-export-btn {
+    cursor: pointer;
+    float: right;
+    margin: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00aa5b;
+    color: white;
+  }
+  .filter-export-btn {
+    cursor: pointer;
+    margin: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2bb2bb;
+    color: white;
+  }
+  .no-rqt h3 {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  #disable-sms input {
+    margin: auto;
+  }
+  #disable-sms input[type="text"] {
+    width: 30em;
+  }
+  
+  .export-container {
+    margin: 40px;
+  }
+  .export-container select {
+    width: 180px;
+  }
+  
