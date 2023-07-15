@@ -57,11 +57,27 @@ class AdminPages extends Main
 		$this->subpages = array(
 			array(
 				'parent_slug' => 'requests', 
+				'page_title' => 'Add request', 
+				'menu_title' => 'Add request', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'add-request', 
+				'callback' => array( $this->callbacks,'addRequest' )
+			),
+			array(
+				'parent_slug' => 'requests', 
 				'page_title' => 'Services', 
 				'menu_title' => 'Services', 
 				'capability' => 'manage_options', 
-				'menu_slug' => 'services', 
-				'callback' => array( $this->callbacks,'adminServices' )
+				'menu_slug' => 'edit-tags.php?taxonomy=service_taxonomy&post_type=service_cpt', 
+				//'callback' => array( $this->callbacks,'adminServices' )
+			),
+			array(
+				'parent_slug' => 'requests', 
+				'page_title' => 'Customers', 
+				'menu_title' => 'Customers', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'users.php?role=request_customer', 
+				//'callback' => array( $this->callbacks,'adminCustomers' )
 			),
 			array(
 				'parent_slug' => 'requests', 

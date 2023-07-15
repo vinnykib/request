@@ -13,7 +13,7 @@
             </div>
       <thead>
       <tr>
-          <th>Person</th>
+          <th>Name</th>
           <th>Date</th>
           <th>Time</th>
           <th>Status</th>

@@ -95,4 +95,203 @@
   .export-container select {
     width: 180px;
   }
+
+  #calendar {
+    width: 300px;
+    font-family: Arial, sans-serif;
+  }
   
+  #calendar table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #calendar th,
+  #calendar td {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
+  #calendar th {
+    background-color: #f2f2f2;
+  }
+  
+  #calendar td:hover {
+    background-color: #e6e6e6;
+  }
+  
+  .weekdays-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .week-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .calendar-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .inactive-date {
+    color: #ccc;
+    cursor: default;
+  }
+  
+  #time {
+    margin-top: 10px;
+  }
+  
+  .time-display {
+    margin-bottom: 10px;
+  }
+
+  
+  .weekdays-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .week-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .calendar-date {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .calendar-date.active-date {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .inactive-date {
+    color: #ccc;
+    cursor: default;
+  }
+  
+  #time {
+    margin-top: 10px;
+  }
+  
+  .time-display {
+    margin-bottom: 10px;
+  }
+  
+
+
+  /*Calendar CSS*/
+
+.wrapper{
+  width: 450px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+.wrapper .header{
+  display: flex;
+  align-items: center;
+  padding: 5px 30px;
+  justify-content: space-between;
+}
+header .header span{
+  height: 38px;
+  width: 38px;
+  margin: 0 1px;
+  cursor: pointer;
+  color: #878787;
+  text-align: center;
+  line-height: 38px;
+  font-size: 1.9rem;
+  user-select: none;
+  border-radius: 50%;
+}
+.header span:last-child{
+  margin-right: -10px;
+}
+header .header span:hover{
+  background: #f2f2f2;
+}
+header .current-date{
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+.calendar{
+  padding: 20px;
+}
+.calendar ul{
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  text-align: center;
+}
+.calendar .days{
+  margin-bottom: 20px;
+}
+.calendar li{
+  color: #333;
+  width: calc(100% / 7);
+  font-size: 1.07rem;
+}
+.calendar .weeks li{
+  font-weight: 500;
+  cursor: default;
+}
+.calendar .days li{
+  z-index: 1;
+  cursor: pointer;
+  position: relative;
+  margin-top: 30px;
+}
+.days li.inactive{
+  color: #aaa;
+}
+.days li.active{
+  color: #fff;
+}
+.days li::before{
+  position: absolute;
+  content: "";
+  left: 50%;
+  top: 50%;
+  height: 40px;
+  width: 40px;
+  z-index: -1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.days li.active::before{
+  background: #2bb2bb;
+}
+.days li:not(.active):hover::before{
+  background: #f2f2f2;
+}
+
+.timepicker{
+  display: none;
+}
+.show-time{
+  display: block;
+}
