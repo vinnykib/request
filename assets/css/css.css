@@ -34,7 +34,11 @@
     border-bottom: 1px solid #ddd;
     padding: 8px;
   }
-  .page-item .page-link {
+
+  .pagination{
+    text-align: center;
+  }
+  .page-item a {
     background-color: #2bb2bb;
     color: white;
     text-decoration: none;
@@ -268,7 +272,7 @@ header .current-date{
 .days li.inactive{
   color: #aaa;
 }
-.days li.active{
+.days li.today{
   color: #fff;
 }
 .days li::before{
@@ -282,16 +286,37 @@ header .current-date{
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
-.days li.active::before{
+.days li.today::before{
   background: #2bb2bb;
 }
-.days li:not(.active):hover::before{
+.days li:not(.today):hover::before{
   background: #f2f2f2;
 }
+.days li.selected:hover::before{
+  background: #52bb85;
+}
+.days li.selected::before{
+  background: #55a57c;
+}
 
-.timepicker{
+.settings-tabs-list li {
+  display: inline;
+  margin: 5px;
+}
+
+.settings-tabs-list li a{
+  text-decoration: none;
+}
+.settings-tabs-list li.active{
+  background: #e7e7e7;
+}
+
+.settings-tab-content .tab-pane {
   display: none;
 }
-.show-time{
+
+.settings-tab-content .tab-pane.active {
   display: block;
+  background: #e7e7e7;
+  box-shadow: 0 1px 3px -1px rgb(24 23 23 / 30%);
 }

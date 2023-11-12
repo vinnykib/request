@@ -68,16 +68,16 @@ class AdminPages extends Main
 				'page_title' => 'Services', 
 				'menu_title' => 'Services', 
 				'capability' => 'manage_options', 
-				'menu_slug' => 'edit-tags.php?taxonomy=service_taxonomy&post_type=service_cpt', 
-				//'callback' => array( $this->callbacks,'adminServices' )
+				'menu_slug' => 'edit-tags.php?taxonomy=service_taxonomy'
+				// 'callback' => array( $this->callbacks,'adminServices' )
 			),
 			array(
 				'parent_slug' => 'requests', 
 				'page_title' => 'Customers', 
 				'menu_title' => 'Customers', 
 				'capability' => 'manage_options', 
-				'menu_slug' => 'users.php?role=request_customer', 
-				//'callback' => array( $this->callbacks,'adminCustomers' )
+				'menu_slug' => 'users.php?role=request_customer'
+				// 'callback' => array( $this->callbacks,'adminCustomers' )
 			),
 			array(
 				'parent_slug' => 'requests', 

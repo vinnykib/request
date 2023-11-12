@@ -62,7 +62,7 @@ class AdminMenu {
 		}
 
 		foreach ( $this->admin_subpages as $page ) {
-			add_submenu_page( $page['parent_slug'], $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'] );
+			add_submenu_page( $page['parent_slug'], $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], isset($page['callback']) ? $page['callback'] : null );
 		}
 	}
 }
