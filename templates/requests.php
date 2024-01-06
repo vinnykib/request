@@ -15,7 +15,7 @@
 
        $args = array(
         'post_type' => 'service_cpt',
-        'posts_per_page' => 5,
+        'posts_per_page' => 10,
         'paged' => $paged
     );
 
@@ -35,9 +35,11 @@
       <thead>
       <tr>
           <th>Name</th>
+          <th>Email</th>
           <th>Date</th>
           <th>Time</th>
           <th>Status</th>
+          <th>Actions</th>
       </tr>
       </thead>
 
@@ -53,21 +55,39 @@
         while($post_query->have_posts() ) : 
         
         $post_query->the_post();
+        global $post;  
+
+        $request_user_id = $post->post_author;
+        $user_id = get_userdata($request_user_id);
+
+ 
+
+        $request_date = get_post_meta( $post->ID,'request_date',true);
+        $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
+        $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
             
             ?>
             <tr>
             <td>
-            <?php the_title(); ?>
+            <?php echo $user_id->display_name; ?>
             </td>
             <td>
-            <?php the_date(); ?>
+            <?php echo $user_id->user_email; ?>
             </td>
             <td>
-            <?php the_time(); ?>
+            <?php echo $request_date; ?>
             </td>
             <td>
-            <?php echo 'Pending'; ?>
+            <?php echo $rqt_start_time.' - '.$rqt_end_time; ?>
             </td>
+            <?php
+            if($post->post_status=='publish'):
+              echo '<td>Approved</td>';
+              else:
+              echo '<td>Pending</td>';
+            endif;
+            ?>
+            <td>Edit Remove</td>
             </tr>
                 
             <?php

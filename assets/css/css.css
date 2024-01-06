@@ -117,13 +117,12 @@
     border: 1px solid #ccc;
   }
   
-  #calendar th {
-    background-color: #f2f2f2;
-  }
-  
   #calendar td:hover {
     background-color: #e6e6e6;
   }
+  #calendar td.today:hover {
+    background: #2bb2bb;
+}
   
   .weekdays-container {
     display: flex;
@@ -251,31 +250,31 @@ header .current-date{
   list-style: none;
   text-align: center;
 }
-.calendar .days{
+.calendar .day{
   margin-bottom: 20px;
 }
-.calendar li{
+.calendar td{
   color: #333;
   width: calc(100% / 7);
   font-size: 1.07rem;
 }
-.calendar .weeks li{
+.calendar .weeks td{
   font-weight: 500;
   cursor: default;
 }
-.calendar .days li{
+#calendar .day td{
   z-index: 1;
   cursor: pointer;
   position: relative;
   margin-top: 30px;
 }
-.days li.inactive{
+.day td.inactive{
   color: #aaa;
 }
-.days li.today{
+.day td.today, .day td.selected{
   color: #fff;
 }
-.days li::before{
+.day td::before{
   position: absolute;
   content: "";
   left: 50%;
@@ -286,16 +285,16 @@ header .current-date{
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
-.days li.today::before{
+.day td.today::before{
   background: #2bb2bb;
 }
-.days li:not(.today):hover::before{
+.day td:not(.today):hover::before{
   background: #f2f2f2;
 }
-.days li.selected:hover::before{
+.day td.selected:hover::before{
   background: #52bb85;
 }
-.days li.selected::before{
+.day td.selected::before{
   background: #55a57c;
 }
 

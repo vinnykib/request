@@ -15,6 +15,7 @@
       <div class="settings-tab-content">
         <div id="tab-1" class="active tab-pane">
           <h3>General</h3>
+          
         </div>
         <div id="tab-2" class="tab-pane">
         <h3>Time slots</h3>
@@ -63,3 +64,5 @@
       
   </div>
 </div>
+
+
