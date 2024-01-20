@@ -50,10 +50,10 @@ function services_post_type() {
     register_post_type( 'service_cpt',
         array(
             'labels' => $args, 
-            'public' => true,
+            'public' => false,
             'supports' => array('title', 'editor'),
             'has_archive' => true,
-            'show_ui' => true,
+            'show_ui' => false,
             'show_in_menu' => 'requests',
             'taxonomies'    => array('service_taxonomy')
         )

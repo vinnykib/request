@@ -19,5 +19,6 @@ class Enqueue extends Main
 		// enqueue all our scripts
 		wp_enqueue_style( 'rqtpluginstyle', $this->plugin_url . 'assets/css/css.css' );
 		wp_enqueue_script( 'rqtpluginscript', $this->plugin_url . 'assets/js/js.js' );
+		wp_enqueue_script( 'rqtcalendarscript', $this->plugin_url . 'assets/js/calendar.js' );
 	}
 }

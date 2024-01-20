@@ -20,4 +20,20 @@ window.addEventListener("load",function(){
         }
     }
 
+  
+
 });
+
+function confirmDelete() {
+    // Display a confirmation dialog
+    var result = confirm("Are you sure you want to delete this item?");
+    
+    // // Check the result of the confirmation dialog
+    // if (result) {
+    //     // User clicked OK, proceed with the delete operation
+    //     alert("Item deleted!"); // Replace this with your actual delete logic
+    // } else {
+    //     // User clicked Cancel, do nothing or provide feedback
+    //     alert("Delete operation canceled.");
+    // }
+}

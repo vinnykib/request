@@ -87,7 +87,20 @@
               echo '<td>Pending</td>';
             endif;
             ?>
-            <td>Edit Remove</td>
+            <td>
+          <?php
+          
+            echo "<form method='post' action=''>
+                    <input type='hidden' name='update_id' value='".$post->ID."'>
+                    <input type='submit' name='update' value='Update'>
+                  </form>
+                  <form method='post' action='' onsubmit='return confirmDelete()'>
+                    <input type='hidden' name='delete_id' value='".$post->ID."'>
+                    <input type='submit' name='delete' value='Delete'>
+                  </form>"
+          
+                      ?>
+          </td>
             </tr>
                 
             <?php
@@ -95,7 +108,6 @@
           endwhile; 
  
           ?> 
-       
       </tbody>      
 
       <!-- Request table pagination -->
@@ -151,3 +163,31 @@
       
   </div>
 </div>
+
+<?php
+
+// Update (Submit)
+if (isset($_POST["update_submit"])) {
+  $id = $_POST["update_id"];
+  $title = sanitize_text_field($_POST["update_title"]);
+  $content = sanitize_text_field($_POST["update_content"]);
+
+  $updated_post = array(
+      'ID'           => $id,
+      'post_title'   => $title,
+      'post_content' => $content,
+  );
+
+  $update_result = wp_update_post($updated_post);
+
+}
+
+
+// Delete
+if (isset($_POST["delete"])) {
+  $id = $_POST["delete_id"];
+  $delete_result = wp_delete_post($id, true);
+}
+
+
+?>
