@@ -89,16 +89,62 @@
             ?>
             <td>
           <?php
+
           
-            echo "<form method='post' action=''>
+            echo "<form id='updateForm' method='post' id='edit-request'>
                     <input type='hidden' name='update_id' value='".$post->ID."'>
-                    <input type='submit' name='update' value='Update'>
-                  </form>
-                  <form method='post' action='' onsubmit='return confirmDelete()'>
-                    <input type='hidden' name='delete_id' value='".$post->ID."'>
-                    <input type='submit' name='delete' value='Delete'>
-                  </form>"
-          
+                    <input type='button' class='updateButton' name='update' value='Edit'>
+                  </form>";
+
+                  // Delete
+
+             
+if (isset($post->ID)) {
+ 
+ 
+  // Display the delete form with a button that triggers the confirmation
+  echo '
+  <form id="deleteForm" method="post">
+          <input type="hidden" name="delete_id" value="' . $post->ID . '">
+          <input type="button" class="deleteButton" value="Delete" name="delete">
+        </form>';
+
+
+         // Add JavaScript for Ajax confirmation
+ 
+
+
+         // Add JavaScript for Ajax confirmation
+//   echo '
+//   <script>
+//   document.addEventListener("DOMContentLoaded", function() {
+//     // Step 1: Get the list of elements by class name
+//     let items = document.querySelectorAll(".deleteButton");
+//     for (let i = 0; i < items.length; i++) {
+//         items[i].addEventListener("click", function() {
+      
+//          var shouldDelete = confirm("Are you sure you want to delete this post?");
+//          if (shouldDelete) {
+//            // If confirmed, send an Ajax request to handle deletion
+//            var xhr = new XMLHttpRequest();
+//            xhr.open("POST", "admin.php?page=delete", true);
+//            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//            xhr.onreadystatechange = function() {
+//              if (xhr.readyState == 4 && xhr.status == 200) {
+//                // Handle success if needed
+//                console.log(xhr.responseText);
+//              }
+//            };
+//            xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
+//          }
+    
+//         });
+//       }
+//   });
+// </script>';
+}
+
+     
                       ?>
           </td>
             </tr>
@@ -162,32 +208,88 @@
 
       
   </div>
+
+
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+<!-- Modal content -->
+<div class="modal-content">
+  <span class="close">&times;</span>
+  <p>Some text in the Modal..</p>
+
+
+  <form action="" method="post">
+
+      <label for="name">Full name:</label><br>
+      <input type="text" class="name" name="name" required><br>
+
+      <label for="email">Email:</label><br>
+      <input type="email" class="email" name="email" required><br>
+
+      <label for="phone">Phone Number:</label><br>
+      <input type="number" class="phone" name="phone"><br>
+
+      <label for="description">Description:</label><br>
+      <textarea class="description" name="description" ></textarea><br><br>
+
+      <input type="hidden" id="start-time" name="rqt_start_time">
+      <input type="hidden" id="end-time" name="rqt_end_time">            
+
+      <input type="hidden" id="request_date" name="request_date">
+
+      <input type="submit" value="Update"> <br><br>
+
+
+  </form>
+
+  
 </div>
 
-<?php
+</div>
 
-// Update (Submit)
-if (isset($_POST["update_submit"])) {
-  $id = $_POST["update_id"];
-  $title = sanitize_text_field($_POST["update_title"]);
-  $content = sanitize_text_field($_POST["update_content"]);
 
-  $updated_post = array(
-      'ID'           => $id,
-      'post_title'   => $title,
-      'post_content' => $content,
-  );
 
-  $update_result = wp_update_post($updated_post);
+</div>
+
+<?php   
+
+
+
+if (isset($post->ID)) {
+// Add JavaScript for Ajax confirmation
+  echo '
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Step 1: Get the list of elements by class name
+    let items = document.querySelectorAll(".deleteButton");
+    let updateButton = document.querySelectorAll("updateButton");
+
+    for (let i = 0; i < items.length; i++) {
+        items[i].addEventListener("click", function() {
+      
+         var shouldDelete = confirm("Are you sure you want to delete this post?");
+         if (shouldDelete) {
+           // If confirmed, send an Ajax request to handle deletion
+           var xhr = new XMLHttpRequest();
+           xhr.open("POST", "admin.php?page=modify", true);
+           xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+           xhr.onreadystatechange = function() {
+             if (xhr.readyState == 4 && xhr.status == 200) {
+               // Handle success if needed
+              //  console.log(xhr.responseText);
+             }
+           };
+           xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
+         }
+    
+        });
+
+        
+      }
+  });
+</script>';
 
 }
-
-
-// Delete
-if (isset($_POST["delete"])) {
-  $id = $_POST["delete_id"];
-  $delete_result = wp_delete_post($id, true);
-}
-
-
-?>

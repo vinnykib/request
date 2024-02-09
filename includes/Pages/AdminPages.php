@@ -86,6 +86,14 @@ class AdminPages extends Main
 				'capability' => 'manage_options', 
 				'menu_slug' => 'settings', 
 				'callback' => array( $this->callbacks,'adminSettings' ),
+			),
+			array(
+				'parent_slug' => 'requests', 
+				'page_title' => 'Modify', 
+				'menu_title' => 'Modify', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'modify', 
+				'callback' => array( $this->callbacks,'updateDelete' ),
 			)
 		);
 	}

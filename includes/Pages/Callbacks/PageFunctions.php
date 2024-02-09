@@ -40,5 +40,10 @@ class PageFunctions extends Main
         return require_once("$this->plugin_path/templates/settings.php");
         
     }
+    public function updateDelete()
+    {
+        return require_once("$this->plugin_path/templates/update-delete.php");
+        
+    }
 
 }

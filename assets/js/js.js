@@ -24,16 +24,59 @@ window.addEventListener("load",function(){
 
 });
 
-function confirmDelete() {
-    // Display a confirmation dialog
-    var result = confirm("Are you sure you want to delete this item?");
-    
-    // // Check the result of the confirmation dialog
-    // if (result) {
-    //     // User clicked OK, proceed with the delete operation
-    //     alert("Item deleted!"); // Replace this with your actual delete logic
-    // } else {
-    //     // User clicked Cancel, do nothing or provide feedback
-    //     alert("Delete operation canceled.");
-    // }
-}
+
+
+ // Add JavaScript for Ajax confirmation
+
+ document.addEventListener("DOMContentLoaded", function() {
+
+ // Edit
+   
+
+   // Get the buttons that opens the modal
+   var btn = document.querySelectorAll(".updateButton");
+
+   for (let i = 0; i < btn.length; i++) {
+    btn[i].addEventListener('click', function() {
+
+          // Get the modal
+   var modal = document.getElementById("myModal");
+
+ 
+   // When the user clicks on the button, open the modal
+   
+   modal.style.display = "block";
+   
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+ 
+   // When the user clicks on <span> (x), close the modal
+   span.onclick = function() {
+   modal.style.display = "none";
+   }
+   
+
+  
+     if (modal) {
+
+      // Send an Ajax request to handle the update
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData(document.getElementById("updateForm"));
+      xhr.open("POST", "admin.php?page=modify", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // Handle success if needed
+          console.log(xhr.responseText);
+        }
+      };
+      xhr.send(formData);
+       
+     }
+
+    });
+  }
+  
+
+ });
+
+ 
