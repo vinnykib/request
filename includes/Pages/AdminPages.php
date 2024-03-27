@@ -94,6 +94,14 @@ class AdminPages extends Main
 				'capability' => 'manage_options', 
 				'menu_slug' => 'modify', 
 				'callback' => array( $this->callbacks,'updateDelete' ),
+			),
+			array(
+				'parent_slug' => 'requests', 
+				'page_title' => 'Add request', 
+				'menu_title' => 'Add request shortcode', 
+				'capability' => 'read', 
+				'menu_slug' => 'add-request-shortcode', 
+				'callback' => array( $this->callbacks,'addRequestShortcode' )
 			)
 		);
 	}

@@ -7,8 +7,10 @@
       <div class="settings-tab">
         <ul class="settings-tabs-list">
           <li class="active"><a href="#tab-1">General</a></li>
-          <li><a href="#tab-2">Time Slots</a></li>
+          <li><a href="#tab-2">Date/Time</a></li>
           <li><a href="#tab-3">Email</a></li>
+          <li><a href="#tab-4">Exports</a></li>
+          <li><a href="#tab-5">Shortcodes</a></li>
         </ul>
       </div>
 
@@ -18,7 +20,7 @@
           
         </div>
         <div id="tab-2" class="tab-pane">
-        <h3>Time slots</h3>
+        <h3>Date/Time</h3>
 
         <form action="">
 
@@ -60,6 +62,15 @@
         <div id="tab-3" class="tab-pane">
           <h3>Emails</h3>
         </div>
+
+        <div id="tab-4" class="tab-pane">
+          <h3>Exports</h3>
+        </div>
+        <div id="tab-5" class="tab-pane">
+          <h3>Shortcodes</h3>
+        </div>
+        
+
       </div>
       
   </div>

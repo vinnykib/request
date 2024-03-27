@@ -45,5 +45,10 @@ class PageFunctions extends Main
         return require_once("$this->plugin_path/templates/update-delete.php");
         
     }
+    public function addRequestShortcode()
+    {
+        return require_once("$this->plugin_path/shortcodes/add-request.php");
+        
+    }
 
 }

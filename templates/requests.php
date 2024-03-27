@@ -15,7 +15,7 @@
 
        $args = array(
         'post_type' => 'service_cpt',
-        'posts_per_page' => 10,
+        'posts_per_page' => 5,
         'paged' => $paged
     );
 
@@ -26,12 +26,6 @@
 
       
 <table class="rqt-table">
-            <div>
-            <form action="" method="post">        
-              <button class="rqt-export-btn">Export to CSV</button>
-            <input type="hidden" name="rqt_csv" value="1">
-            </form>
-            </div>
       <thead>
       <tr>
           <th>Name</th>
