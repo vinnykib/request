@@ -6,20 +6,16 @@
       
       <?php
 
-// $paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
-
       $paged = isset( $_GET['paged'] ) ? $_GET['paged'] : 1; 
-      // $prevpage = max( ($paged - 1), 0 );
-      // $nextpage = $paged + 1;
-
-
+   
        $args = array(
         'post_type' => 'service_cpt',
-        'posts_per_page' => 5,
+        'posts_per_page' => 10,
         'paged' => $paged
     );
 
     $post_query = new WP_Query($args);  
+
     if($post_query->have_posts() ) :
 
       ?>
@@ -39,13 +35,8 @@
 
       <tbody>
 
-
-
-
       <?php 
       
-       
-
         while($post_query->have_posts() ) : 
         
         $post_query->the_post();
@@ -53,8 +44,9 @@
 
         $request_user_id = $post->post_author;
         $user_id = get_userdata($request_user_id);
+        $logged_in_user_id = wp_get_current_user($request_user_id);
 
- 
+        if($user_id == $logged_in_user_id) :     
 
         $request_date = get_post_meta( $post->ID,'request_date',true);
         $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
@@ -103,77 +95,24 @@ if (isset($post->ID)) {
           <input type="button" class="deleteButton" value="Delete" name="delete">
         </form>';
 
-
-         // Add JavaScript for Ajax confirmation
- 
-
-
-         // Add JavaScript for Ajax confirmation
-//   echo '
-//   <script>
-//   document.addEventListener("DOMContentLoaded", function() {
-//     // Step 1: Get the list of elements by class name
-//     let items = document.querySelectorAll(".deleteButton");
-//     for (let i = 0; i < items.length; i++) {
-//         items[i].addEventListener("click", function() {
-      
-//          var shouldDelete = confirm("Are you sure you want to delete this post?");
-//          if (shouldDelete) {
-//            // If confirmed, send an Ajax request to handle deletion
-//            var xhr = new XMLHttpRequest();
-//            xhr.open("POST", "admin.php?page=delete", true);
-//            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//            xhr.onreadystatechange = function() {
-//              if (xhr.readyState == 4 && xhr.status == 200) {
-//                // Handle success if needed
-//                console.log(xhr.responseText);
-//              }
-//            };
-//            xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
-//          }
-    
-//         });
-//       }
-//   });
-// </script>';
 }
-
      
                       ?>
           </td>
             </tr>
                 
             <?php
+
+          endif;
            
           endwhile; 
+
  
           ?> 
       </tbody>      
 
       <!-- Request table pagination -->
-      </table>
-      <!-- <nav aria-label="Page navigation">
-        <ul class="pagination">
-         if ($prevpage !== 0) { 
-          <li class="page-item">
-            <a class="page-link" href="echo 'admin.php?page=requests&paged='.$prevpage ?>" >
-            <span aria-hidden="true">&laquo;</span>
-            Previous
-            </a>
-          </li>
-          
-        if ($post_query->max_num_pages  > $paged) {
-      
-          <li class="page-item">
-            <a class="page-link" href="echo 'admin.php?page=requests&paged='.$nextpage ?>">
-            Next
-            <span aria-hidden="true">&raquo;</span> 
-            </a>
-          </li>
-       } 
-        </ul>
-      </nav> -->
-    
+      </table>   
 
       <?php
 
@@ -259,12 +198,11 @@ if (isset($post->ID)) {
   document.addEventListener("DOMContentLoaded", function() {
     // Step 1: Get the list of elements by class name
     let items = document.querySelectorAll(".deleteButton");
-    let updateButton = document.querySelectorAll("updateButton");
 
     for (let i = 0; i < items.length; i++) {
         items[i].addEventListener("click", function() {
       
-         var shouldDelete = confirm("Are you sure you want to delete this post?");
+         var shouldDelete = confirm("Are you sure you want to delete this request?");
          if (shouldDelete) {
            // If confirmed, send an Ajax request to handle deletion
            var xhr = new XMLHttpRequest();
@@ -273,7 +211,8 @@ if (isset($post->ID)) {
            xhr.onreadystatechange = function() {
              if (xhr.readyState == 4 && xhr.status == 200) {
                // Handle success if needed
-              //  console.log(xhr.responseText);
+               // Reload the page after deletion
+               location.reload();
              }
            };
            xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");

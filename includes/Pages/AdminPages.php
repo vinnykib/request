@@ -99,9 +99,17 @@ class AdminPages extends Main
 				'parent_slug' => 'requests', 
 				'page_title' => 'Add request', 
 				'menu_title' => 'Add request shortcode', 
-				'capability' => 'read', 
+				'capability' => 'manage_options', 
 				'menu_slug' => 'add-request-shortcode', 
 				'callback' => array( $this->callbacks,'addRequestShortcode' )
+			),
+			array(
+				'parent_slug' => 'requests', 
+				'page_title' => 'Profile', 
+				'menu_title' => 'Profile shortcode', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'profile', 
+				'callback' => array( $this->callbacks,'profileShortcode' )
 			)
 		);
 	}

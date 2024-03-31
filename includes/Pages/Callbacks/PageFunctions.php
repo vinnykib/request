@@ -14,7 +14,7 @@ class PageFunctions extends Main
 
     public function adminRequest()
     {
-        return require_once("$this->plugin_path/templates/requests.php");
+        return require_once("$this->plugin_path/templates/request-list.php");
         
     }
     public function addrequest()
@@ -48,6 +48,11 @@ class PageFunctions extends Main
     public function addRequestShortcode()
     {
         return require_once("$this->plugin_path/shortcodes/add-request.php");
+        
+    }
+    public function profileShortcode()
+    {
+        return require_once("$this->plugin_path/shortcodes/profile.php");
         
     }
 
