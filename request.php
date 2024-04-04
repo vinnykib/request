@@ -257,7 +257,13 @@ function submit_request() {
 add_shortcode('requests_shortcode', 'custom_requests_shortcode_function');
 
 function custom_requests_shortcode_function() {
+
+    $current_user = wp_get_current_user();
+
+    if (in_array('administrator', $current_user->roles) || in_array('request_customer', $current_user->roles)) :
+
     ob_start();
+
     ?>
 
     <div class="rqt-container">
@@ -418,4 +424,6 @@ function custom_requests_shortcode_function() {
 
 
     return ob_get_clean();
+
+endif; 
 }
