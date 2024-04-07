@@ -17,6 +17,7 @@ class PageFunctions extends Main
         return require_once("$this->plugin_path/templates/request-list.php");
         
     }
+
     public function addrequest()
     {
         return require_once("$this->plugin_path/templates/add-request.php");
@@ -40,19 +41,34 @@ class PageFunctions extends Main
         return require_once("$this->plugin_path/templates/settings.php");
         
     }
+
     public function updateDelete()
     {
         return require_once("$this->plugin_path/templates/update-delete.php");
         
     }
+
     public function addRequestShortcode()
     {
         return require_once("$this->plugin_path/shortcodes/add-request.php");
         
     }
+
     public function profileShortcode()
     {
         return require_once("$this->plugin_path/shortcodes/profile.php");
+        
+    }
+
+    public function pending()
+    {
+        return require_once("$this->plugin_path/templates/pending.php");
+        
+    }
+
+    public function approveCancel()
+    {
+        return require_once("$this->plugin_path/templates/approve-cancel.php");
         
     }
 

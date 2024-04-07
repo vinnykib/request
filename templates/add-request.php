@@ -100,7 +100,7 @@ function requestform(){
           'post_content' => $description,
           'post_type' => 'service_cpt',
           'post_author' => $user_id->ID,
-          'post_status' => 'draft'
+          'post_status' => 'pending'
          );
          
          $post_id = wp_insert_post($new_post);
@@ -134,6 +134,5 @@ function requestform(){
         }
     
 }
-
 
 requestform();

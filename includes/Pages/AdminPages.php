@@ -57,6 +57,14 @@ class AdminPages extends Main
 		$this->subpages = array(
 			array(
 				'parent_slug' => 'requests', 
+				'page_title' => 'Pending', 
+				'menu_title' => 'Pending', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'pending', 
+				'callback' => array( $this->callbacks,'pending' )
+			),
+			array(
+				'parent_slug' => 'requests', 
 				'page_title' => 'Add request', 
 				'menu_title' => 'Add request', 
 				'capability' => 'manage_options', 
@@ -110,6 +118,14 @@ class AdminPages extends Main
 				'capability' => 'manage_options', 
 				'menu_slug' => 'profile', 
 				'callback' => array( $this->callbacks,'profileShortcode' )
+			),
+			array(
+				'parent_slug' => 'requests', 
+				'page_title' => 'Approve', 
+				'menu_title' => 'Approve', 
+				'capability' => 'manage_options', 
+				'menu_slug' => 'approve-cancel', 
+				'callback' => array( $this->callbacks,'approveCancel' )
 			)
 		);
 	}

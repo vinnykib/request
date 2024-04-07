@@ -26,57 +26,57 @@ window.addEventListener("load",function(){
 
 
 
- // Add JavaScript for Ajax confirmation
+//  // Add JavaScript for Ajax confirmation
 
- document.addEventListener("DOMContentLoaded", function() {
+//  document.addEventListener("DOMContentLoaded", function() {
 
- // Edit
+//  // Edit
    
 
-   // Get the buttons that opens the modal
-   var btn = document.querySelectorAll(".updateButton");
+//    // Get the buttons that opens the modal
+//    var btn = document.querySelectorAll(".updateButton");
 
-   for (let i = 0; i < btn.length; i++) {
-    btn[i].addEventListener('click', function() {
+//    for (let i = 0; i < btn.length; i++) {
+//     btn[i].addEventListener('click', function() {
 
-          // Get the modal
-   var modal = document.getElementById("myModal");
+//           // Get the modal
+//    var modal = document.getElementById("myModal");
 
  
-   // When the user clicks on the button, open the modal
+//    // When the user clicks on the button, open the modal
    
-   modal.style.display = "block";
+//    modal.style.display = "block";
    
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+//   // Get the <span> element that closes the modal
+//   var span = document.getElementsByClassName("close")[0];
  
-   // When the user clicks on <span> (x), close the modal
-   span.onclick = function() {
-   modal.style.display = "none";
-   }
+//    // When the user clicks on <span> (x), close the modal
+//    span.onclick = function() {
+//    modal.style.display = "none";
+//    }
    
 
   
-     if (modal) {
+//      if (modal) {
 
-      // Send an Ajax request to handle the update
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData(document.getElementById("updateForm"));
-      xhr.open("POST", "admin.php?page=modify", true);
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-          // Handle success if needed
-          console.log(xhr.responseText);
-        }
-      };
-      xhr.send(formData);
+//       // Send an Ajax request to handle the update
+//       var xhr = new XMLHttpRequest();
+//       var formData = new FormData(document.getElementById("updateForm"));
+//       xhr.open("POST", "admin.php?page=modify", true);
+//       xhr.onreadystatechange = function() {
+//         if (xhr.readyState == 4 && xhr.status == 200) {
+//           // Handle success if needed
+//           console.log(xhr.responseText);
+//         }
+//       };
+//       xhr.send(formData);
        
-     }
+//      }
 
-    });
-  }
+//     });
+//   }
   
 
- });
+//  });
 
  

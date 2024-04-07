@@ -9,13 +9,10 @@
 // $paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
 
       $paged = isset( $_GET['paged'] ) ? $_GET['paged'] : 1; 
-      // $prevpage = max( ($paged - 1), 0 );
-      // $nextpage = $paged + 1;
-
 
        $args = array(
         'post_type' => 'service_cpt',
-        'posts_per_page' => 10,
+        'posts_per_page' => 5,
         'paged' => $paged
     );
 
@@ -39,12 +36,7 @@
 
       <tbody>
 
-
-
-
-      <?php 
-      
-       
+      <?php       
 
         while($post_query->have_posts() ) : 
         
@@ -77,65 +69,33 @@
             <?php
             if($post->post_status=='publish'):
               echo '<td>Approved</td>';
-              else:
+            elseif($post->post_status=='pending'):
               echo '<td>Pending</td>';
+            else:
+                echo '<td>Cancelled</td>';
             endif;
             ?>
             <td>
           <?php
-
-          
-            echo "<form id='updateForm' method='post' id='edit-request'>
-                    <input type='hidden' name='update_id' value='".$post->ID."'>
-                    <input type='button' class='updateButton' name='update' value='Edit'>
-                  </form>";
-
-                  // Delete
-
              
-if (isset($post->ID)) {
- 
- 
-  // Display the delete form with a button that triggers the confirmation
-  echo '
-  <form id="deleteForm" method="post">
-          <input type="hidden" name="delete_id" value="' . $post->ID . '">
-          <input type="button" class="deleteButton" value="Delete" name="delete">
-        </form>';
+            if (isset($post->ID)) {   
 
+              // Edit         
+            echo '
+            <form id="updateForm" method="post" id="edit-request">
+              <input type="button" name="update_id" class="updateButton" value="Edit" data-postid="' . $post->ID . '">
+            </form>';
 
- // Add JavaScript for Ajax confirmation
-//   echo '
-//   <script>
-//   document.addEventListener("DOMContentLoaded", function() {
-//     // Step 1: Get the list of elements by class name
-//     let items = document.querySelectorAll(".deleteButton");
-//     for (let i = 0; i < items.length; i++) {
-//         items[i].addEventListener("click", function() {
-      
-//          var shouldDelete = confirm("Are you sure you want to delete this post?");
-//          if (shouldDelete) {
-//            // If confirmed, send an Ajax request to handle deletion
-//            var xhr = new XMLHttpRequest();
-//            xhr.open("POST", "admin.php?page=modify", true);
-//            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//            xhr.onreadystatechange = function() {
-//              if (xhr.readyState == 4 && xhr.status == 200) {
-//                // Handle success if needed
-//                console.log(xhr.responseText);
-//              }
-//            };
-//            xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
-//          }
-    
-//         });
-//       }
-//   });
-// </script>';
-}
+              // Delete
+              echo '
+              <form id="deleteForm" method="post">
+                <input type="button" name="delete_id" class="deleteButton" value="Delete" data-postid="' . $post->ID . '">
+              </form>';
 
-     
-                      ?>
+            }
+
+          ?>
+
           </td>
             </tr>
                 
@@ -148,28 +108,6 @@ if (isset($post->ID)) {
 
       <!-- Request table pagination -->
       </table>
-      <!-- <nav aria-label="Page navigation">
-        <ul class="pagination">
-         if ($prevpage !== 0) { 
-          <li class="page-item">
-            <a class="page-link" href="echo 'admin.php?page=requests&paged='.$prevpage ?>" >
-            <span aria-hidden="true">&laquo;</span>
-            Previous
-            </a>
-          </li>
-          
-        if ($post_query->max_num_pages  > $paged) {
-      
-          <li class="page-item">
-            <a class="page-link" href="echo 'admin.php?page=requests&paged='.$nextpage ?>">
-            Next
-            <span aria-hidden="true">&raquo;</span> 
-            </a>
-          </li>
-       } 
-        </ul>
-      </nav> -->
-    
 
       <?php
 
@@ -199,11 +137,8 @@ if (isset($post->ID)) {
       
   </div>
 
-
-
-
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="update-modal" class="modal">
 
 <!-- Modal content -->
 <div class="modal-content">
@@ -240,12 +175,9 @@ if (isset($post->ID)) {
 
 </div>
 
-
-
 </div>
 
 <?php   
-
 
 
 if (isset($post->ID)) {
@@ -254,10 +186,13 @@ if (isset($post->ID)) {
   <script>
   document.addEventListener("DOMContentLoaded", function() {
     // Step 1: Get the list of elements by class name
-    let items = document.querySelectorAll(".deleteButton");
+    let deleteItems = document.querySelectorAll(".deleteButton");
 
-    for (let i = 0; i < items.length; i++) {
-        items[i].addEventListener("click", function() {
+    for (let i = 0; i < deleteItems.length; i++) {
+      deleteItems[i].addEventListener("click", function() {
+
+          let deleteId = deleteItems[i].dataset.postid;
+          console.log(deleteId);
       
          var shouldDelete = confirm("Are you sure you want to delete this request?");
          if (shouldDelete) {
@@ -272,13 +207,57 @@ if (isset($post->ID)) {
                location.reload();
              }
            };
-           xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
+           xhr.send("delete_id=" + deleteId + "&delete_confirm=true");
          }
     
         });
-
-        
       }
+
+      //Update
+      let updateItems = document.querySelectorAll(".updateButton");
+      // Step 3: Add event listeners for update buttons
+      for (let i = 0; i < updateItems.length; i++) {
+          updateItems[i].addEventListener("click", function() {
+              let updateId = updateItems[i].dataset.postid;
+              console.log("Update ID:", updateId);
+              // Implement your update logic here, such as showing a form or making an Ajax request to update the data
+              // Get the modal
+                 let updateModal = document.getElementById("update-modal");
+
+                 // When the user clicks on the edit button, open the modal
+                 updateModal.style.display = "block";
+                 
+                // Get the <span> element that closes the modal
+                let span = document.getElementsByClassName("close")[0];
+               
+                 // When the user clicks on <span> (x), close the modal
+                 span.onclick = function() {
+                  updateModal.style.display = "none";
+                 }
+
+
+                 if (updateModal) {
+
+                  // If confirmed, send an Ajax request to handle update
+                  var xhr = new XMLHttpRequest();
+                  xhr.open("POST", "admin.php?page=modify", true);
+                  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                  xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                      // Handle success if needed
+                      // Reload the page after deletion
+                      // location.reload();
+                    }
+                  };
+                  xhr.send("update_id=" + updateId + "&update_confirm=true");
+
+                }
+                 
+              
+            });
+      }
+
+
   });
 </script>';
 

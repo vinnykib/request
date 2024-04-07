@@ -170,9 +170,9 @@ function request_form_shortcode() {
             <p>Some text in the Modal..</p>
             <form action="" method="post">
                 <label for="name">Full name:</label><br>
-                <input type="text" class="name" name="name" required><br>
+                <input type="text" class="name" name="rqt-name" required><br>
                 <label for="email">Email:</label><br>
-                <input type="email" class="email" name="email" required><br>
+                <input type="email" class="email" name="rqt-email" required><br>
                 <label for="phone">Phone Number:</label><br>
                 <input type="number" class="phone" name="phone"><br>
                 <label for="description">Description:</label><br>
@@ -195,9 +195,9 @@ function request_form_shortcode() {
 add_action('init', 'submit_request');
 
 function submit_request() {
-    if (isset($_POST['name']) && isset($_POST['email'])) {
-        $user_name = sanitize_user($_POST['name']);
-        $user_email = sanitize_email($_POST['email']);
+    if (isset($_POST['rqt-name']) && isset($_POST['rqt-email'])) {
+        $user_name = sanitize_user($_POST['rqt-name']);
+        $user_email = sanitize_email($_POST['rqt-email']);
         $phone = sanitize_text_field($_POST['phone']);
         $description = sanitize_text_field($_POST['description']);
         $rqt_start_time = sanitize_text_field($_POST['rqt_start_time']);
@@ -236,7 +236,7 @@ function submit_request() {
             'post_content' => $description,
             'post_type' => 'service_cpt',
             'post_author' => $user_id,
-            'post_status' => 'draft'
+            'post_status' => 'pending'
         );
         $post_id = wp_insert_post($new_post);
 
@@ -245,7 +245,7 @@ function submit_request() {
             update_post_meta($post_id, 'rqt_start_time', $rqt_start_time);
             update_post_meta($post_id, 'rqt_end_time', $rqt_end_time);
             update_post_meta($post_id, 'request_date', $request_date);
-            echo "Request added successfully with the ID of $post_id and user id of $user_id";
+            echo "Request added successfully with the ID of $post_id and user id of $user_id through shortode";
         } else {
             echo "Error, Request not created";
         }
@@ -275,7 +275,7 @@ function custom_requests_shortcode_function() {
             $paged = isset($_GET['paged']) ? $_GET['paged'] : 1;
             $args = array(
                 'post_type' => 'service_cpt',
-                'post_status' => array('draft','publish'),
+                'post_status' => array('draft','pending','publish'),
                 'posts_per_page' => 10,
                 'paged' => $paged
             );
@@ -317,8 +317,10 @@ function custom_requests_shortcode_function() {
                                     <td><?php echo $rqt_start_time . ' - ' . $rqt_end_time; ?></td>
                                     <?php if ($post->post_status == 'publish') :
                                         echo '<td>Approved</td>';
-                                    elseif ($post->post_status == 'draft') :
+                                    elseif ($post->post_status == 'pending') :
                                         echo '<td>Pending</td>';
+                                        else:
+                                            echo '<td>Cancelled</td>';
                                     endif;
                                     ?>
                                     <td>
@@ -333,7 +335,7 @@ function custom_requests_shortcode_function() {
                                             echo '
                                                 <form id="deleteForm" method="post">
                                                     <input type="hidden" name="delete_id" value="' . $post->ID . '">
-                                                    <input type="button" class="deleteButton" value="Delete" name="delete">
+                                                    <input type="button" class="deleteButton" value="Cancel" name="delete">
                                                 </form>';
                                         }
                                         ?>
@@ -378,9 +380,9 @@ function custom_requests_shortcode_function() {
             <p>Some text in the Modal..</p>
             <form action="" method="post">
                 <label for="name">Full name:</label><br>
-                <input type="text" class="name" name="name" required><br>
+                <input type="text" class="name" name="rqt-name" required><br>
                 <label for="email">Email:</label><br>
-                <input type="email" class="email" name="email" required><br>
+                <input type="email" class="email" name="rqt-email" required><br>
                 <label for="phone">Phone Number:</label><br>
                 <input type="number" class="phone" name="phone"><br>
                 <label for="description">Description:</label><br>
