@@ -12,7 +12,7 @@
 
        $args = array(
         'post_type' => 'service_cpt',
-        'posts_per_page' => 5,
+        'posts_per_page' => 10,
         'paged' => $paged
     );
 
@@ -38,6 +38,7 @@
 
       <?php       
 
+
         while($post_query->have_posts() ) : 
         
         $post_query->the_post();
@@ -60,7 +61,7 @@
             <td>
             <?php echo $user_id->user_email; ?>
             </td>
-            <td>
+            <td data-postdate="<?php echo $request_date; ?>">
             <?php echo $request_date; ?>
             </td>
             <td>
@@ -138,34 +139,45 @@
   </div>
 
 <!-- The Modal -->
-<div id="update-modal" class="modal">
+<div id="update-modal" class="rqt-modal">
 
 <!-- Modal content -->
-<div class="modal-content">
+<div class="rqt-modal-content">
   <span class="close">&times;</span>
-  <p>Some text in the Modal..</p>
+  <p>Update details..</p>
 
 
-  <form action="" method="post">
+  <form action="" method="post" id="update-form">
 
       <label for="name">Full name:</label><br>
-      <input type="text" class="name" name="name" required><br>
+      <input type="text" class="rqt-name" name="rqt-upd-name" required><br>
 
       <label for="email">Email:</label><br>
-      <input type="email" class="email" name="email" required><br>
+      <input type="email" class="email" name="rqt-upd-email" required><br>
 
       <label for="phone">Phone Number:</label><br>
-      <input type="number" class="phone" name="phone"><br>
+      <input type="number" class="phone" name="rqt-upd-phone"><br>
 
       <label for="description">Description:</label><br>
-      <textarea class="description" name="description" ></textarea><br><br>
+      <textarea class="description" name="rqt-upd-description"></textarea><br>
 
-      <input type="hidden" id="start-time" name="rqt_start_time">
-      <input type="hidden" id="end-time" name="rqt_end_time">            
+      <label for="status">Status:</label><br>
+      <select name="rqt-upd-status">
+        <option value="pending">Pending</option>
+        <option value="draft">Cancelled</option>
+        <option value="publish">Approved</option>
+      </select><br>
 
-      <input type="hidden" id="request_date" name="request_date">
+      <label for="Start time">Start time:</label><br>
+      <input type="time" id="start-time" name="rqt-upd-start-time"><br>
 
-      <input type="submit" value="Update"> <br><br>
+      <label for="End time">End time:</label><br>
+      <input type="time" id="end-time" name="rqt-upd-end-time"><br>     
+      
+      <label for="Date">Date:</label><br>
+      <input type="date" id="request_date" name="rqt-upd-request-date"><br><br>
+
+      <input type="submit" value="Update" name="update_submit"> <br><br>
 
 
   </form>
@@ -220,6 +232,7 @@ if (isset($post->ID)) {
           updateItems[i].addEventListener("click", function() {
               let updateId = updateItems[i].dataset.postid;
               console.log("Update ID:", updateId);
+
               // Implement your update logic here, such as showing a form or making an Ajax request to update the data
               // Get the modal
                  let updateModal = document.getElementById("update-modal");
@@ -236,23 +249,27 @@ if (isset($post->ID)) {
                  }
 
 
-                 if (updateModal) {
-
-                  // If confirmed, send an Ajax request to handle update
+                 document.getElementById("update-form").addEventListener("submit", function(event) {
+                  event.preventDefault(); // Prevent the default form submission
+                  
+                  let formData = new FormData(this);
+                  formData.append("update_id", updateId); // Append update ID if necessary
+                  
                   var xhr = new XMLHttpRequest();
                   xhr.open("POST", "admin.php?page=modify", true);
-                  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                  xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                      // Handle success if needed
-                      // Reload the page after deletion
-                      // location.reload();
-                    }
+                  xhr.onload = function() {
+                      if (xhr.status == 200) {
+                          // Handle success
+                          location.reload();
+                      } else {
+                          console.error("Error:", xhr.responseText);
+                      }
                   };
-                  xhr.send("update_id=" + updateId + "&update_confirm=true");
-
-                }
-                 
+                  
+                  xhr.send(formData);
+              });
+              
+                               
               
             });
       }
@@ -262,3 +279,4 @@ if (isset($post->ID)) {
 </script>';
 
 }
+

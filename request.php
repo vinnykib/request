@@ -164,10 +164,10 @@ function request_form_shortcode() {
     </div>
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+    <div id="rqt-modal" class="rqt-modal">
+        <div class="rqt-modal-content">
             <span class="close">&times;</span>
-            <p>Some text in the Modal..</p>
+            <p>Add your details..</p>
             <form action="" method="post">
                 <label for="name">Full name:</label><br>
                 <input type="text" class="name" name="rqt-name" required><br>
@@ -373,9 +373,9 @@ function custom_requests_shortcode_function() {
     </div>
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
+    <div id="rqt-modal" class="rqt-modal">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="rqt-modal-content">
             <span class="close">&times;</span>
             <p>Some text in the Modal..</p>
             <form action="" method="post">

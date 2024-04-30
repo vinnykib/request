@@ -23,12 +23,12 @@
 </div>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="rqt-modal" class="rqt-modal">
 
   <!-- Modal content -->
-  <div class="modal-content">
+  <div class="rqt-modal-content">
     <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
+    <p>Add details..</p>
 
 
     <form action="" method="post">

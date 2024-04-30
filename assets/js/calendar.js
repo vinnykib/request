@@ -179,7 +179,7 @@ timePicker.innerHTML = `
         week.parentElement.insertBefore(timePicker, week.nextSibling);
 
           // Get the modal
-        var modal = document.getElementById("myModal");
+        var modal = document.getElementById("rqt-modal");
 
         // Get the button that opens the modal
         var btn = document.getElementById("select-time");
@@ -247,3 +247,41 @@ timePicker.innerHTML = `
   }
   
 }
+
+
+// Wait for the DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all the "Edit" buttons in the table
+  const editButtons = document.querySelectorAll('.updateButton');
+  
+  // Add a click event listener to each "Edit" button
+  editButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Find the row that contains the clicked button
+      const row = button.closest('tr');
+      
+      // Get the data from the row
+      const name = row.querySelector('td:nth-child(1)').textContent;
+      const email = row.querySelector('td:nth-child(2)').textContent;
+      const date = row.querySelector('td:nth-child(3)').dataset.postdate;
+      const time = row.querySelector('td:nth-child(4)').textContent;
+      const status = row.querySelector('td:nth-child(5)').textContent;
+
+      
+      // Get the form you want to populate (e.g., using its ID)
+      const form = document.getElementById('update-form');
+
+      // Populate the form inputs with the data from the row
+      form.querySelector('input[name="rqt-upd-name"]').value = name;
+      form.querySelector('input[name="rqt-upd-email"]').value = email;
+      form.querySelector('input[name="rqt-upd-request-date"]').value = date;
+      form.querySelector('input[name="rqt-upd-time"]').value = time;
+      form.querySelector('input[name="rqt-upd-status"]').value = status;
+
+      console.log(name);
+            
+      // Submit the form (if you want to do this automatically, or you can let the user modify data and submit manually)
+      // form.submit();
+    });
+  });
+});

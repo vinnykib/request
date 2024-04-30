@@ -16,7 +16,6 @@ if (isset($_POST["approve_id"])) {
 
   // Cancel (Submit)
 if (isset($_POST["cancel_id"])) {
-
     $id = $_POST["cancel_id"];
     // Update post data
     $updated_post = array(

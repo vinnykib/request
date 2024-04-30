@@ -81,10 +81,9 @@
           <?php
 
           
-            echo "<form id='approveForm' method='post'>
-                    <input type='hidden' name='approve_id' value='".$post->ID."'>
-                    <input type='button' class='approveButton' name='approve' value='Approve'>
-                  </form>";
+            echo '<form id="approveForm" method="post">
+                    <input type="button" name="approve_id" class="approveButton" value="Approve" data-postid="'. $post->ID .'">
+                  </form>';
 
                   // Delete
 
