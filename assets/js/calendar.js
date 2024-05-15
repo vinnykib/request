@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (dayCount <= daysInMonth) {
                     // Days from the current month
                     cell.textContent = dayCount;
-                    cell.setAttribute('data-date',dayCount+'-'+currMonth+'-'+year); 
+                    cell.setAttribute('data-date',currMonth+'-'+dayCount+'-'+year); 
 
                     // Highlight today's date
                     const today = new Date();
@@ -215,12 +215,37 @@ timePicker.innerHTML = `
       let selectedDate = this.dataset.date;
 
       // Set the selected date to the input field
-      let dateContentInput = document.getElementById(inputId);
+    //   let dateContentInput = document.getElementById(inputId);
+    //   if (dateContentInput) {
+    //     dateContentInput.value = selectedDate;
+    //   }
+
+    //   console.log(selectedDate);
+
+
+    let parts = selectedDate.split('-');
+if (parts.length === 3) {
+    // Assuming the format is mm-dd-yyyy
+    let month = parseInt(parts[0], 10);
+    let day = parseInt(parts[1], 10);
+    let year = parseInt(parts[2], 10);
+    
+    // Create a new Date object
+    let selectedDate = new Date(year, month - 1, day);
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let formattedDate = selectedDate.toLocaleDateString('en-US', options);
+
+    let dateContentInput = document.getElementById(inputId);
       if (dateContentInput) {
-        dateContentInput.value = selectedDate;
+        dateContentInput.value = formattedDate;
       }
 
-      console.log(selectedDate);
+    console.log(formattedDate);
+} else {
+    console.log("Invalid date format");
+}
+
+    
 
       function addTime(){
 
@@ -263,8 +288,21 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get the data from the row
       const name = row.querySelector('td:nth-child(1)').textContent;
       const email = row.querySelector('td:nth-child(2)').textContent;
-      const date = row.querySelector('td:nth-child(3)').dataset.postdate;
-      const time = row.querySelector('td:nth-child(4)').textContent;
+      const dateStr = row.querySelector('td:nth-child(3)').textContent;
+        // Parse the date string
+      let date = new Date(dateStr);
+      // Get the components (month, day, year)
+      let month = date.getMonth() + 1; // Months are zero-indexed
+      let day = date.getDate();
+      let year = date.getFullYear();
+
+      // Format the components to mm-dd-yyyy
+      let formattedDates = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+      console.log(formattedDates); // Output: 04-18-2024
+
+      const startTime = row.querySelector('td:nth-child(4) span:nth-child(1)').textContent;
+      const endTime = row.querySelector('td:nth-child(4) span:nth-child(2)').textContent;
       const status = row.querySelector('td:nth-child(5)').textContent;
 
       
@@ -272,13 +310,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('update-form');
 
       // Populate the form inputs with the data from the row
-      form.querySelector('input[name="rqt-upd-name"]').value = name;
-      form.querySelector('input[name="rqt-upd-email"]').value = email;
-      form.querySelector('input[name="rqt-upd-request-date"]').value = date;
-      form.querySelector('input[name="rqt-upd-time"]').value = time;
-      form.querySelector('input[name="rqt-upd-status"]').value = status;
+      form.querySelector('input[name="rqt-upd-name"]').value = name.trim();
+      form.querySelector('input[name="rqt-upd-email"]').value = email.trim();
+      form.querySelector('input[name="rqt-upd-request-date"]').value = formattedDates.trim();
+      form.querySelector('input[name="rqt-upd-start-time"]').value = startTime.trim();
+      form.querySelector('input[name="rqt-upd-end-time"]').value = endTime.trim();
+      form.querySelector('select[name="rqt-upd-status"]').value = status.trim();
 
-      console.log(name);
+      console.log(status);
             
       // Submit the form (if you want to do this automatically, or you can let the user modify data and submit manually)
       // form.submit();

@@ -65,7 +65,7 @@
             <?php echo $request_date; ?>
             </td>
             <td>
-            <?php echo $rqt_start_time.' - '.$rqt_end_time; ?>
+            <?php echo '<span>' . $rqt_start_time . ' </span> - ' . '<span>' . $rqt_end_time. '</span>';  ?>
             </td>
             <?php
             if($post->post_status=='publish'):
@@ -150,7 +150,7 @@
   <form action="" method="post" id="update-form">
 
       <label for="name">Full name:</label><br>
-      <input type="text" class="rqt-name" name="rqt-upd-name" required><br>
+      <input type="text" class="rqt-name" name="rqt-upd-name" value="" required><br>
 
       <label for="email">Email:</label><br>
       <input type="email" class="email" name="rqt-upd-email" required><br>
@@ -163,9 +163,9 @@
 
       <label for="status">Status:</label><br>
       <select name="rqt-upd-status">
-        <option value="pending">Pending</option>
-        <option value="draft">Cancelled</option>
-        <option value="publish">Approved</option>
+        <option>Pending</option>
+        <option>Cancelled</option>
+        <option>Approved</option>
       </select><br>
 
       <label for="Start time">Start time:</label><br>
