@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const startTime = row.querySelector('td:nth-child(4) span:nth-child(1)').textContent;
       const endTime = row.querySelector('td:nth-child(4) span:nth-child(2)').textContent;
-      const status = row.querySelector('td:nth-child(5)').textContent;
+      let status = row.querySelector('td:nth-child(5)').textContent;
 
       
       // Get the form you want to populate (e.g., using its ID)

@@ -17,6 +17,15 @@ function update_request_post($id, $name, $email, $phone, $description, $status, 
     $phone = sanitize_text_field($phone);
     $description = sanitize_text_field($description);
     $status = sanitize_text_field($status);
+
+    if ($status == "Pending") {
+        $status = "pending";
+    } elseif ($status == "Cancelled") {
+        $status = "draft";
+    } else {
+        $status = "publish";
+    }
+
     $rqt_start_time = sanitize_text_field($rqt_start_time);
     $rqt_end_time = sanitize_text_field($rqt_end_time);
     $request_date = sanitize_text_field($request_date);
