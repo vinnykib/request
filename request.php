@@ -431,3 +431,13 @@ function custom_requests_shortcode_function() {
 
 endif; 
 }
+
+
+//Remove submenu items of request admin menu
+add_action('admin_menu', 'remove_admin_menu_item');
+function remove_admin_menu_item(){
+    remove_submenu_page('requests', 'modify');
+    remove_submenu_page('requests', 'profile');
+    remove_submenu_page('requests', 'approve-cancel');
+    remove_submenu_page('requests', 'add-request-shortcode');
+}
