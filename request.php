@@ -153,17 +153,14 @@ function request_form_shortcode() {
         </div>
         <header>
             <div class="header" id="header">
-                <span id="prev" class="material-symbols-rounded"><</span>
-                <button id="prevMonth">Previous Month</button>
-                <button id="nextMonth">Next Month</button>
+                <span id="prevMonth" class="material-symbols-rounded"><</span>
                 <p class="current-date"></p>
-                <span id="next" class="material-symbols-rounded">></span>
+                <span id="nextMonth" class="material-symbols-rounded">></span>
             </div>
         </header>
         <div id="calendar"></div>
-    </div>
 
-    <!-- The Modal -->
+         <!-- The Modal -->
     <div id="rqt-modal" class="rqt-modal">
         <div class="rqt-modal-content">
             <span class="close">&times;</span>
@@ -184,6 +181,11 @@ function request_form_shortcode() {
             </form>
         </div>
     </div>
+
+
+    </div>
+
+
 
     <?php
     $output = ob_get_clean();

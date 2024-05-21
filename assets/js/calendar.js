@@ -21,10 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
         monthHeader.classList.add('month');     
         calendar.appendChild(monthHeader);
 
-        // Create month header
-        monthHeader.innerHTML = `
-            <span>${months[month]} ${year}</span>
-        `;
+
+        monthYear = months[month] + ' ' + year;
+        document.querySelector('.current-date').innerHTML = monthYear;
 
 
         // Create table for days
