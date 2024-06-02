@@ -8,11 +8,9 @@
       <header>
         
         <div class="header" id="header">
-          <span id="prev" class="material-symbols-rounded"><</span>
-          <button id="prevMonth">Previous Month</button>
-          <button id="nextMonth">Next Month</button>
+          <span id="prevMonth" class="material-symbols-rounded"><</span>
           <p class="current-date"></p>
-          <span id="next" class="material-symbols-rounded">></span>
+          <span id="nextMonth" class="material-symbols-rounded">></span>
         </div>
       </header>
 

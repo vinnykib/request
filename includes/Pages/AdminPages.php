@@ -119,14 +119,6 @@ class AdminPages extends Main
 				'menu_slug' => 'profile', 
 				'callback' => array( $this->callbacks,'profileShortcode' )
 			),
-			array(
-				'parent_slug' => 'requests', 
-				'page_title' => 'Approve', 
-				'menu_title' => 'Approve', 
-				'capability' => 'manage_options', 
-				'menu_slug' => 'approve-cancel', 
-				'callback' => array( $this->callbacks,'approveCancel' )
-			)
 		);
 	}
 

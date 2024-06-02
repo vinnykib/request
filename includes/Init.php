@@ -15,7 +15,8 @@ final class Init
 		return [
 			Pages\AdminPages::class,
 			Main\Enqueue::class,
-			Main\Links::class
+			Main\Links::class,
+			Main\ApproveCancel::class
 		];
 	}
 

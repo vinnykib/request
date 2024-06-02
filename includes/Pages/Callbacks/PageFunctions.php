@@ -66,10 +66,4 @@ class PageFunctions extends Main
         
     }
 
-    public function approveCancel()
-    {
-        return require_once("$this->plugin_path/templates/approve-cancel.php");
-        
-    }
-
 }

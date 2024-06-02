@@ -100,10 +100,6 @@
   width: 180px;
 }
 
-#calendar {
-  width: 300px;
-  font-family: Arial, sans-serif;
-}
 
 #calendar table {
   width: 100%;
@@ -208,7 +204,6 @@
 /*Calendar CSS*/
 
 .wrapper{
-width: 450px;
 padding: 2px;
 background: #fff;
 border-radius: 10px;
@@ -242,6 +237,31 @@ header .current-date{
 font-size: 1.45rem;
 font-weight: 500;
 }
+
+#calendar table {
+  width: 100%;
+  border-collapse: collapse;
+  }
+  
+  #calendar th {
+  background-color: #007bff;
+  color: #fff;
+  }
+  
+  #calendar td:hover {
+  background-color: #f2f2f2;
+  }
+  
+  #calendar .today {
+  background-color: #4CAF50;
+  color: white;
+  }
+  #calendar .time {
+  height: 30px;
+  }
+  #calendar .timepicker div {
+  display: inline;
+  }
 .calendar{
 padding: 20px;
 }
@@ -319,38 +339,6 @@ display: none;
 display: block;
 background: #e7e7e7;
 box-shadow: 0 1px 3px -1px rgb(24 23 23 / 30%);
-}
-
-#calendar {
-width: 300px;
-margin: 50px auto;
-}
-
-#calendar table {
-width: 100%;
-border-collapse: collapse;
-}
-
-
-
-#calendar th {
-background-color: #007bff;
-color: #fff;
-}
-
-#calendar td:hover {
-background-color: #f2f2f2;
-}
-
-#calendar .today {
-background-color: #4CAF50;
-color: white;
-}
-#calendar .time {
-height: 30px;
-}
-#calendar .timepicker div {
-display: inline;
 }
 
 /* The Modal (background) */

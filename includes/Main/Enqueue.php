@@ -15,10 +15,11 @@ class Enqueue extends Main
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 	}
 	
-	function enqueue() {
+	public function enqueue() {
 		// enqueue all our scripts
 		wp_enqueue_style( 'rqtpluginstyle', $this->plugin_url . 'assets/css/css.css' );
 		wp_enqueue_script( 'rqtpluginscript', $this->plugin_url . 'assets/js/js.js' );
 		wp_enqueue_script( 'rqtcalendarscript', $this->plugin_url . 'assets/js/calendar.js' );
+		wp_enqueue_script( 'rqtajaxcript', $this->plugin_url . 'assets/js/ajax-calls.js' );
 	}
 }

@@ -55,6 +55,10 @@
  
 
         $request_date = get_post_meta( $post->ID,'request_date',true);
+
+        $dateTimestamp = strtotime($request_date);
+        $formattedDate = date("l, F j, Y", $dateTimestamp);
+
         $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
         $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
             
@@ -67,7 +71,7 @@
             <?php echo $user_id->user_email; ?>
             </td>
             <td>
-            <?php echo $request_date; ?>
+            <?php echo $formattedDate; ?>
             </td>
             <td>
             <?php echo $rqt_start_time.' - '.$rqt_end_time; ?>
@@ -80,25 +84,41 @@
             <td>
           <?php
 
+          if (isset($post->ID)) {
+
           
-            echo '<form id="approveForm" method="post">
-                    <input type="button" name="approve_id" class="approveButton" value="Approve" data-postid="'. $post->ID .'">
+            echo '<form method="post" id="approveForm" data-url="'. admin_url("admin-ajax.php"). '">
+
+                    <button type="submit" class="approveButton" data-postid="'. $post->ID .'">Approve</button>
+
+                    <input type="hidden" name="approve_id" value="'. $post->ID .'"> 
+             
+                    <input type="hidden" name="action" value="approve_request"> 
+             
+                    <input type="hidden" name="nonce" value="'. wp_create_nonce('approve-nonce') .'">
+
                   </form>';
 
                   // Delete
 
              
-if (isset($post->ID)) {
- 
- 
-  // Display the Cancel form with a button that triggers the confirmation
-  echo '
-  <form id="cancelForm" method="post">
-       <input type="button" name="cancel_id" class="cancelButton" value="Cancel" data-postid="'. $post->ID .'">
-  </form>';
+                 
+          
+            // Display the Cancel form with a button that triggers the confirmation
+            echo '<form method="post" id="cancelForm" data-url="'. admin_url("admin-ajax.php"). '">
+                
+                <button type="submit" class="cancelButton" data-postid="'. $post->ID .'">Cancel</button>
+
+                <input type="hidden" name="cancel_id" value="'. $post->ID .'"> 
+
+                <input type="hidden" name="action" value="cancel_request"> 
+
+                <input type="hidden" name="nonce" value="'. wp_create_nonce('cancel-nonce') .'">
+
+            </form>';
 
 
-}
+          }
 
      
                       ?>
@@ -108,7 +128,7 @@ if (isset($post->ID)) {
             <?php
            
           endwhile; 
- 
+
           ?> 
       </tbody>      
 
@@ -164,77 +184,3 @@ if (isset($post->ID)) {
 
       
   </div>
-
-<?php   
-
-
-
-if (isset($post->ID)) {
-// Add JavaScript for Ajax confirmation
-  echo '
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Step 1: Get the list of elements by class name
-    let cancelItems = document.querySelectorAll(".cancelButton");
-
-    for (let i = 0; i < cancelItems.length; i++) {
-      cancelItems[i].addEventListener("click", function() {
-
-        
-        let cancelId = cancelItems[i].dataset.postid;
-        console.log(cancelId);
-      
-         var shouldCancel = confirm("Are you sure you want to cancel this request?");
-         if (shouldCancel) {
-           // If confirmed, send an Ajax request to handle deletion
-           var xhr = new XMLHttpRequest();
-           xhr.open("POST", "admin.php?page=approve-cancel", true);
-           xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-           xhr.onreadystatechange = function() {
-             if (xhr.readyState == 4 && xhr.status == 200) {
-               // Handle success if needed
-               // Reload the page after deletion
-               location.reload();
-             }
-           };
-           xhr.send("cancel_id=" + cancelId + "&cancel_confirm=true");
-         }
-    
-        });
-
-        
-      }
-
-
-      // Step 1: Get the list of elements by class name
-      let approveItems = document.querySelectorAll(".approveButton");
-  
-      for (let i = 0; i < approveItems.length; i++) {
-        approveItems[i].addEventListener("click", function() {
-
-           let approveId = cancelItems[i].dataset.postid;
-
-           var shouldApprove = confirm("Are you sure you want to Approve this request?");
-           if (shouldApprove) {
-             // If confirmed, send an Ajax request to handle deletion
-             var xhr = new XMLHttpRequest();
-             xhr.open("POST", "admin.php?page=approve-cancel", true);
-             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-             xhr.onreadystatechange = function() {
-               if (xhr.readyState == 4 && xhr.status == 200) {
-                 // Handle success if needed
-                 // Reload the page after deletion
-                 location.reload();
-               }
-             };
-             xhr.send("approve_id=" + approveId + "&approve_confirm=true");
-           }
-      
-          });
-  
-          
-        }
-  });
-</script>';
-
-}

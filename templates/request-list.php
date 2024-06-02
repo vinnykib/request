@@ -50,6 +50,10 @@
  
 
         $request_date = get_post_meta( $post->ID,'request_date',true);
+
+        $dateTimestamp = strtotime($request_date);
+        $formattedDate = date("l, F j, Y", $dateTimestamp);
+
         $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
         $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
             
@@ -62,7 +66,7 @@
             <?php echo $user_id->user_email; ?>
             </td>
             <td data-postdate="<?php echo $request_date; ?>">
-            <?php echo $request_date; ?>
+            <?php echo $formattedDate; ?>
             </td>
             <td>
             <?php echo '<span>' . $rqt_start_time . ' </span> - ' . '<span>' . $rqt_end_time. '</span>';  ?>
@@ -147,7 +151,7 @@
   <p>Update details..</p>
 
 
-  <form action="" method="post" id="update-form">
+  <form action="#" method="post" id="update-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
 
       <label for="name">Full name:</label><br>
       <input type="text" class="rqt-name" name="rqt-upd-name" value="" required><br>
@@ -255,7 +259,7 @@ if (isset($post->ID)) {
                   let formData = new FormData(this);
                   formData.append("update_id", updateId); // Append update ID if necessary
                   
-                  var xhr = new XMLHttpRequest();
+                  let xhr = new XMLHttpRequest();
                   xhr.open("POST", "admin.php?page=modify", true);
                   xhr.onload = function() {
                       if (xhr.status == 200) {
