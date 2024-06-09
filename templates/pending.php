@@ -87,7 +87,7 @@
           if (isset($post->ID)) {
 
           
-            echo '<form method="post" id="approveForm" data-url="'. admin_url("admin-ajax.php"). '">
+            echo '<form method="post" id="approveForm" data-url="'. admin_url("admin-ajax.php").'">
 
                     <button type="submit" class="approveButton" data-postid="'. $post->ID .'">Approve</button>
 
@@ -98,14 +98,11 @@
                     <input type="hidden" name="nonce" value="'. wp_create_nonce('approve-nonce') .'">
 
                   </form>';
-
-                  // Delete
-
              
                  
           
             // Display the Cancel form with a button that triggers the confirmation
-            echo '<form method="post" id="cancelForm" data-url="'. admin_url("admin-ajax.php"). '">
+            echo '<form method="post" id="cancelForm" data-url="'. admin_url("admin-ajax.php") .'">
                 
                 <button type="submit" class="cancelButton" data-postid="'. $post->ID .'">Cancel</button>
 

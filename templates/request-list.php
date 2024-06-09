@@ -86,15 +86,20 @@
             if (isset($post->ID)) {   
 
               // Edit         
-            echo '
-            <form id="updateForm" method="post" id="edit-request">
-              <input type="button" name="update_id" class="updateButton" value="Edit" data-postid="' . $post->ID . '">
-            </form>';
+              echo '<button type="submit" class="updateButton" data-postid="'. $post->ID .'">Edit</button>';
 
               // Delete
               echo '
-              <form id="deleteForm" method="post">
-                <input type="button" name="delete_id" class="deleteButton" value="Delete" data-postid="' . $post->ID . '">
+              <form id="deleteForm" method="post" data-url="' . admin_url("admin-ajax.php"). '">
+
+                <button type="submit" class="deleteButton" data-postid="'. $post->ID .'">Delete</button>
+
+                <input type="hidden" name="delete_id" id="delete-id"> 
+        
+                <input type="hidden" name="action" value="delete_request"> 
+        
+                <input type="hidden" name="nonce" value="'. wp_create_nonce('delete-nonce') .'">
+
               </form>';
 
             }
@@ -150,8 +155,7 @@
   <span class="close">&times;</span>
   <p>Update details..</p>
 
-
-  <form action="#" method="post" id="update-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
+  <form method="post" id="update-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
 
       <label for="name">Full name:</label><br>
       <input type="text" class="rqt-name" name="rqt-upd-name" value="" required><br>
@@ -181,106 +185,20 @@
       <label for="Date">Date:</label><br>
       <input type="date" id="request_date" name="rqt-upd-request-date"><br><br>
 
-      <input type="submit" value="Update" name="update_submit"> <br><br>
+      <button type="submit" id="editButton">Update</button>
+
+      <input type="hidden" name="update_id" id="update-id"> 
+
+      <input type="hidden" name="action" value="update_request"> 
+       
+      <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('update-nonce'); ?>">
 
 
   </form>
 
-  
 </div>
 
 </div>
 
 </div>
-
-<?php   
-
-
-if (isset($post->ID)) {
-// Add JavaScript for Ajax confirmation
-  echo '
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Step 1: Get the list of elements by class name
-    let deleteItems = document.querySelectorAll(".deleteButton");
-
-    for (let i = 0; i < deleteItems.length; i++) {
-      deleteItems[i].addEventListener("click", function() {
-
-          let deleteId = deleteItems[i].dataset.postid;
-          console.log(deleteId);
-      
-         var shouldDelete = confirm("Are you sure you want to delete this request?");
-         if (shouldDelete) {
-           // If confirmed, send an Ajax request to handle deletion
-           var xhr = new XMLHttpRequest();
-           xhr.open("POST", "admin.php?page=modify", true);
-           xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-           xhr.onreadystatechange = function() {
-             if (xhr.readyState == 4 && xhr.status == 200) {
-               // Handle success if needed
-               // Reload the page after deletion
-               location.reload();
-             }
-           };
-           xhr.send("delete_id=" + deleteId + "&delete_confirm=true");
-         }
-    
-        });
-      }
-
-      //Update
-      let updateItems = document.querySelectorAll(".updateButton");
-      // Step 3: Add event listeners for update buttons
-      for (let i = 0; i < updateItems.length; i++) {
-          updateItems[i].addEventListener("click", function() {
-              let updateId = updateItems[i].dataset.postid;
-              console.log("Update ID:", updateId);
-
-              // Implement your update logic here, such as showing a form or making an Ajax request to update the data
-              // Get the modal
-                 let updateModal = document.getElementById("update-modal");
-
-                 // When the user clicks on the edit button, open the modal
-                 updateModal.style.display = "block";
-                 
-                // Get the <span> element that closes the modal
-                let span = document.getElementsByClassName("close")[0];
-               
-                 // When the user clicks on <span> (x), close the modal
-                 span.onclick = function() {
-                  updateModal.style.display = "none";
-                 }
-
-
-                 document.getElementById("update-form").addEventListener("submit", function(event) {
-                  event.preventDefault(); // Prevent the default form submission
-                  
-                  let formData = new FormData(this);
-                  formData.append("update_id", updateId); // Append update ID if necessary
-                  
-                  let xhr = new XMLHttpRequest();
-                  xhr.open("POST", "admin.php?page=modify", true);
-                  xhr.onload = function() {
-                      if (xhr.status == 200) {
-                          // Handle success
-                          location.reload();
-                      } else {
-                          console.error("Error:", xhr.responseText);
-                      }
-                  };
-                  
-                  xhr.send(formData);
-              });
-              
-                               
-              
-            });
-      }
-
-
-  });
-</script>';
-
-}
 

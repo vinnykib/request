@@ -20,6 +20,6 @@ class Enqueue extends Main
 		wp_enqueue_style( 'rqtpluginstyle', $this->plugin_url . 'assets/css/css.css' );
 		wp_enqueue_script( 'rqtpluginscript', $this->plugin_url . 'assets/js/js.js' );
 		wp_enqueue_script( 'rqtcalendarscript', $this->plugin_url . 'assets/js/calendar.js' );
-		wp_enqueue_script( 'rqtajaxcript', $this->plugin_url . 'assets/js/ajax-calls.js' );
+		wp_enqueue_script( 'rqtajaxcript', $this->plugin_url . 'assets/js/crud-ajax.js' );
 	}
 }
