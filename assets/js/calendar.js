@@ -65,14 +65,13 @@ document.addEventListener("DOMContentLoaded", function () {
           // Determine whether to display a day from the previous, current, or next month
           if (i === 0 && j < daysFromPrevMonth) {
             // Days from the previous month
-            const prevMonthDay =
-              new Date(year, month, 0).getDate() - (daysFromPrevMonth - j) + 1;
+            const prevMonthDay = new Date(year, month, 0).getDate() - (daysFromPrevMonth - j) + 1;
             const lastMonth = new Date(year, month, 0).getMonth() + 1; // get previous month
             // get previous month
             cell.textContent = prevMonthDay;
             cell.setAttribute(
               "data-date",
-              prevMonthDay + "-" + lastMonth + "-" + lastMonthYear
+              lastMonth + "-" + prevMonthDay + "-" + lastMonthYear
             );
             cell.classList.add("prevMonth");
           } else if (dayCount <= daysInMonth) {
@@ -102,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
             cell.textContent = nextMonthDay;
             cell.setAttribute(
               "data-date",
-              nextMonthDay + "-" + nextMonth + "-" + nextMonthYear
+              nextMonth + "-" + nextMonthDay + "-" + nextMonthYear
             );
             cell.classList.add("nextMonth");
             dayCount++;
@@ -164,7 +163,7 @@ function setupClickEvents(className, inputId) {
         <!-- Trigger/Open The Modal -->
             <button type="button" id="select-time">Make Request</button>
         </div>
-    <div>
+    </div>
     </td>
             `;
 
@@ -183,10 +182,29 @@ function setupClickEvents(className, inputId) {
       // Step 4: Add selected class to the clicked element
       this.classList.add("selected");
       this.parentElement.classList.add("selected");
+
       let week = document.querySelector(".week.selected");
 
       if (week) {
         week.parentElement.insertBefore(timePicker, week.nextSibling);
+
+        let timeWrapper = document.getElementById('time-wrapper');
+        timeWrapper.style.display = 'block';
+
+        let day = document.querySelector(".day.selected");
+        if (day) {
+        day.addEventListener('click', function(event) {
+
+                  // Toggle the visibility of the element with id "time-wrapper"
+                  
+                  if (timeWrapper.style.display === 'block') {
+                      timeWrapper.style.display = 'none';
+                  } else {
+                      timeWrapper.style.display = 'block';
+                  }           
+      });
+    }
+  
 
         // Get the modal
         var modal = document.getElementById("rqt-modal");
@@ -214,31 +232,22 @@ function setupClickEvents(className, inputId) {
           }
         };
 
-        //     let getTime = document.getElementById('time-wrapper');
-        //   // Toggle the visibility of the time wrapper
-        //   getTime.style.display = (getTime.style.display === 'none' || getTime.style.display === '') ? 'block' : 'none';
       }
 
       // Get date on click
-      let selectedDate = this.dataset.date;
+      let selectedDateStr = this.dataset.date;
+      console.log(selectedDateStr);
 
-      // Set the selected date to the input field
-      //   let dateContentInput = document.getElementById(inputId);
-      //   if (dateContentInput) {
-      //     dateContentInput.value = selectedDate;
-      //   }
-
-      //   console.log(selectedDate);
-
-      let parts = selectedDate.split("-");
+      let parts = selectedDateStr.split("-");
       if (parts.length === 3) {
         // Assuming the format is mm-dd-yyyy
         let month = parseInt(parts[0], 10);
         let day = parseInt(parts[1], 10);
         let year = parseInt(parts[2], 10);
-
+      
         // Create a new Date object
         let selectedDate = new Date(year, month - 1, day);
+      
         let options = {
           weekday: "long",
           year: "numeric",
@@ -246,13 +255,14 @@ function setupClickEvents(className, inputId) {
           day: "numeric",
         };
         let formattedDate = selectedDate.toLocaleDateString("en-US", options);
-
-        let dateContentInput = document.getElementById(inputId);
+      
+        let dateContentInput = document.getElementById("calendar");
         if (dateContentInput) {
           dateContentInput.value = formattedDate;
+          console.log(formattedDate);  // Logs the formatted date string
+        } else {
+          console.log("Input element not found");
         }
-
-        console.log(formattedDate);
       } else {
         console.log("Invalid date format");
       }
@@ -276,5 +286,18 @@ function setupClickEvents(className, inputId) {
       document.getElementById("select-time").addEventListener("click", addTime);
     });
   }
-}
 
+  // Disable days before today
+  const today = new Date();
+            today.setHours(0, 0, 0, 0); // Ensure comparison is done at midnight
+
+            document.querySelectorAll('.day').forEach(cell => {
+                const cellDate = cell.getAttribute('data-date');
+                const [month, day, year] = cellDate.split('-').map(Number);
+                const cellDateObj = new Date(year, month - 1, day);
+
+                if (cellDateObj < today) {
+                    cell.classList.add('disabled');
+                }
+            });
+}
