@@ -249,4 +249,64 @@ updateForm.addEventListener("submit", function (event) {
       }
     });
   }
+
+//Export
+// Get the button by ID
+let exportButton = document.getElementById("export-button");
+
+if (exportButton) {
+    exportButton.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        // Ask for confirmation before proceeding with the export
+        let shouldExport = confirm("Are you sure you want to export these requests?");
+        if (!shouldExport) {
+            return; // If the user cancels, do nothing
+        }
+
+        // Get the export form and URL
+        let exportForm = document.getElementById("export-form");
+        let exportUrl = exportForm.dataset.url;
+
+        // Create URLSearchParams from the form data
+        let exportParams = new URLSearchParams(new FormData(exportForm));
+
+        // Send the fetch request
+        fetch(exportUrl, {
+            method: "POST",
+            body: exportParams,
+        })
+        .then((response) => {
+            // Check if the response is a CSV file
+            if (response.headers.get('Content-Type').includes('text/csv')) {
+                return response.blob(); // Get the CSV content as a Blob
+            } else {
+                return response.json(); // Otherwise, parse as JSON
+            }
+        })
+        .then((data) => {
+            if (data instanceof Blob) {
+                // Handle CSV download
+                let url = window.URL.createObjectURL(data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = 'requests_export.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } else if (data.error) {
+                console.error("Error:", data.error);
+            } else {
+                console.log("Export successful:", data);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    });
+}
+
+
+  
+
 });

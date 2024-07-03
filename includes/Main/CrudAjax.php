@@ -172,7 +172,12 @@ public function delete_request() {
     }
 
         wp_die();
-    }
-
+    }    
+    
 
 }
+
+    
+    
+        
+            

@@ -64,10 +64,47 @@
         </div>
 
         <div id="tab-4" class="tab-pane">
-          <h3>Exports</h3>
+          <div class="apt-container">
+            <div class="apt-panel-body">
+               <div class="export-container">
+               <h3>Export Requests</h3>
+               <p>Select dates to export requests within the specified range</p>
+                  <form method="post" id="export-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>"> 
+                  <p>
+                  <b><label for="from">From Date</label></b><br>
+                  <input type="date" name="from_date" id="from_date" autocomplete="off" required> 
+                  </p>
+                  <p>
+                  <b><label for="to">To Date</label></b><br>
+                  <input type="date" name="to_date" id="to_date" autocomplete="off" required>
+                  </p>
+                      
+
+                  <p>
+                  <b><label for="request_status">Status</label></b><br>
+                  <select name="request_status">
+                  <option value="any">All</option>
+                  <option value="publish">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="draft">Canceled</option>
+                  </select>
+                  </p>
+
+                  <button type="submit" id="export-button">Export to CSV</button>
+                
+
+                  <input type="hidden" name="action" value="export_requests"> 
+                  
+                  <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('export-all-nonce'); ?>">
+                  </form>
+
+               </div>
+            </div>
+</div>
         </div>
         <div id="tab-5" class="tab-pane">
           <h3>Shortcodes</h3>
+          <code>[requestform]</code>
         </div>
         
 
@@ -75,5 +112,3 @@
       
   </div>
 </div>
-
-

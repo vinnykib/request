@@ -16,7 +16,8 @@ final class Init
 			Pages\AdminPages::class,
 			Main\Enqueue::class,
 			Main\Links::class,
-			Main\CrudAjax::class
+			Main\CrudAjax::class,
+			Main\Export::class
 		];
 	}
 
