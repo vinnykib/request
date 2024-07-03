@@ -37,6 +37,64 @@ class CrudAjax extends Main
             $update_result = wp_update_post($updated_post);
 
             if ($update_result !== 0) {
+                // Get post author's email
+                $post = get_post($id);
+                $post_author_email = get_the_author_meta('user_email', $post->post_author);
+
+                $request_date = get_post_meta( $post->ID,'request_date',true);
+
+                $dateTimestamp = strtotime($request_date);
+                $formattedDate = date("l, F j, Y", $dateTimestamp);
+
+                $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
+                $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
+                
+                // Send email notification
+                $to = $post_author_email;
+                $subject = 'Request approved';
+                $message = '
+                <html>
+                <head>
+                    <style>
+                        .email-content {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                        }
+                        .email-header {
+                            font-size: 18px;
+                            font-weight: bold;
+                            color: #333;
+                        }
+                        .email-body {
+                            margin-top: 10px;
+                        }
+                        .email-footer {
+                            margin-top: 20px;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-content">
+                        <div class="email-header">Request Approval Notification</div>
+                        <div class="email-body">
+                            <p>Your request has been approved. Below are the details:</p>
+                            <p><strong>Email:</strong> ' . $post_author_email . '</p>
+                            <p><strong>Date:</strong> ' . $formattedDate . '</p>
+                            <p><strong>Time:</strong> ' . $rqt_start_time . ' - ' . $rqt_end_time . '</p>
+                        </div>
+                        <div class="email-footer">
+                            <p>Thank you,</p>
+                            <p>Your Company Name</p>
+                        </div>
+                    </div>
+                </body>
+                </html>';
+
+                $headers = array('Content-Type: text/html; charset=UTF-8');
+                
+                wp_mail($to, $subject, $message, $headers);
                 echo json_encode(array("success" => true));
             } else {
                 echo json_encode(array("success" => false, "error" => "Failed to approve request."));
@@ -65,6 +123,66 @@ class CrudAjax extends Main
             $update_result = wp_update_post($updated_post);
 
             if ($update_result !== 0) {
+
+                // Get post author's email
+                $post = get_post($id);
+                $post_author_email = get_the_author_meta('user_email', $post->post_author);
+
+                $request_date = get_post_meta( $post->ID,'request_date',true);
+
+                $dateTimestamp = strtotime($request_date);
+                $formattedDate = date("l, F j, Y", $dateTimestamp);
+
+                $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
+                $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
+
+                // Send email notification
+                $to = $post_author_email;
+                $subject = 'Request Cancelled';
+                $message = '
+                <html>
+                <head>
+                    <style>
+                        .email-content {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                        }
+                        .email-header {
+                            font-size: 18px;
+                            font-weight: bold;
+                            color: #333;
+                        }
+                        .email-body {
+                            margin-top: 10px;
+                        }
+                        .email-footer {
+                            margin-top: 20px;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-content">
+                        <div class="email-header">Request Cancellation Notification</div>
+                        <div class="email-body">
+                            <p>Your request has been cancelled. Below are the details:</p>
+                            <p><strong>Email:</strong> ' . $post_author_email . '</p>
+                            <p><strong>Date:</strong> ' . $formattedDate . '</p>
+                            <p><strong>Time:</strong> ' . $rqt_start_time . ' - ' . $rqt_end_time . '</p>
+                        </div>
+                        <div class="email-footer">
+                            <p>Thank you,</p>
+                            <p>Your Company Name</p>
+                        </div>
+                    </div>
+                </body>
+                </html>';
+
+                $headers = array('Content-Type: text/html; charset=UTF-8');
+                
+                wp_mail($to, $subject, $message, $headers);
+
                 echo json_encode(array("success" => true));
             } else {
                 echo json_encode(array("success" => false, "error" => "Failed to cancel request."));
