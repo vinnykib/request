@@ -256,7 +256,7 @@ function setupClickEvents(className, inputId) {
         };
         let formattedDate = selectedDate.toLocaleDateString("en-US", options);
       
-        let dateContentInput = document.getElementById("calendar");
+        let dateContentInput = document.getElementById("request_date");
         if (dateContentInput) {
           dateContentInput.value = formattedDate;
           console.log(formattedDate);  // Logs the formatted date string
