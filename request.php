@@ -148,9 +148,6 @@ function request_form_shortcode() {
 
     <!-- HTML markup for the form -->
     <div class="wrapper">
-        <div class="rqt-panel-head">
-            <h3>Add Request</h3>
-        </div>
         <header>
             <div class="header" id="header">
                 <span id="prevMonth" class="material-symbols-rounded"><</span>
