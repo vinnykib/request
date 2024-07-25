@@ -7,6 +7,7 @@ namespace Includes\Pages;
 use Includes\Main\Main;
 use Includes\Menu\AdminMenu;
 use Includes\Pages\Callbacks\PageFunctions;
+use Includes\Pages\Callbacks\SettingsFunctions;
 
 /**
 * 
@@ -16,6 +17,8 @@ class AdminPages extends Main
 	public $settings;
 
 	public $callbacks;
+
+	public $settings_callbacks;
 
 	public $pages = array();
 
@@ -30,9 +33,23 @@ class AdminPages extends Main
 
 		$this->callbacks = new PageFunctions();
 
+		$this->settings_callbacks = new SettingsFunctions();
+
 		$this->setPages();
 
 		$this->setSubPages();
+
+		$this->setSettings();
+
+		$this->setSections();
+
+		$this->setFields();
+
+		// $this->setColorSettings();
+
+		// $this->setColorSections();
+
+		// $this->setColorFields();
 
 		$this->settings->addPages( $this->pages )->withSubPage( 'Requests List' )->addSubPages( $this->subpages )->register();
 	}
@@ -97,5 +114,65 @@ class AdminPages extends Main
 			),
 		);
 	}
+
+	public function setSettings()
+{
+    $args = array();
+
+    // Prepare settings for weeks
+    foreach ($this->weeks as $key => $value) {
+        $args[] = array(
+            'option_group' => 'requests_options_group',
+            'option_name' => $key,
+            'callback' => array($this->settings_callbacks, 'checkboxSanitize')
+        );
+    }
+    // Register all settings
+    foreach ($args as $arg) {
+        register_setting($arg['option_group'], $arg['option_name'], $arg['callback']);
+    }
+
+    // Apply the settings
+    $this->settings->setSettings($args);
+}
+
+	
+public function setSections()
+{
+    $args = array(
+        array(
+            'id' => 'request_admin_index',
+            'title' => 'Settings',
+            'callback' => array($this->settings_callbacks, 'adminSectionManager'),
+            'page' => 'settings'
+        )
+    );
+
+    $this->settings->setSections($args);
+}
+
+public function setFields()
+{
+    $args = array();
+
+    // Prepare fields for weeks
+    foreach ($this->weeks as $key => $value) {
+        $args[] = array(
+            'id' => $key,
+            'title' => $value,
+            'callback' => array($this->settings_callbacks, 'checkboxField'),
+            'page' => 'settings',
+            'section' => 'request_admin_index',
+            'args' => array(
+                'label_for' => $key,
+                'class' => 'ui-toggle'
+            )
+        );
+    }
+
+    // Set the fields
+    $this->settings->setFields($args);
+}
+
 
 }

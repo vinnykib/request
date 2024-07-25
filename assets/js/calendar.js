@@ -286,18 +286,57 @@ function setupClickEvents(className, inputId) {
       document.getElementById("select-time").addEventListener("click", addTime);
     });
   }
+  
 
-  // Disable days before today
-  const today = new Date();
-            today.setHours(0, 0, 0, 0); // Ensure comparison is done at midnight
 
-            document.querySelectorAll('.day').forEach(cell => {
-                const cellDate = cell.getAttribute('data-date');
-                const [month, day, year] = cellDate.split('-').map(Number);
-                const cellDateObj = new Date(year, month - 1, day);
+//  // Identify if it's the settings page or the calendar page
+//  const isSettingsPage = document.querySelectorAll('.ui-toggle').length > 0;
+//  const isCalendarPage = document.querySelectorAll('.day').length > 0;
 
-                if (cellDateObj < today) {
-                    cell.classList.add('disabled');
-                }
-            });
+//  if (isSettingsPage) {
+//      // Settings page logic
+//      const dayCheckboxes = document.querySelectorAll('.ui-toggle');
+
+//      // Load saved states from localStorage and set the checkboxes
+//      dayCheckboxes.forEach(checkbox => {
+//          const day = checkbox.id;
+//          const savedState = localStorage.getItem(`checkboxChecked-${day}`) === 'true';
+//          checkbox.checked = savedState;
+
+//          // Save the state to localStorage whenever it changes
+//          checkbox.addEventListener('change', function() {
+//              localStorage.setItem(`checkboxChecked-${day}`, checkbox.checked);
+//          });
+//      });
+
+//  } else if (isCalendarPage) {
+//      // Calendar page logic
+//      // Get today's date
+//      const today = new Date();
+//      today.setHours(0, 0, 0, 0); // Set to the start of the day
+
+//      // Retrieve the state of each checkbox from localStorage
+//      const checkboxStates = {};
+//      ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].forEach(day => {
+//          checkboxStates[day] = localStorage.getItem(`checkboxChecked-${day}`) === 'true';
+//      });
+
+//      document.querySelectorAll('.day').forEach(cell => {
+//          const cellDate = cell.getAttribute('data-date');
+//          const [month, day, year] = cellDate.split('-').map(Number);
+//          const cellDateObj = new Date(year, month - 1, day);
+
+//          // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+//          const dayOfWeek = cellDateObj.getDay();
+//          const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+//          // Disable cell if date is before today or if the corresponding checkbox is checked
+//          if (cellDateObj < today || checkboxStates[dayNames[dayOfWeek]]) {
+//              cell.classList.add('disabled');
+//          }
+//      });
+//  }
+
+
 }
+

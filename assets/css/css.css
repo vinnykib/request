@@ -86,13 +86,6 @@
   padding: 20px;
 }
 
-#disable-sms input {
-  margin: auto;
-}
-#disable-sms input[type="text"] {
-  width: 30em;
-}
-
 .export-container {
   margin: 40px;
 }
@@ -204,39 +197,23 @@
 
 /*Calendar CSS*/
 
-.wrapper{
-padding: 2px;
+.calendar-wrapper{
 background: #fff;
 border-radius: 10px;
+overflow: auto;
 box-shadow: 0 15px 40px rgba(0,0,0,0.12);
 }
-.wrapper .header{
+.calendar-wrapper .calendar-header{
 display: flex;
 align-items: center;
 padding: 5px 30px;
 justify-content: space-between;
 }
-header .header span{
-height: 38px;
-width: 38px;
-margin: 0 1px;
+.calendar-header span{
 cursor: pointer;
-color: #878787;
-text-align: center;
-line-height: 38px;
-font-size: 1.9rem;
-user-select: none;
-border-radius: 50%;
 }
-.header span:last-child{
-margin-right: -10px;
-}
-header .header span:hover{
-background: #f2f2f2;
-}
-header .current-date{
-font-size: 1.45rem;
-font-weight: 500;
+.calendar-header .current-date, #calendar table th{
+cursor: default;
 }
 
 #calendar table {
@@ -245,7 +222,7 @@ font-weight: 500;
   }
   
   #calendar th {
-  background-color: #007bff;
+  background-color: #2bb2bb;
   color: #fff;
   }
   

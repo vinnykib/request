@@ -17,34 +17,27 @@
       <div class="settings-tab-content">
         <div id="tab-1" class="active tab-pane">
           <h3>General</h3>
+
+          <div class="wrap">
+        <h1>Custom Color Changer Settings</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('custom_color_changer_settings');
+            do_settings_sections('custom_color_changer');
+
+            submit_button();
+           
+            ?>
+
+        </form>
+
+    </div>
           
         </div>
         <div id="tab-2" class="tab-pane">
         <h3>Date/Time</h3>
 
         <form action="">
-
-          <label for="Sunday">Sunday</label>
-          <input type="checkbox" value="Sunday">
-
-          <label for="Monday">Monday</label>
-          <input type="checkbox" value="Monday">
-
-          <label for="Tuesday">Tuesday</label>
-          <input type="checkbox" value="Tuesday">
-
-          <label for="Wednesday">Wednesday</label>
-          <input type="checkbox" value="Wednesday">
-
-          <label for="Thursday">Thursday</label>
-          <input type="checkbox" value="Thursday">
-
-          <label for="Friday">Friday</label>
-          <input type="checkbox" value="Friday">
-
-          <label for="Saturday">Saturday</label>
-          <input type="checkbox" value="Saturday"><br><br>
-          
 
           <label>Start:</label>
           <input type="time" value="09:00:00">
@@ -57,7 +50,25 @@
 
         </form>
 
+        <div class="wrap">
+	<?php settings_errors(); ?>
 
+	<form method="post" action="options.php">
+		<?php 
+			settings_fields( 'requests_options_group' );
+			do_settings_sections( 'settings' );
+			submit_button();
+		?>
+	</form>
+
+  <form method="post" action="options.php">
+		<?php 
+			settings_fields( 'requests_colors_group' );
+			do_settings_sections( 'settings' );
+			submit_button();
+		?>
+	</form>
+</div>
         </div>
         <div id="tab-3" class="tab-pane">
           <h3>Emails</h3>
