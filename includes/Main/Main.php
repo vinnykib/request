@@ -16,6 +16,8 @@ class Main
 
 	public $colors = array();
 
+	public $filterdays = array();
+
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( dirname( __FILE__, 2 ) );
 		$this->plugin_url = plugin_dir_url( dirname( __FILE__, 2 ) );
@@ -29,6 +31,11 @@ class Main
 			'thursday' => 'Thursday',
 			'friday' => 'Friday',
 			'saturday' => 'Saturday'
+		);
+
+		$this->filterdays = array(
+			'start_day' => 'Start day',
+			'end_day' => 'End day'
 		);
 	}
 }

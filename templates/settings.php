@@ -8,9 +8,10 @@
         <ul class="settings-tabs-list">
           <li class="active"><a href="#tab-1">General</a></li>
           <li><a href="#tab-2">Date/Time</a></li>
-          <li><a href="#tab-3">Email</a></li>
-          <li><a href="#tab-4">Exports</a></li>
-          <li><a href="#tab-5">Shortcodes</a></li>
+          <li><a href="#tab-3">Payment</a></li>
+          <li><a href="#tab-4">Email</a></li>
+          <li><a href="#tab-5">Exports</a></li>
+          <li><a href="#tab-6">Shortcodes</a></li>
         </ul>
       </div>
 
@@ -37,44 +38,44 @@
         <div id="tab-2" class="tab-pane">
         <h3>Date/Time</h3>
 
-        <form action="">
-
-          <label>Start:</label>
-          <input type="time" value="09:00:00">
-
-          <label>End:</label>
-          <input type="time" value="17:00:00">
-
-          <label>Time slot Interval:</label>
-          <input type="text" value="30 mins">
-
-        </form>
-
         <div class="wrap">
 	<?php settings_errors(); ?>
 
-	<form method="post" action="options.php">
+	<form method="post" action="options.php" id="settingsForm">
+
+  <input type="hidden" name="action" value="settings_request"> 
+  
 		<?php 
 			settings_fields( 'requests_options_group' );
 			do_settings_sections( 'settings' );
 			submit_button();
 		?>
 	</form>
-
-  <form method="post" action="options.php">
-		<?php 
-			settings_fields( 'requests_colors_group' );
-			do_settings_sections( 'settings' );
-			submit_button();
-		?>
-	</form>
+  
 </div>
         </div>
         <div id="tab-3" class="tab-pane">
+          <h3>Payments</h3>
+          <?php
+
+?>
+
+<form method="post" action="options.php">
+<?php
+settings_fields('custom_settings_group');
+do_settings_sections('custom-settings-page');
+submit_button();
+?>
+</form>
+
+
+
+        </div>
+        <div id="tab-4" class="tab-pane">
           <h3>Emails</h3>
         </div>
 
-        <div id="tab-4" class="tab-pane">
+        <div id="tab-5" class="tab-pane">
           <div class="apt-container">
             <div class="apt-panel-body">
                <div class="export-container">
@@ -113,7 +114,7 @@
             </div>
 </div>
         </div>
-        <div id="tab-5" class="tab-pane">
+        <div id="tab-6" class="tab-pane">
           <h3>Shortcodes</h3>
           <code>[requestform]</code>
         </div>

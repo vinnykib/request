@@ -156,7 +156,7 @@ function setupClickEvents(className, inputId) {
 
         <div>
             <label for="rqt">End:</label>
-            <input type="time" id="form-end-time" name="rqt_end_time" value="17:00">
+            <input type="time" id="form-end-time" name="rqt_end_time" value="10:00">
         </div>
 
         <div>
@@ -232,8 +232,166 @@ function setupClickEvents(className, inputId) {
           }
         };
 
-      }
 
+        //Ajax
+
+        // let addRequestForm = document.getElementById('addRequestForm');
+
+        // addRequestForm.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+            
+        //     // Reset the form messages
+        //     resetMessages();
+            
+        //     // Collect all the data
+        //     let data = {
+        //         name: addRequestForm.querySelector('[name="rqt-name"]').value,
+        //         email: addRequestForm.querySelector('[name="rqt-email"]').value,
+        //         phone: addRequestForm.querySelector('[name="phone"]').value,
+        //         description: addRequestForm.querySelector('[name="description"]').value,
+        //         rqt_start_time: addRequestForm.querySelector('[name="rqt_start_time"]').value,
+        //         rqt_end_time: addRequestForm.querySelector('[name="rqt_end_time"]').value,
+        //         request_date: addRequestForm.querySelector('[name="request_date"]').value,
+        //         time_hrs: addRequestForm.querySelector('[name="request_hrs"]').value,
+        //         time_mins: addRequestForm.querySelector('[name="request_mins"]').value,
+        //     };
+            
+        //     // Validate everything
+        //     if (!data.name) {
+        //         addRequestForm.querySelector('[data-error="invalidName"]').classList.add('show');
+        //         return;
+        //     }
+        
+        //     if (!validateEmail(data.email)) {
+        //         addRequestForm.querySelector('[data-error="invalidEmail"]').classList.add('show');
+        //         return;
+        //     }
+        
+        //     if (!data.description) {
+        //         addRequestForm.querySelector('[data-error="invalidMessage"]').classList.add('show');
+        //         return;
+        //     }
+        
+        //     // Ajax HTTP POST request
+        //     let url = addRequestForm.dataset.url;
+        //     let params = new URLSearchParams(new FormData(addRequestForm));
+        
+        //     addRequestForm.querySelector('.js-form-submission').classList.add('show');
+        
+        //     fetch(url, {
+        //         method: 'POST',
+        //         body: params,
+        //     })
+        //     .then((res) => res.json())
+        //     .then((response) => {
+        //         resetMessages();
+                
+        //         if (response === 0 || response.status === 'error') {
+        //             addRequestForm.querySelector('.js-form-error').classList.add('show');
+        //             return;
+        //         }
+        
+        //         addRequestForm.querySelector('.js-form-success').classList.add('show');
+        //         addRequestForm.reset();
+        
+        //         if (response.data && response.data.redirect_url) {
+        //             window.location.href = response.data.redirect_url;
+        //         } else {
+        //             console.log("No redirect URL provided");
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         resetMessages();
+        //         addRequestForm.querySelector('.js-form-error').classList.add('show');
+        //     });
+        // });
+
+        let addRequestForm = document.getElementById('addRequestForm');
+
+        addRequestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Reset the form messages
+            resetMessages();
+            
+            // Collect all the data
+            let data = {
+                name: addRequestForm.querySelector('[name="rqt-name"]').value,
+                email: addRequestForm.querySelector('[name="rqt-email"]').value,
+                phone: addRequestForm.querySelector('[name="phone"]').value,
+                description: addRequestForm.querySelector('[name="description"]').value,
+                rqt_start_time: addRequestForm.querySelector('[name="rqt_start_time"]').value,
+                rqt_end_time: addRequestForm.querySelector('[name="rqt_end_time"]').value,
+                request_date: addRequestForm.querySelector('[name="request_date"]').value,
+                time_hrs: addRequestForm.querySelector('[name="request_hrs"]').value,
+                time_mins: addRequestForm.querySelector('[name="request_mins"]').value,
+            };
+            
+            // Validate everything
+            if (!data.name) {
+                addRequestForm.querySelector('[data-error="invalidName"]').classList.add('show');
+                return;
+            }
+        
+            if (!validateEmail(data.email)) {
+                addRequestForm.querySelector('[data-error="invalidEmail"]').classList.add('show');
+                return;
+            }
+        
+            if (!data.description) {
+                addRequestForm.querySelector('[data-error="invalidMessage"]').classList.add('show');
+                return;
+            }
+        
+            // Ajax HTTP POST request
+            let url = addRequestForm.dataset.url;
+            let params = new URLSearchParams(new FormData(addRequestForm));
+        
+            addRequestForm.querySelector('.js-form-submission').classList.add('show');
+        
+            fetch(url, {
+                method: 'POST',
+                body: params,
+            })
+            .then((res) => res.json())
+            .then((response) => {
+                resetMessages();
+                
+                if (response === 0 || response.status === 'error') {
+                    addRequestForm.querySelector('.js-form-error').classList.add('show');
+                    return;
+                }
+        
+                addRequestForm.querySelector('.js-form-success').classList.add('show');
+                addRequestForm.reset();
+        
+                if (response.data && response.data.redirect_url) {
+                    window.location.href = response.data.redirect_url;
+                } else {
+                  if (response.data.message) {
+                    console.log(response.data.message);
+                } 
+                    console.log("No redirect URL provided");
+                }
+            })
+            .catch((error) => {
+                resetMessages();
+                addRequestForm.querySelector('.js-form-error').classList.add('show');
+            });
+        });
+        
+        function resetMessages() {
+            document.querySelectorAll('.field-msg').forEach((f) => f.classList.remove('show'));
+        }
+        
+        function validateEmail(email) {
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        
+
+
+      }
       // Get date on click
       let selectedDateStr = this.dataset.date;
       console.log(selectedDateStr);
@@ -260,6 +418,11 @@ function setupClickEvents(className, inputId) {
         if (dateContentInput) {
           dateContentInput.value = formattedDate;
           console.log(formattedDate);  // Logs the formatted date string
+
+          //Pass Date to modal form
+        let modalDate = document.getElementById("modal-date");
+        modalDate.innerHTML = formattedDate; 
+
         } else {
           console.log("Input element not found");
         }
@@ -269,19 +432,51 @@ function setupClickEvents(className, inputId) {
 
       function addTime() {
         // Get time on click
-
+    
         // Set the selected time to the input field
-        let selectedStartTime =
-          document.getElementById("form-start-time").value;
+        let selectedStartTime = document.getElementById("form-start-time").value;
         let formStartTime = document.getElementById("start-time");
         formStartTime.value = selectedStartTime;
         console.log(selectedStartTime);
-
+    
         let selectedEndTime = document.getElementById("form-end-time").value;
         let formEndTime = document.getElementById("end-time");
         formEndTime.value = selectedEndTime;
         console.log(selectedEndTime);
-      }
+    
+        // Pass time to modal form
+        let modalTime = document.getElementById("modal-time");
+        modalTime.innerHTML = selectedStartTime + " - " + selectedEndTime; 
+    
+        // Calculate time range
+        function calculateTimeRange(startTime, endTime) {
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+            const diff = end - start;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return { hours, minutes };
+        }
+    
+        const timeRange = calculateTimeRange(selectedStartTime, selectedEndTime);
+        console.log(`Hours: ${timeRange.hours}, Minutes: ${timeRange.minutes}`);
+
+        // Pass time in hours and minutes to hdden form fields 
+        let timeHours = document.getElementById("request_hrs");
+        timeHours.value = timeRange.hours;
+        let timeMins = document.getElementById("request_mins");
+        timeMins.value = timeRange.minutes;
+        
+        // Display the time range in the modal (optional)
+        let modalTimeRange = document.getElementById("modal-time-range");
+        if (modalTimeRange) {
+            modalTimeRange.innerHTML = `Time Range: ${timeRange.hours} hours and ${timeRange.minutes} minutes`;
+        }
+
+        // Pass Price to modal form
+        let modalPrice = document.getElementById("modal-time");
+        modalTime.innerHTML = selectedStartTime + " - " + selectedEndTime; 
+    }
 
       document.getElementById("select-time").addEventListener("click", addTime);
     });
@@ -289,53 +484,99 @@ function setupClickEvents(className, inputId) {
   
 
 
-//  // Identify if it's the settings page or the calendar page
-//  const isSettingsPage = document.querySelectorAll('.ui-toggle').length > 0;
-//  const isCalendarPage = document.querySelectorAll('.day').length > 0;
+//Code to disable days in calendar
+  
+function handleCalendarAndSettings() {
+  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const isSettingsPage = document.querySelectorAll('input.day-settings').length > 0;
+  const isCalendarPage = document.querySelectorAll('.day').length > 0;
 
-//  if (isSettingsPage) {
-//      // Settings page logic
-//      const dayCheckboxes = document.querySelectorAll('.ui-toggle');
+  function applyCalendarLogic() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-//      // Load saved states from localStorage and set the checkboxes
-//      dayCheckboxes.forEach(checkbox => {
-//          const day = checkbox.id;
-//          const savedState = localStorage.getItem(`checkboxChecked-${day}`) === 'true';
-//          checkbox.checked = savedState;
+      const checkboxStates = calendarSettings.disableDays;
 
-//          // Save the state to localStorage whenever it changes
-//          checkbox.addEventListener('change', function() {
-//              localStorage.setItem(`checkboxChecked-${day}`, checkbox.checked);
-//          });
-//      });
+      // Get the start and end dates directly from calendarSettings
+      let startDate, endDate;
+      if (checkboxStates.start_day) {
+          startDate = new Date(checkboxStates.start_day);
+          startDate.setHours(0, 0, 0, 0);
+      }
+      if (checkboxStates.end_day) {
+          endDate = new Date(checkboxStates.end_day);
+          endDate.setHours(23, 59, 59, 999); // Include the entire end day
+      }
 
-//  } else if (isCalendarPage) {
-//      // Calendar page logic
-//      // Get today's date
-//      const today = new Date();
-//      today.setHours(0, 0, 0, 0); // Set to the start of the day
+      document.querySelectorAll('.day').forEach(cell => {
+          const cellDate = cell.getAttribute('data-date');
+          const [month, day, year] = cellDate.split('-').map(Number);
+          const cellDateObj = new Date(year, month - 1, day);
 
-//      // Retrieve the state of each checkbox from localStorage
-//      const checkboxStates = {};
-//      ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].forEach(day => {
-//          checkboxStates[day] = localStorage.getItem(`checkboxChecked-${day}`) === 'true';
-//      });
+          const dayOfWeek = cellDateObj.getDay();
 
-//      document.querySelectorAll('.day').forEach(cell => {
-//          const cellDate = cell.getAttribute('data-date');
-//          const [month, day, year] = cellDate.split('-').map(Number);
-//          const cellDateObj = new Date(year, month - 1, day);
+          let disable = false;
 
-//          // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-//          const dayOfWeek = cellDateObj.getDay();
-//          const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+          // Disable days before today
+          if (cellDateObj < today) {
+              disable = true;
+          }
 
-//          // Disable cell if date is before today or if the corresponding checkbox is checked
-//          if (cellDateObj < today || checkboxStates[dayNames[dayOfWeek]]) {
-//              cell.classList.add('disabled');
-//          }
-//      });
-//  }
+          // Disable days based on start and end dates
+          if (startDate && !endDate) {
+              // Disable all days before the start date
+              if (cellDateObj < startDate) {
+                  disable = true;
+              }
+          } else if (!startDate && endDate) {
+              // Disable all days after the end date
+              if (cellDateObj > endDate) {
+                  disable = true;
+              }
+          } else if (startDate && endDate) {
+              // Disable all days outside the range between start and end dates
+              if (cellDateObj < startDate || cellDateObj > endDate) {
+                  disable = true;
+              }
+          }
+
+          // Disable cell if the corresponding checkbox is checked
+          if (checkboxStates[dayNames[dayOfWeek]]) {
+              disable = true;
+          }
+
+          // Apply the disabled class if needed
+          if (disable) {
+              cell.classList.add('disabled');
+          } else {
+              cell.classList.remove('disabled');
+          }
+      });
+  }
+
+  if (isSettingsPage) {
+      // Settings page logic (no changes needed here)
+
+  } else if (isCalendarPage) {
+      applyCalendarLogic();
+
+      const calendarContainer = document.querySelector('#calendar');
+      if (calendarContainer) {
+          const observer = new MutationObserver(() => {
+              applyCalendarLogic();
+          });
+
+          observer.observe(calendarContainer, { childList: true, subtree: true });
+      } else {
+          console.error('Calendar container not found. Please check the selector.');
+      }
+  }
+}
+
+// Call the function to initialize
+handleCalendarAndSettings();
+
+
 
 
 }

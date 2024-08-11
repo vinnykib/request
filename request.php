@@ -37,53 +37,68 @@ if ( class_exists( 'Includes\\Init' ) ) {
 }
 
 //Create Services Custom Post type
-add_action( 'init', 'services_post_type' );
+// add_action( 'init', 'services_post_type' );
 
-function services_post_type() {
-    $args = array(
-        'name' => __( 'Services' ),
-        'singular_name' => __( 'Service' )
-    );
+// function services_post_type() {
+//     $args = array(
+//         'name' => __( 'Services' ),
+//         'singular_name' => __( 'Service' )
+//     );
 
-    register_post_type( 'service_cpt',
-        array(
-            'labels' => $args, 
-            'public' => false,
-            'has_archive' => false,
-            'show_ui' => false,
-            'show_in_admin_bar' => false,
-            'supports' => array('title', 'editor'),
-            'taxonomies'    => array('service_taxonomy')
-        )
-    );
-}
+//     register_post_type( 'service_cpt',
+//         array(
+//             'labels' => $args, 
+//             'public' => false,
+//             'has_archive' => false,
+//             'show_ui' => false,
+//             'show_in_admin_bar' => false,
+//             'supports' => array('title', 'editor'),
+//             'taxonomies'    => array('service_taxonomy')
+//         )
+//     );
+// }
 
-// Add services taxonomy
-add_action( 'init', 'services_taxonomy', 0 );
+// // Add services taxonomy
+// add_action( 'init', 'services_taxonomy', 0 );
 
-function services_taxonomy() {
-    $args = array(
-        'name' => _x( 'Services', 'taxonomy general name' ),
-        'singular_name' => _x( 'Service', 'taxonomy singular name' ),
-        'menu_name' => __( 'Services' ),
-        'all_items' => __( 'All Services' ),
-        'edit_item' => __( 'Edit Service' ), 
-        'update_item' => __( 'Update Service' ),
-        'add_new_item' => __( 'Add New Service' ),
-        'new_item_name' => __( 'New Service' ),
-        'not_found'          => __( 'No Services found' ),
-    );
+// function services_taxonomy() {
+//     $args = array(
+//         'name' => _x( 'Services', 'taxonomy general name' ),
+//         'singular_name' => _x( 'Service', 'taxonomy singular name' ),
+//         'menu_name' => __( 'Services' ),
+//         'all_items' => __( 'All Services' ),
+//         'edit_item' => __( 'Edit Service' ), 
+//         'update_item' => __( 'Update Service' ),
+//         'add_new_item' => __( 'Add New Service' ),
+//         'new_item_name' => __( 'New Service' ),
+//         'not_found'          => __( 'No Services found' ),
+//     );
 
-    register_taxonomy('service_taxonomy','requests',array(
-        'labels' => $args,
-        'query_var'  => true,
-        'hierarchical' => false,
-        'show_ui' => true,
-        'show_admin_column' => false,
-        'rewrite' => true
-        ));
+//     register_taxonomy('service_taxonomy','requests',array(
+//         'labels' => $args,
+//         'query_var'  => true,
+//         'hierarchical' => false,
+//         'show_ui' => true,
+//         'show_admin_column' => false,
+//         'rewrite' => true
+//         ));
         
-}
+// }
+
+//Highlight Service menu
+
+// add_action('parent_file', 'highlight_service_menu');
+
+// function highlight_service_menu($parent_file) {
+//     global $current_screen;
+
+//     // Check if it's the desired taxonomy screen
+//     if ($current_screen->taxonomy == 'service_taxonomy') {
+//         $parent_file = 'requests';
+//     }
+
+//     return $parent_file;
+// }
 
 //Add custom user roles
 add_action('init', 'custom_user_role');
@@ -115,317 +130,35 @@ function custom_user_role(){
 }
 
 
-//Highlight Service menu
 
-add_action('parent_file', 'highlight_service_menu');
-
-function highlight_service_menu($parent_file) {
-    global $current_screen;
-
-    // Check if it's the desired taxonomy screen
-    if ($current_screen->taxonomy == 'service_taxonomy') {
-        $parent_file = 'requests';
-    }
-
-    return $parent_file;
-}
 
 function rqt_enqueue_script() {   
+    // Enqueue the WordPress color picker style and script
+    wp_enqueue_style( 'wp-color-picker' );
+    wp_enqueue_script( 'wp-color-picker' );
+
+    // Enqueue custom scripts and styles
     wp_enqueue_style( 'rqtpluginstyle', plugin_dir_url( __FILE__ ) . 'assets/css/css.css' );
-    wp_enqueue_script( 'rqtcalendarscript', plugin_dir_url( __FILE__ ) . 'assets/js/calendar.js' );
-    wp_enqueue_script( 'my_custom_script', plugin_dir_url( __FILE__ ) . 'assets/js/js.js' );
+    wp_enqueue_script( 'rqtcalendarscript', plugin_dir_url( __FILE__ ) . 'assets/js/calendar.js', array( 'jquery' ), false, true );
+    wp_enqueue_script( 'my_custom_script', plugin_dir_url( __FILE__ ) . 'assets/js/js.js', array( 'jquery', 'wp-color-picker' ), false, true );
+
+
+    wp_localize_script('rqtcalendarscript', 'calendarSettings', array(
+        'disableDays' => array(
+            'sunday'    => get_option('sunday'),
+            'monday'    => get_option('monday'),
+            'tuesday'   => get_option('tuesday'),
+            'wednesday' => get_option('wednesday'),
+            'thursday'  => get_option('thursday'),
+            'friday'    => get_option('friday'),
+            'saturday'  => get_option('saturday'),
+            'start_day'  => get_option('start_day'),
+            'end_day'  => get_option('end_day'),
+        )
+    ));
 }
 add_action('wp_enqueue_scripts', 'rqt_enqueue_script');
 
-
-
-// Register shortcode
-add_shortcode('requestform', 'request_form_shortcode');
-
-// Shortcode function
-function request_form_shortcode() {
-    ob_start(); ?>
-
-    <!-- HTML markup for the form -->
-    <div class="calendar-wrapper">
-            <div class="calendar-header" id="calendar-header">
-                <span id="prevMonth" class="material-symbols-rounded"><</span>
-                <span class="current-date"></span>
-                <span id="nextMonth" class="material-symbols-rounded">></span>
-            </div>
-        <div id="calendar"></div>
-
-         <!-- The Modal -->
-    <div id="rqt-modal" class="rqt-modal">
-        <div class="rqt-modal-content">
-            <span class="close">&times;</span>
-            <p>Add your details..</p>
-            <form action="" method="post">
-                <label for="name">Full name:</label><br>
-                <input type="text" class="name" name="rqt-name" required><br>
-                <label for="email">Email:</label><br>
-                <input type="email" class="email" name="rqt-email" required><br>
-                <label for="phone">Phone Number:</label><br>
-                <input type="number" class="phone" name="phone"><br>
-                <label for="description">Description:</label><br>
-                <textarea class="description" name="description"></textarea><br><br>
-                <input type="hidden" id="start-time" name="rqt_start_time">
-                <input type="hidden" id="end-time" name="rqt_end_time">
-                <input type="hidden" id="request_date" name="request_date">
-                <input type="submit" value="Save"> <br><br>
-            </form>
-        </div>
-    </div>
-
-
-    </div>
-
-
-
-    <?php
-    $output = ob_get_clean();
-    return $output;
-}
-
-// Handle form submission
-
-add_action('init', 'submit_request');
-
-function submit_request() {
-    if (isset($_POST['rqt-name']) && isset($_POST['rqt-email'])) {
-        $user_name = sanitize_user($_POST['rqt-name']);
-        $user_email = sanitize_email($_POST['rqt-email']);
-        $phone = sanitize_text_field($_POST['phone']);
-        $description = sanitize_text_field($_POST['description']);
-        $rqt_start_time = sanitize_text_field($_POST['rqt_start_time']);
-        $rqt_end_time = sanitize_text_field($_POST['rqt_end_time']);
-        $request_date = sanitize_text_field($_POST['request_date']);
-
-        // Check if the email already exists
-        $user = get_user_by('email', $user_email);
-
-        if ($user) {
-            $user_id = $user->ID;
-        } else {
-            // Email doesn't exist, create a new user
-            $random_password = wp_generate_password(12, false);
-            $user_id = wp_create_user($user_name, $random_password, $user_email);
-
-            if (is_wp_error($user_id)) {
-                // An error occurred while creating the user
-                $error_message = $user_id->get_error_message();
-                echo $error_message;
-                return;
-            }
-
-            // Assign a role to the user
-            $user = new WP_User($user_id);
-            $user->remove_role('subscriber');
-            $user->add_role('request_customer');
-
-            // Update user meta data
-            update_user_meta($user_id, 'phone', $phone);
-        }
-
-        // Create the post
-        $new_post = array(
-            'post_title' => 'New Request',
-            'post_content' => $description,
-            'post_type' => 'service_cpt',
-            'post_author' => $user_id,
-            'post_status' => 'pending'
-        );
-        $post_id = wp_insert_post($new_post);
-
-        if ($post_id) {
-            // Update post meta data
-            update_post_meta($post_id, 'rqt_start_time', $rqt_start_time);
-            update_post_meta($post_id, 'rqt_end_time', $rqt_end_time);
-            update_post_meta($post_id, 'request_date', $request_date);
-            echo "Request added successfully with the ID of $post_id and user id of $user_id through shortode";
-        } else {
-            echo "Error, Request not created";
-        }
-    }
-}
-
-
-// Profile shorcode
-add_shortcode('requests_shortcode', 'custom_requests_shortcode_function');
-
-function custom_requests_shortcode_function() {
-
-    $current_user = wp_get_current_user();
-
-    if (in_array('administrator', $current_user->roles) || in_array('request_customer', $current_user->roles)) :
-
-    ob_start();
-
-    ?>
-
-    <div class="rqt-container">
-        <div class="rqt-panel-head">
-            <h3>Requests</h3>
-        </div>
-        <div class="rqt-panel-body">
-            <?php
-            $paged = isset($_GET['paged']) ? $_GET['paged'] : 1;
-            $args = array(
-                'post_type' => 'service_cpt',
-                'post_status' => array('draft','pending','publish'),
-                'posts_per_page' => 10,
-                'paged' => $paged
-            );
-
-            $post_query = new WP_Query($args);
-
-            if ($post_query->have_posts()) :
-                ?>
-                <table class="rqt-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        while ($post_query->have_posts()) :
-                            $post_query->the_post();
-                            global $post;
-
-                            $request_user_id = $post->post_author;
-                            $user_id = get_userdata($request_user_id);
-                            $logged_in_user_id = wp_get_current_user($request_user_id);
-
-                            if ($user_id == $logged_in_user_id) :
-                                $request_date = get_post_meta($post->ID, 'request_date', true);
-                                $rqt_start_time = get_post_meta($post->ID, 'rqt_start_time', true);
-                                $rqt_end_time = get_post_meta($post->ID, 'rqt_end_time', true);
-                        ?>
-                                <tr>
-                                    <td><?php echo $user_id->display_name; ?></td>
-                                    <td><?php echo $user_id->user_email; ?></td>
-                                    <td><?php echo $request_date; ?></td>
-                                    <td><?php echo $rqt_start_time . ' - ' . $rqt_end_time; ?></td>
-                                    <?php if ($post->post_status == 'publish') :
-                                        echo '<td>Approved</td>';
-                                    elseif ($post->post_status == 'pending') :
-                                        echo '<td>Pending</td>';
-                                        else:
-                                            echo '<td>Cancelled</td>';
-                                    endif;
-                                    ?>
-                                    <td>
-                                        <?php
-                                        echo "<form id='updateForm' method='post' id='edit-request'>
-                                                    <input type='hidden' name='update_id' value='" . $post->ID . "'>
-                                                    <input type='button' class='updateButton' name='update' value='Edit'>
-                                                </form>";
-
-                                        // Delete
-                                        if (isset($post->ID)) {
-                                            echo '
-                                                <form id="deleteForm" method="post">
-                                                    <input type="hidden" name="delete_id" value="' . $post->ID . '">
-                                                    <input type="button" class="deleteButton" value="Cancel" name="delete">
-                                                </form>';
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                        <?php
-                            endif;
-                        endwhile;
-                        ?>
-                    </tbody>
-                </table>
-
-                <!-- Request table pagination -->
-                <?php
-                echo '<nav aria-label="Page navigation">';
-                echo '<ul class="pagination">';
-                echo '<li class="page-item">';
-                echo paginate_links(array(
-                    'base' => 'admin.php?page=requests&paged=%#%',
-                    'total' => $post_query->max_num_pages,
-                    'current' => $paged
-                ));
-                echo '</li>';
-                echo '</ul>';
-                echo '</nav>';
-                ?>
-
-            <?php else : ?>
-                <div class="no-apt">
-                    <h3>There are no Requests</h3>
-                </div>
-            <?php endif; 
-            ?>
-        </div>
-    </div>
-
-    <!-- The Modal -->
-    <div id="rqt-modal" class="rqt-modal">
-        <!-- Modal content -->
-        <div class="rqt-modal-content">
-            <span class="close">&times;</span>
-            <p>Some text in the Modal..</p>
-            <form action="" method="post">
-                <label for="name">Full name:</label><br>
-                <input type="text" class="name" name="rqt-name" required><br>
-                <label for="email">Email:</label><br>
-                <input type="email" class="email" name="rqt-email" required><br>
-                <label for="phone">Phone Number:</label><br>
-                <input type="number" class="phone" name="phone"><br>
-                <label for="description">Description:</label><br>
-                <textarea class="description" name="description"></textarea><br><br>
-                <input type="hidden" id="start-time" name="rqt_start_time">
-                <input type="hidden" id="end-time" name="rqt_end_time">
-                <input type="hidden" id="request_date" name="request_date">
-                <input type="submit" value="Update"> <br><br>
-            </form>
-        </div>
-    </div>
-
-    <?php
-    if (isset($post->ID)) {
-        // Add JavaScript for Ajax confirmation
-        echo '
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                let items = document.querySelectorAll(".deleteButton");
-                for (let i = 0; i < items.length; i++) {
-                    items[i].addEventListener("click", function() {
-                        var shouldDelete = confirm("Are you sure you want to delete this request?");
-                        if (shouldDelete) {
-                            var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "admin.php?page=modify", true);
-                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState == 4 && xhr.status == 200) {
-                                    location.reload();
-                                }
-                            };
-                            xhr.send("delete_id=' . $post->ID . '&delete_confirm=true");
-                        }
-                    });
-                }
-            });
-        </script>';
-    }
-
-    wp_reset_postdata();
-
-
-    return ob_get_clean();
-
-endif; 
-}
 
 
 
@@ -723,3 +456,150 @@ function custom_color_changer_enqueue_scripts($hook) {
     wp_enqueue_script('custom-color-changer-script', plugin_dir_url(__FILE__) . 'custom-color-changer.js', array('wp-color-picker'), false, true);
 }
 add_action('admin_enqueue_scripts', 'custom_color_changer_enqueue_scripts');
+
+
+
+
+/**
+ * 
+ * 
+ * Start of woocommerce code
+ * 
+ * 
+*/
+// Add custom checkbox to product type options
+add_filter('product_type_options', 'add_request_plugin_product_checkbox');
+function add_request_plugin_product_checkbox($options) {
+    $options['request_plugin_product'] = array(
+        'id' => '_request_plugin_product',
+        'wrapper_class' => 'show_if_simple show_if_variable',
+        'label' => __('Request Plugin Product', 'woocommerce'),
+        'description' => __('Check this box to include this product as a request plugin product.', 'woocommerce'),
+        'default' => 'no',
+    );
+    return $options;
+}
+
+// Save the custom checkbox field value
+add_action('woocommerce_process_product_meta', 'save_request_plugin_product_checkbox');
+function save_request_plugin_product_checkbox($post_id) {
+    $request_plugin_product = isset($_POST['_request_plugin_product']) ? 'yes' : 'no';
+    update_post_meta($post_id, '_request_plugin_product', $request_plugin_product);
+}
+
+// Add custom fields to the product data metabox for variations
+add_action('woocommerce_product_after_variable_attributes', 'add_custom_fields_to_variants', 10, 3);
+function add_custom_fields_to_variants($loop, $variation_data, $variation) {
+    echo '<div class="options_group">';
+    
+    woocommerce_wp_text_input( 
+        array( 
+            'id'          => 'custom_hours_field[' . $loop . ']', 
+            'label'       => __( 'Hours', 'woocommerce' ), 
+            'placeholder' => 'e.g. 1 hour',
+            'desc_tip'    => 'true',
+            'description' => __( 'Enter the number of hours for this variant.', 'woocommerce' ),
+            'value'       => get_post_meta($variation->ID, 'custom_hours_field', true)
+        )
+    );
+
+    woocommerce_wp_text_input( 
+        array( 
+            'id'          => 'custom_minutes_field[' . $loop . ']', 
+            'label'       => __( 'Minutes', 'woocommerce' ), 
+            'placeholder' => 'e.g. 30 minutes',
+            'desc_tip'    => 'true',
+            'description' => __( 'Enter the number of minutes for this variant.', 'woocommerce' ),
+            'value'       => get_post_meta($variation->ID, 'custom_minutes_field', true)
+        )
+    );
+    
+    echo '</div>';
+}
+
+// Save custom fields for variations
+add_action('woocommerce_save_product_variation', 'save_custom_fields_on_variants', 10, 2);
+function save_custom_fields_on_variants($variation_id, $i) {
+    if (isset($_POST['custom_hours_field'][$i])) {
+        update_post_meta($variation_id, 'custom_hours_field', sanitize_text_field($_POST['custom_hours_field'][$i]));
+    }
+
+    if (isset($_POST['custom_minutes_field'][$i])) {
+        update_post_meta($variation_id, 'custom_minutes_field', sanitize_text_field($_POST['custom_minutes_field'][$i]));
+    }
+}
+
+
+// Settings for selected product
+function register_custom_settings() {
+    register_setting('custom_settings_group', 'selected_product_id');
+
+    add_settings_section(
+        'custom_settings_section',
+        __('Product Selection', 'textdomain'),
+        'custom_settings_section_callback',
+        'custom-settings-page'
+    );
+
+    add_settings_field(
+        'selected_product_id',
+        __('Select a Product', 'textdomain'),
+        'selected_product_id_callback',
+        'custom-settings-page',
+        'custom_settings_section'
+    );
+}
+add_action('admin_init', 'register_custom_settings');
+
+function custom_settings_section_callback() {
+    echo '<p>' . __('Select a product to save as a setting.', 'textdomain') . '</p>';
+}
+
+
+
+function selected_product_id_callback() {
+    $selected_product_id = get_option('selected_product_id', '');
+    
+    $args = array(
+        'post_type' => 'product',
+        'meta_query' => array(
+            array(
+                'key' => '_request_plugin_product',
+                'value' => 'yes',
+                'compare' => '=',
+            ),
+        ),
+    );
+
+    $query = new \WP_Query($args);
+
+    if ($query->have_posts()) {
+        echo '<select name="selected_product_id" id="selected_product_id">';
+        echo '<option value="">' . __('Select a product', 'textdomain') . '</option>'; // Initial option
+        while ($query->have_posts()) {
+            $query->the_post();
+            $product_id = get_the_ID();
+            $product_title = get_the_title();
+            $product = wc_get_product($product_id);
+            
+            if ($product->is_type('variable')) {
+                // Get all variation prices
+                $variation_prices = $product->get_variation_prices();
+                $min_price = min($variation_prices['price']);
+                $max_price = max($variation_prices['price']);
+                
+                $product_price = wc_price($min_price) . ' - ' . wc_price($max_price);
+            } else {
+                $product_price = wc_price($product->get_price());
+            }
+
+            $selected = ($product_id == $selected_product_id) ? 'selected' : '';
+            echo '<option value="' . esc_attr($product_id) . '" ' . $selected . '>' . esc_html($product_title) . ' - ' . $product_price . '</option>';
+        }
+        echo '</select>';
+        wp_reset_postdata();
+    } else {
+        echo '<p>' . __('No products available', 'textdomain') . '</p>';
+    }
+}
+

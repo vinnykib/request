@@ -88,14 +88,14 @@ class AdminPages extends Main
 				'menu_slug' => 'add-request', 
 				'callback' => array( $this->callbacks,'addRequest' )
 			),
-			array(
-				'parent_slug' => 'requests', 
-				'page_title' => 'Services', 
-				'menu_title' => 'Services', 
-				'capability' => 'manage_options', 
-				'menu_slug' => 'edit-tags.php?taxonomy=service_taxonomy'
-				// 'callback' => array( $this->callbacks,'adminServices' )
-			),
+			// array(
+			// 	'parent_slug' => 'requests', 
+			// 	'page_title' => 'Services', 
+			// 	'menu_title' => 'Services', 
+			// 	'capability' => 'manage_options', 
+			// 	'menu_slug' => 'edit-tags.php?taxonomy=service_taxonomy'
+			// 	// 'callback' => array( $this->callbacks,'adminServices' )
+			// ),
 			array(
 				'parent_slug' => 'requests', 
 				'page_title' => 'Customers', 
@@ -127,6 +127,16 @@ class AdminPages extends Main
             'callback' => array($this->settings_callbacks, 'checkboxSanitize')
         );
     }
+
+	// Prepare settings for filter days
+    foreach ($this->filterdays as $key => $value) {
+        $args[] = array(
+            'option_group' => 'requests_options_group',
+            'option_name' => $key,
+            'callback' => array($this->settings_callbacks, 'filterSanitize')
+        );
+    }
+
     // Register all settings
     foreach ($args as $arg) {
         register_setting($arg['option_group'], $arg['option_name'], $arg['callback']);
@@ -142,8 +152,14 @@ public function setSections()
     $args = array(
         array(
             'id' => 'request_admin_index',
-            'title' => 'Settings',
+            'title' => 'Days of the week requests allowed',
             'callback' => array($this->settings_callbacks, 'adminSectionManager'),
+            'page' => 'settings'
+		),
+		array(
+            'id' => 'filterdays_admin_index',
+            'title' => 'Set start and end date for requests',
+            'callback' => array($this->settings_callbacks, 'filterSectionManager'),
             'page' => 'settings'
         )
     );
@@ -165,7 +181,24 @@ public function setFields()
             'section' => 'request_admin_index',
             'args' => array(
                 'label_for' => $key,
-                'class' => 'ui-toggle'
+                'class' => 'day-settings'
+            )
+        );
+
+		
+    }
+
+	 // Prepare fields for filterdays
+	 foreach ($this->filterdays as $key => $value) {
+        $args[] = array(
+            'id' => $key,
+            'title' => $value,
+            'callback' => array($this->settings_callbacks, 'filterCheckboxField'),
+            'page' => 'settings',
+            'section' => 'filterdays_admin_index',
+            'args' => array(
+                'label_for' => $key,
+                'class' => 'filter-settings'
             )
         );
     }

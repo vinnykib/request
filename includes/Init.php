@@ -17,7 +17,8 @@ final class Init
 			Main\Enqueue::class,
 			Main\Links::class,
 			Main\CrudAjax::class,
-			Main\Export::class
+			Main\Export::class,
+			Main\Shortcode::class
 		];
 	}
 

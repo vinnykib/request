@@ -22,8 +22,10 @@ class CrudAjax extends Main
 
     public function approve_request()
     {
-        if ( ! DOING_AJAX || ! check_ajax_referer('approve-nonce', 'nonce') ) {
-            echo "Just an error";
+          // Check if the request is an AJAX call and if the nonce is valid
+          if ( ! DOING_AJAX || ! check_ajax_referer('approve-nonce', 'nonce') ) {
+            echo json_encode(array('error' => 'Invalid AJAX request'));
+            wp_die();
         }
 
         if (isset($_POST["approve_id"])) {

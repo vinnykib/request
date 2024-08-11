@@ -91,7 +91,7 @@
 
                     <button type="submit" class="approveButton" data-postid="'. $post->ID .'">Approve</button>
 
-                    <input type="hidden" name="approve_id" value="'. $post->ID .'"> 
+                    <input type="hidden" name="approve_id" id="approve-id"> 
              
                     <input type="hidden" name="action" value="approve_request"> 
              
@@ -106,7 +106,7 @@
                 
                 <button type="submit" class="cancelButton" data-postid="'. $post->ID .'">Cancel</button>
 
-                <input type="hidden" name="cancel_id" value="'. $post->ID .'"> 
+                <input type="hidden" name="cancel_id" id="cancel-id"> 
 
                 <input type="hidden" name="action" value="cancel_request"> 
 
@@ -160,7 +160,7 @@
         echo '<ul class="pagination">';
         echo '<li class="page-item">';
           echo paginate_links( array(
-            'base' => 'admin.php?page=requests&paged=%#%',
+            'base' => 'admin.php?page=pending&paged=%#%',
             'total' => $post_query->max_num_pages,
             'current' => $paged
         ));

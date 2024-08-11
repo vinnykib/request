@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function (e) {
   //Approve
   // Get the list of approve buttons by class name
   let approveItems = document.querySelectorAll(".approveButton");
@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
   approveItems.forEach((approveButton) => {
     approveButton.addEventListener("click", function (event) {
       event.preventDefault();
+
+      let approveId = approveButton.dataset.postid;
+      console.log(approveId);
+
+      let approveValue = document.getElementById("approve-id");
+      approveValue.value = approveId;
+
       let shouldApprove = confirm(
         "Are you sure you want to approve this request?"
       );
@@ -15,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let approveUrl = approveForm.dataset.url;
         console.log(approveUrl);
+
 
         // Send a fetch request to handle approval
         let approveParams = new URLSearchParams(new FormData(approveForm));
@@ -49,6 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       let cancelId = cancelButton.dataset.postid;
       console.log(cancelId);
+
+      let cancelValue = document.getElementById("cancel-id");
+      cancelValue.value = cancelId;
 
       let shouldCancel = confirm(
         "Are you sure you want to cancel this request?"
@@ -307,6 +318,5 @@ if (exportButton) {
 }
 
 
-  
-
 });
+

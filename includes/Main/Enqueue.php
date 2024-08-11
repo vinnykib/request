@@ -41,5 +41,6 @@ class Enqueue extends Main
 			wp_register_style('custom-color-changer', false);
 			wp_enqueue_style('custom-color-changer');
 
+
 	}
 }
