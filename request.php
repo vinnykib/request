@@ -156,6 +156,10 @@ function rqt_enqueue_script() {
             'end_day'  => get_option('end_day'),
         )
     ));
+
+    // Saved dates
+    $saved_dates = get_option('dynamic_dates', array());
+    wp_add_inline_script('rqtcalendarscript', 'let savedDates = ' . json_encode($saved_dates) . ';', 'before');
 }
 add_action('wp_enqueue_scripts', 'rqt_enqueue_script');
 
@@ -416,7 +420,7 @@ function custom_color_changer_apply_styles() {
         .calendar-wrapper {
             background-color: {$calendar_body_color};
             color: {$calendar_body_text_color};
-            width: {$calendar_width}px;
+            max-width: {$calendar_width}px;
         }
         #calendar table {
             height: {$calendar_height}px;

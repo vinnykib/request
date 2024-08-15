@@ -42,5 +42,25 @@ class Enqueue extends Main
 			wp_enqueue_style('custom-color-changer');
 
 
+
+			wp_localize_script('rqtcalendarscript', 'calendarSettings', array(
+				'disableDays' => array(
+					'sunday'    => get_option('sunday'),
+					'monday'    => get_option('monday'),
+					'tuesday'   => get_option('tuesday'),
+					'wednesday' => get_option('wednesday'),
+					'thursday'  => get_option('thursday'),
+					'friday'    => get_option('friday'),
+					'saturday'  => get_option('saturday'),
+					'start_day'  => get_option('start_day'),
+					'end_day'  => get_option('end_day'),
+				)
+			));
+
+			// Saved dates
+			$saved_dates = get_option('dynamic_dates', array());
+			wp_add_inline_script('rqtcalendarscript', 'let savedDates = ' . json_encode($saved_dates) . ';', 'before');
+
+
 	}
 }

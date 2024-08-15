@@ -23,16 +23,14 @@
   background-color: #ddd;
 }
 
-.rqt-table th {
+.rqt-table th{
   background-color: #2bb2bb;
   color: white;
-  padding: 8px;
+  padding: 15px;
   text-align: left;
 }
-
 .rqt-table td {
-  border-bottom: 1px solid #ddd;
-  padding: 8px;
+  padding: 15px;
 }
 
 .pagination{
@@ -103,7 +101,6 @@
 #calendar td {
   padding: 5px;
   text-align: center;
-  border: 1px solid #ccc;
   cursor: pointer;
 }
 
@@ -379,4 +376,125 @@ cursor: pointer;
 
 .success {
   color: rgb(47, 129, 47);
+}
+
+/*Admin calendar*/
+
+.admin-calendar {
+  width: 350px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.admin-month {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #2bb2bb;
+  color: white;
+}
+
+.admin-month h1 {
+  margin: 0;
+}
+
+.admin-days div:hover {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.admin-active {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+}
+
+#aelected-dates {
+  width: 350px;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#selected-dates th, #aelected-dates td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#SelectedDatesButton{
+  background-color: #2e84bd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.actionButtons form {
+  display: inline;
+  padding: 5px;
+}
+
+button.remove-btn, button.deleteButton, button.cancelButton{
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button.updateButton, button.approveButton, #editButton, #export-button{
+  background-color: #3e8535;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button.remove-btn:hover {
+  background-color: #d32f2f;
+}
+.clicked-day {
+  background-color: #ffeeba; /* Light yellow background to indicate the day is clicked */
+  color: #856404; /* Darker yellow text */
+  font-weight: bold; /* Make the text bold */
+  border-radius: 50%; /* Make it circular, if desired */
+}
+.admin-days-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.admin-day-name {
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.admin-weekdays, .admin-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 10px;
+}
+
+.admin-weekdays div {
+  text-align: center;
+  font-weight: bold;
+}
+
+.admin-days div {
+  text-align: center;
+  padding: 10px;
+  margin: 2px 0;
+  cursor: pointer;
 }

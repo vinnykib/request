@@ -80,7 +80,7 @@
                 echo '<td>Cancelled</td>';
             endif;
             ?>
-            <td>
+            <td class="actionButtons">
           <?php
              
             if (isset($post->ID)) {   

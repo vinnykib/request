@@ -38,12 +38,10 @@
         <div id="tab-2" class="tab-pane">
         <h3>Date/Time</h3>
 
-        <div class="wrap">
+  <div class="wrap">
 	<?php settings_errors(); ?>
 
-	<form method="post" action="options.php" id="settingsForm">
-
-  <input type="hidden" name="action" value="settings_request"> 
+	<form method="post" action="options.php">
   
 		<?php 
 			settings_fields( 'requests_options_group' );
@@ -51,8 +49,58 @@
 			submit_button();
 		?>
 	</form>
-  
+  <div class="wrap">
+          <h3>Select specific dates to disable in the calendar</h3>
 </div>
+
+  <div id="admin-calendar" class="admin-calendar">
+
+<div class="admin-month">
+          <button id="admin-prev">&#10094;</button>
+          <h1 id="admin-month-year"></h1>
+          <button id="admin-next">&#10095;</button>
+      </div>
+  <div class="admin-weekdays">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+  </div>
+  <div id="admin-days" class="admin-days">
+      <!-- Calendar days will go here -->
+  </div>
+</div>
+
+
+  <table id="selected-dates">
+  <thead>
+      <tr>
+          <th>Selected Dates</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr id="no-dates-message">
+          <td colspan="2">No dates selected</td>
+      </tr>
+  </tbody>
+</table>
+
+
+<form method="post" id="settingsForm" data-url="<?php echo admin_url('admin-ajax.php'); ?>" action="options.php">
+  <button type="submit" id="SelectedDatesButton">Save</button>
+  <input type="hidden" name="action" value="save_dynamic_data"> 
+  <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('selected-dates-nonce'); ?>">
+</form>
+
+</div>
+
+
+
+  
         </div>
         <div id="tab-3" class="tab-pane">
           <h3>Payments</h3>

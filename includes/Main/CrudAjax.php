@@ -16,9 +16,86 @@ class CrudAjax extends Main
         add_action('wp_ajax_cancel_request', array($this, 'cancel_request'));
         add_action('wp_ajax_update_request', array($this, 'update_request'));
         add_action('wp_ajax_delete_request', array($this, 'delete_request'));
+
+        add_action('wp_ajax_save_dynamic_data', array($this, 'save_dynamic_data'));
     }
+    // public function save_dynamic_data() {
+    //     error_log('Request data: ' . print_r($_POST, true));
+    
+    //     if (!isset($_POST['nonce']) || !check_ajax_referer('selected-dates-nonce', 'nonce', false)) {
+    //         error_log('Invalid nonce');
+    //         wp_send_json_error(array('message' => 'Invalid nonce.'));
+    //         wp_die();
+    //     }
+    
+    //     if (isset($_POST['selected_dates']) && is_array($_POST['selected_dates'])) {
+    //         $selected_dates = $_POST['selected_dates'];
+    //         $stored_dates = array_map('sanitize_text_field', $selected_dates);
+    
+    //         error_log('Saving dates: ' . print_r($stored_dates, true));
+    
+    //         $result = update_option('dynamic_dates', $stored_dates);
+    
+    //         if ($result !== false) {
+    //             wp_send_json_success('Data saved successfully!');
+    //         } else {
+    //             error_log('Failed to save data');
+    //             wp_send_json_error(array('message' => 'Failed to save data.'));
+    //         }
+    //     } else {
+    //         error_log('No dates provided');
+    //         wp_send_json_error(array('message' => 'No dates provided.'));
+    //     }
+    
+    //     wp_die();
+    // }
 
+    public function save_dynamic_data() {
+        error_log('Request data: ' . print_r($_POST, true));
+    
+        if (!isset($_POST['nonce']) || !check_ajax_referer('selected-dates-nonce', 'nonce', false)) {
+            error_log('Invalid nonce');
+            wp_send_json_error(array('message' => 'Invalid nonce.'));
+            wp_die();
+        }
+    
+        // Check if 'selected_dates' is set and not empty
+        if (isset($_POST['selected_dates']) && !empty($_POST['selected_dates'])) {
+            $selected_dates = $_POST['selected_dates'];
+            $stored_dates = array_map('sanitize_text_field', $selected_dates);
+    
+            error_log('Saving dates: ' . print_r($stored_dates, true));
+    
+            $result = update_option('dynamic_dates', $stored_dates);
+    
+            if ($result !== false) {
+                wp_send_json_success('Data saved successfully!');
+            } else {
+                error_log('Failed to save data');
+                wp_send_json_error(array('message' => 'Failed to save data.'));
+            }
+        } else {
+            // If 'selected_dates' is not set or is empty, save null
+            $stored_dates = null;
+    
+            error_log('Saving dates: ' . print_r($stored_dates, true));
+    
+            $result = update_option('dynamic_dates', $stored_dates);
+    
+            if ($result !== false) {
+                wp_send_json_success('Data saved successfully!');
+            } else {
+                error_log('Failed to save data');
+                wp_send_json_error(array('message' => 'Failed to save data.'));
+            }
+        }
+    
+        wp_die();
+    }
+    
+    
 
+    
 
     public function approve_request()
     {

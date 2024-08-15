@@ -484,8 +484,99 @@ function setupClickEvents(className, inputId) {
   
 
 
-//Code to disable days in calendar
+// //Code to disable days in calendar
   
+// function handleCalendarAndSettings() {
+//   const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+//   const isSettingsPage = document.querySelectorAll('input.day-settings').length > 0;
+//   const isCalendarPage = document.querySelectorAll('.day').length > 0;
+//   const rqtSelectDate = document.querySelectorAll('.rqt-select-date').length > 0;
+
+//   function applyCalendarLogic() {
+//       const today = new Date();
+//       today.setHours(0, 0, 0, 0);
+
+//       const checkboxStates = calendarSettings.disableDays;
+
+//       // Get the start and end dates directly from calendarSettings
+//       let startDate, endDate;
+//       if (checkboxStates.start_day) {
+//           startDate = new Date(checkboxStates.start_day);
+//           startDate.setHours(0, 0, 0, 0);
+//       }
+//       if (checkboxStates.end_day) {
+//           endDate = new Date(checkboxStates.end_day);
+//           endDate.setHours(23, 59, 59, 999); // Include the entire end day
+//       }
+
+//       document.querySelectorAll('.day').forEach(cell => {
+//           const cellDate = cell.getAttribute('data-date');
+//           const [month, day, year] = cellDate.split('-').map(Number);
+//           const cellDateObj = new Date(year, month - 1, day);
+
+//           const dayOfWeek = cellDateObj.getDay();
+
+//           let disable = false;
+
+//           // Disable days before today
+//           if (cellDateObj < today) {
+//               disable = true;
+//           }
+
+//           // Disable days based on start and end dates
+//           if (startDate && !endDate) {
+//               // Disable all days before the start date
+//               if (cellDateObj < startDate) {
+//                   disable = true;
+//               }
+//           } else if (!startDate && endDate) {
+//               // Disable all days after the end date
+//               if (cellDateObj > endDate) {
+//                   disable = true;
+//               }
+//           } else if (startDate && endDate) {
+//               // Disable all days outside the range between start and end dates
+//               if (cellDateObj < startDate || cellDateObj > endDate) {
+//                   disable = true;
+//               }
+//           }
+
+//           // Disable cell if the corresponding checkbox is checked
+//           if (checkboxStates[dayNames[dayOfWeek]]) {
+//               disable = true;
+//           }
+
+//           // Apply the disabled class if needed
+//           if (disable) {
+//               cell.classList.add('disabled');
+//           } else {
+//               cell.classList.remove('disabled');
+//           }
+//       });
+//   }
+
+//   if (isSettingsPage) {
+//       // Settings page logic (no changes needed here)
+
+//   } else if (isCalendarPage) {
+//       applyCalendarLogic();
+
+//       const calendarContainer = document.querySelector('#calendar');
+//       if (calendarContainer) {
+//           const observer = new MutationObserver(() => {
+//               applyCalendarLogic();
+//           });
+
+//           observer.observe(calendarContainer, { childList: true, subtree: true });
+//       } else {
+//           console.error('Calendar container not found. Please check the selector.');
+//       }
+//   }
+// }
+
+// // Call the function to initialize
+// handleCalendarAndSettings();
+
 function handleCalendarAndSettings() {
   const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   const isSettingsPage = document.querySelectorAll('input.day-settings').length > 0;
@@ -497,7 +588,6 @@ function handleCalendarAndSettings() {
 
       const checkboxStates = calendarSettings.disableDays;
 
-      // Get the start and end dates directly from calendarSettings
       let startDate, endDate;
       if (checkboxStates.start_day) {
           startDate = new Date(checkboxStates.start_day);
@@ -505,47 +595,57 @@ function handleCalendarAndSettings() {
       }
       if (checkboxStates.end_day) {
           endDate = new Date(checkboxStates.end_day);
-          endDate.setHours(23, 59, 59, 999); // Include the entire end day
+          endDate.setHours(23, 59, 59, 999);
       }
+
+      // Ensure savedDates is an array; default to an empty array if not
+      const disabledDates = Array.isArray(savedDates) ? savedDates.map(dateString => {
+          const [month, day, year] = dateString.split('/').map(Number);
+          const date = new Date(year, month - 1, day);
+          date.setHours(0, 0, 0, 0);
+          // console.log(`Parsed disabled date: ${date.toISOString()}`); // Debugging line
+          return date;
+      }) : [];
 
       document.querySelectorAll('.day').forEach(cell => {
           const cellDate = cell.getAttribute('data-date');
           const [month, day, year] = cellDate.split('-').map(Number);
           const cellDateObj = new Date(year, month - 1, day);
+          cellDateObj.setHours(0, 0, 0, 0); // Normalize to midnight local time
+
+          // console.log(`Processing cell date: ${cellDateObj.toISOString()}`); // Debugging line
 
           const dayOfWeek = cellDateObj.getDay();
 
           let disable = false;
 
-          // Disable days before today
           if (cellDateObj < today) {
               disable = true;
           }
 
-          // Disable days based on start and end dates
           if (startDate && !endDate) {
-              // Disable all days before the start date
               if (cellDateObj < startDate) {
                   disable = true;
               }
           } else if (!startDate && endDate) {
-              // Disable all days after the end date
               if (cellDateObj > endDate) {
                   disable = true;
               }
           } else if (startDate && endDate) {
-              // Disable all days outside the range between start and end dates
               if (cellDateObj < startDate || cellDateObj > endDate) {
                   disable = true;
               }
           }
 
-          // Disable cell if the corresponding checkbox is checked
           if (checkboxStates[dayNames[dayOfWeek]]) {
               disable = true;
           }
 
-          // Apply the disabled class if needed
+          if (disabledDates.some(disabledDate => disabledDate.getTime() === cellDateObj.getTime())) {
+              // console.log(`Disabling date: ${cellDateObj.toISOString()}`); // Debugging line
+              disable = true;
+          }
+
           if (disable) {
               cell.classList.add('disabled');
           } else {
@@ -556,7 +656,6 @@ function handleCalendarAndSettings() {
 
   if (isSettingsPage) {
       // Settings page logic (no changes needed here)
-
   } else if (isCalendarPage) {
       applyCalendarLogic();
 
@@ -573,10 +672,8 @@ function handleCalendarAndSettings() {
   }
 }
 
-// Call the function to initialize
+// Initialize the function
 handleCalendarAndSettings();
-
-
 
 
 }

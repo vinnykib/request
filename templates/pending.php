@@ -81,7 +81,7 @@
               echo '<td>Pending</td>';
             endif;
             ?>
-            <td>
+            <td class="actionButtons">
           <?php
 
           if (isset($post->ID)) {
