@@ -425,12 +425,16 @@ function custom_color_changer_apply_styles() {
         #calendar table {
             height: {$calendar_height}px;
         }
-        #calendar-header {
+        #calendar .calendar-header {
             background-color: {$calendar_header_color};
             color: {$calendar_header_text_color};
             height: {$calendar_header_height}px;
         }
-        #calendar table th {
+        #select-time, .rqt-submit-btn{
+            background-color: {$calendar_header_color};
+            color: {$calendar_header_text_color};
+        }
+        #calendar .week-header  {
             background-color: {$week_header_color};
             color: {$week_header_text_color};
         }

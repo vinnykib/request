@@ -1,26 +1,23 @@
 <div class="calendar-wrapper">
-    <div class="calendar-header" id="calendar-header">
-        <span id="prevMonth" class="material-symbols-rounded"><</span>
-        <span class="current-date"></span>
-        <span id="nextMonth" class="material-symbols-rounded">></span>
-    </div>
     <div id="calendar"></div>
 
     <div id="rqt-modal" class="rqt-modal">
         <div class="rqt-modal-content">
-            <span class="close">&times;</span>
+        <div class="close-wrapper"><span class="close">&times;</span></div>
+        <div class="modal-form-wrapper">            
             <form method="post" id="addRequestForm" data-url="<?php echo admin_url('admin-ajax.php'); ?>">            
-            
 
-            <div>
-                Date: <p id="modal-date"></p>  
-                Time: <p" id="modal-time"></p>
+            <div id="details-confirm-check">
+                <div id="modal-date"></div>  
+                <div id="modal-time"></div>
+                <div id="modal-price"></div>
+
             </div>
 
                 <p>Add your details..</p>
                 
 
-                <br><label for="name">Full name:</label><br>
+               <label for="name">Full name:</label><br>
                 <input type="text" class="name" name="rqt-name"><br>
                 <small class="field-msg error" data-error="invalidName">Your Name is Required</small>
 
@@ -43,15 +40,26 @@
                 <input type="hidden" id="request_mins" name="request_mins">
                 
 
-                <button type="submit" class="btn btn-default btn-lg btn-sunset-form">Submit</button>
+                <button type="submit" class="rqt-submit-btn">Submit</button>
 
                 <small class="field-msg js-form-submission">Submission in process, please wait&hellip;</small>
-                <small class="field-msg success js-form-success">Message Successfully submitted, thank you!</small>
-                <small class="field-msg error js-form-error">There was a problem with the Contact Form, please try again!</small>
+                <small class="field-msg success js-form-success">Request Successfully submitted, thank you!</small>
+                <small class="field-msg error js-form-error">There was a problem with the request Form, please try again!</small>
 
                 <input type="hidden" name="action" value="submit_request"> 
                 <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('submit-request-nonce'); ?>">
+
             </form>
+
+            <form method="post" id="priceRequestForm" data-url="<?php echo admin_url('admin-ajax.php'); ?>">            
+                <input type="hidden" id="request_hrs_price" name="request_hrs">
+                <input type="hidden" id="request_mins_price" name="request_mins">
+                <input type="hidden" name="action" value="price_request"> 
+                <input type="hidden" id="price-request-nonce" name="nonce" value="<?php echo wp_create_nonce('price-request-nonce'); ?>">
+            </form>
+
+
+            </div>
         </div>
     </div>
 </div>

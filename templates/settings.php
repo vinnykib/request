@@ -17,9 +17,8 @@
 
       <div class="settings-tab-content">
         <div id="tab-1" class="active tab-pane">
+        <div class="rqt-body-container">
           <h3>General</h3>
-
-          <div class="wrap">
         <h1>Custom Color Changer Settings</h1>
         <form method="post" action="options.php">
             <?php
@@ -32,13 +31,13 @@
 
         </form>
 
-    </div>
+        </div>
           
         </div>
         <div id="tab-2" class="tab-pane">
+        <div class="rqt-body-container">
         <h3>Date/Time</h3>
 
-  <div class="wrap">
 	<?php settings_errors(); ?>
 
 	<form method="post" action="options.php">
@@ -49,9 +48,7 @@
 			submit_button();
 		?>
 	</form>
-  <div class="wrap">
           <h3>Select specific dates to disable in the calendar</h3>
-</div>
 
   <div id="admin-calendar" class="admin-calendar">
 
@@ -103,6 +100,7 @@
   
         </div>
         <div id="tab-3" class="tab-pane">
+        <div class="rqt-body-container">
           <h3>Payments</h3>
           <?php
 
@@ -115,18 +113,19 @@ do_settings_sections('custom-settings-page');
 submit_button();
 ?>
 </form>
+</div>
 
 
 
         </div>
         <div id="tab-4" class="tab-pane">
+        <div class="rqt-body-container">
           <h3>Emails</h3>
+        </div>
         </div>
 
         <div id="tab-5" class="tab-pane">
-          <div class="apt-container">
-            <div class="apt-panel-body">
-               <div class="export-container">
+          <div class="rqt-body-container">
                <h3>Export Requests</h3>
                <p>Select dates to export requests within the specified range</p>
                   <form method="post" id="export-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>"> 
@@ -159,14 +158,13 @@ submit_button();
                   </form>
 
                </div>
-            </div>
-</div>
         </div>
         <div id="tab-6" class="tab-pane">
-          <h3>Shortcodes</h3>
+        <div class="rqt-body-container">
+          <h3>Shortcode</h3>
           <code>[requestform]</code>
         </div>
-        
+        </div>
 
       </div>
       

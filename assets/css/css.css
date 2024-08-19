@@ -1,7 +1,6 @@
 .rqt-container {
   width: calc(100% - 60px);
   min-width: 1000px;
-  background: #fff;
   border-radius: 10px;
   overflow: hidden;
   padding: 0;
@@ -30,7 +29,7 @@
   text-align: left;
 }
 .rqt-table td {
-  padding: 15px;
+  padding: 10px;
 }
 
 .pagination{
@@ -60,265 +59,15 @@
 .rqt-panel-body {
   margin: 5px;
 }
-.rqt-export-btn {
-  cursor: pointer;
-  float: right;
-  margin: 5px;
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-  background-color: #00aa5b;
-  color: white;
-}
-.filter-export-btn {
-  cursor: pointer;
-  margin: 5px;
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-  background-color: #2bb2bb;
-  color: white;
-}
 .no-rqt h3 {
   text-align: center;
   padding: 20px;
 }
 
-.export-container {
-  margin: 40px;
-}
-.export-container select {
-  width: 180px;
+.rqt-body-container {
+  padding: 40px;
 }
 
-
-#calendar table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#calendar th,
-#calendar td {
-  padding: 5px;
-  text-align: center;
-  cursor: pointer;
-}
-
-#calendar td:hover {
-  background-color: #e6e6e6;
-}
-#calendar td.today:hover {
-  background: #2bb2bb;
-}
-
-.weekdays-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.week-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.calendar-date {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #f2f2f2;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.inactive-date {
-  color: #ccc;
-  cursor: default;
-}
-
-#time {
-  margin-top: 10px;
-}
-
-.time-display {
-  margin-bottom: 10px;
-}
-
-
-.weekdays-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.week-container {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.calendar-date {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #f2f2f2;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.calendar-date.active-date {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.inactive-date {
-  color: #ccc;
-  cursor: default;
-}
-
-#time {
-  margin-top: 10px;
-}
-
-.time-display {
-  margin-bottom: 10px;
-}
-
-
-
-/*Calendar CSS*/
-
-.calendar-wrapper{
-background: #fff;
-border-radius: 10px;
-overflow: auto;
-box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-}
-.calendar-wrapper .calendar-header{
-display: flex;
-align-items: center;
-padding: 5px 30px;
-justify-content: space-between;
-}
-.calendar-header span{
-cursor: pointer;
-}
-.calendar-header .current-date, #calendar table th{
-cursor: default;
-}
-
-#calendar table {
-  width: 100%;
-  border-collapse: collapse;
-  }
-  
-  #calendar th {
-  background-color: #2bb2bb;
-  color: #fff;
-  }
-  
-  #calendar td:hover {
-  background-color: #f2f2f2;
-  }
-  
-  #calendar .today {
-  background-color: #4CAF50;
-  color: white;
-  }
-  #calendar .time {
-  height: 30px;
-  }
-  #calendar .timepicker div {
-  display: inline;
-  }
-.calendar{
-padding: 20px;
-}
-.calendar ul{
-display: flex;
-flex-wrap: wrap;
-list-style: none;
-text-align: center;
-}
-.calendar .day{
-margin-bottom: 20px;
-}
-.calendar td{
-color: #333;
-width: calc(100% / 7);
-font-size: 1.07rem;
-}
-.calendar .weeks td{
-font-weight: 500;
-cursor: default;
-}
-#calendar .day td{
-z-index: 1;
-position: relative;
-margin-top: 30px;
-}
-#calendar .day.disabled {
-  color: gray;
-  pointer-events: none;
-  text-decoration: line-through;
-}
-.day td.inactive{
-color: #aaa;
-}
-.day td.today, .day td.selected{
-color: #fff;
-}
-.day td::before{
-position: absolute;
-content: "";
-left: 50%;
-top: 50%;
-height: 40px;
-width: 40px;
-z-index: -1;
-border-radius: 50%;
-transform: translate(-50%, -50%);
-}
-.day td.today::before{
-background: #2bb2bb;
-}
-.day td:not(.today):hover::before{
-background: #f2f2f2;
-}
-.day td.selected:hover::before{
-background: #52bb85;
-}
-.day td.selected::before{
-background: #55a57c;
-}
-
-.settings-tabs-list li {
-display: inline;
-margin: 5px;
-}
-
-.settings-tabs-list li a{
-text-decoration: none;
-}
-.settings-tabs-list li.active{
-background: #e7e7e7;
-}
-
-.settings-tab-content .tab-pane {
-display: none;
-}
-
-.settings-tab-content .tab-pane.active {
-display: block;
-background: #e7e7e7;
-box-shadow: 0 1px 3px -1px rgb(24 23 23 / 30%);
-}
 
 /* The Modal (background) */
 .rqt-modal {
@@ -342,7 +91,9 @@ padding: 20px;
 border: 1px solid #888;
 width: fit-content; /* Could be more or less, depending on screen size */
 }
-
+.modal-form-wrapper {
+  clear: both;
+}
 /* The Close Button */
 .close {
 color: #aaa;
@@ -400,6 +151,7 @@ cursor: pointer;
 
 .admin-month h1 {
   margin: 0;
+  color: white;
 }
 
 .admin-days div:hover {
@@ -497,4 +249,276 @@ button.remove-btn:hover {
   padding: 10px;
   margin: 2px 0;
   cursor: pointer;
+}
+
+/*Front end calendar CSS*/
+
+
+.calendar-wrapper {
+  background: #fff;
+  border-radius: 10px;
+  overflow: auto;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.calendar-header #prevMonth {
+  float: left;
+}
+.calendar-header #nextMonth {
+  float: right;
+}
+@media (min-width: 768px) {
+#calendar .calendar-header th {
+  padding: 0 20px;
+}
+}
+.calendar-header .current-date {
+  flex-grow: 1;
+  text-align: center;
+  font-weight: bold;
+}
+
+.calendar-header .material-symbols-rounded {
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+#calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#calendar table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#calendar td {
+  /* padding: 5px; */
+  text-align: center;
+  cursor: pointer;
+  height: auto; /* Remove the calc for height */
+  width: 14.28%; /* Ensure each cell takes up 1/7th of the width */
+}
+#calendar .today {
+  background-color: #4CAF50;
+  color: white;
+}
+#calendar .day .date-day {
+  display: flex;               /* Use flexbox for centering */
+  justify-content: center;     /* Center horizontally */
+  align-items: center;         /* Center vertically */
+  width: 100%;                 /* Full width of the cell */
+  height: 100%;                /* Full height of the cell */
+  margin: 0;                   /* Ensure no margin affects alignment */  
+}
+#calendar .day.disabled {
+  color: gray;
+  pointer-events: none;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.day td.inactive {
+  color: #aaa;
+}
+
+.day td.today, .day td.selected {
+  color: #fff;
+}
+
+.day td::before {
+  position: absolute;
+  content: "";
+  left: 50%;
+  top: 50%;
+  height: 40px;
+  width: 40px;
+  z-index: -1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.day td.today::before {
+  background: #2bb2bb;
+}
+
+.day td:not(.today):hover::before {
+  background: #f2f2f2;
+}
+
+.day td.selected::before {
+  background: #55a57c;
+}
+
+.day td.selected:hover::before {
+  background: #52bb85;
+}
+
+.weekdays-container, .week-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.calendar-date {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f2f2f2;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.calendar-date.active-date {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.inactive-date {
+  color: #ccc;
+  cursor: default;
+}
+
+.time-display {
+  margin-bottom: 10px;
+}
+
+/*Time wrapper*/
+
+.time-picker {
+  width: 100%;
+  display: table-row;
+}
+#calendar .time-picker td {
+  cursor: default;
+}
+
+#time-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+#time-wrapper label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+#time-wrapper input[type="time"] {
+  padding: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease-in-out;
+}
+
+#time-wrapper input[type="time"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+#select-time, .rqt-submit-btn {
+  padding: 8px 12px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+#time-wrapper div {
+  margin: 5px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  #time-wrapper div {
+    flex: 1 1 100%;
+  }
+}
+
+#calendar .day.selected, .time-picker {
+  background: #e6e6e6;
+}
+
+/**
+CSS to still review
+*/
+.settings-tabs-list li {
+  margin: 0 2px;
+  flex: 1; /* Make each tab take equal space */
+  text-align: center;
+  }
+  
+  .settings-tabs-list li.active{
+  background: #e7e7e7;
+  }
+  
+  .settings-tab-content .tab-pane {
+  display: none;
+  }
+  
+  .settings-tab-content .tab-pane.active {
+  display: block;
+  background: #e7e7e7;
+  box-shadow: 0 1px 3px -1px rgb(24 23 23 / 30%);
+  }
+.settings-tab {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #f8f9fa; /* Light background color */
+  border-bottom: 2px solid #ddd; /* Add a border below the tabs */
+}
+
+.settings-tabs-list {
+  display: flex;
+  justify-content: space-between; /* Distribute tabs evenly */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.settings-tabs-list li a {
+  display: block;
+  text-decoration: none;
+  color: #2bb2bb; /* Primary color for links */
+  font-weight: 600;
+  font-size: 18px;
+  padding: 10px;
+  transition: color 0.3s, background-color 0.3s; /* Smooth hover effect */
+}
+
+.settings-tabs-list li a:hover,
+.settings-tabs-list li.active a {
+  background-color: #e7e7e7; /* Background color on hover/active */
+  color: #2bb2bb; /* Text color on hover/active */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: none;
+}
+
+.rqt-body-container code {
+  padding: 10px;
+  background-color: #e9ecef; /* Light gray background for the code */
+  border-left: 4px solid #55a57c; /* Blue border to highlight the code */
+  color: #4e3542; /* Color for the shortcode text */
+  font-size: 18px;
+  border-radius: 4px;
+  margin-top: 10px;
 }

@@ -24,123 +24,137 @@ document.addEventListener("DOMContentLoaded", function () {
     const lastMonthYear = new Date(year, month, 0).getFullYear(); // get previous month
 
     if (calendar) {
-      calendar.innerHTML = "";
+        // Clear the previous calendar content
+        calendar.innerHTML = "";
 
-      const monthHeader = document.createElement("div");
-      monthHeader.classList.add("month");
-      calendar.appendChild(monthHeader);
+        // Create table for days
+        const table = document.createElement("table");
 
-      monthYear = months[month] + " " + year;
-      document.querySelector(".current-date").innerHTML = monthYear;
+        // Create a row for the calendar header
+        const headerRow = document.createElement("tr");
+        headerRow.classList.add("calendar-header");
+        const headerCell = document.createElement("th");
+        headerCell.setAttribute("colspan", 7); // Span across all 7 columns
 
-      // Create table for days
-      const table = document.createElement("table");
+        // Create the inner content of the header (navigation and current date)
+        headerCell.innerHTML = `
+            <span id="prevMonth" class="material-symbols-rounded"><</span>
+            <span class="current-date">${months[month]} ${year}</span>
+            <span id="nextMonth" class="material-symbols-rounded">></span>
+        `;
+        headerRow.appendChild(headerCell);
+        table.appendChild(headerRow);
 
-      // Create day labels (headers)
-      const dayLabels = document.createElement("tr");
-      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      for (const dayName of dayNames) {
-        const dayLabel = document.createElement("th");
-        dayLabel.textContent = dayName;
-        dayLabels.appendChild(dayLabel);
-      }
-      table.appendChild(dayLabels);
+        // Create day labels (headers)
+        const dayLabels = document.createElement("tr");
+        dayLabels.classList.add("week-header");
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        for (const dayName of dayNames) {
+            const dayLabel = document.createElement("th");
+            dayLabel.textContent = dayName;
+            dayLabels.appendChild(dayLabel);
+        }
+        table.appendChild(dayLabels);
 
-      // Calculate the number of days to display from the previous and next months
-      const daysFromPrevMonth = firstDay.getDay(); // Days to display from the previous month
-      const daysFromNextMonth = 6 * 7 - daysFromPrevMonth - daysInMonth; // Days to display from the next month
+        // Calculate the number of days to display from the previous and next months
+        const daysFromPrevMonth = firstDay.getDay(); // Days to display from the previous month
+        const daysFromNextMonth = 6 * 7 - daysFromPrevMonth - daysInMonth; // Days to display from the next month
 
-      // Create days
-      let dayCount = 1;
+        // Create days
+        let dayCount = 1;
 
-      for (let i = 0; i < 6; i++) {
-        const row = document.createElement("tr");
-        row.classList.add("week");
-        let weekHasDays = false; // Flag to check if the week has any days
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement("tr");
+            row.classList.add("week");
+            let weekHasDays = false; // Flag to check if the week has any days
 
-        for (let j = 0; j < 7; j++) {
-          const cell = document.createElement("td");
-          cell.classList.add("day");
+            for (let j = 0; j < 7; j++) {
+                const cell = document.createElement("td");
+                cell.classList.add("day");
 
-          // Determine whether to display a day from the previous, current, or next month
-          if (i === 0 && j < daysFromPrevMonth) {
-            // Days from the previous month
-            const prevMonthDay = new Date(year, month, 0).getDate() - (daysFromPrevMonth - j) + 1;
-            const lastMonth = new Date(year, month, 0).getMonth() + 1; // get previous month
-            // get previous month
-            cell.textContent = prevMonthDay;
-            cell.setAttribute(
-              "data-date",
-              lastMonth + "-" + prevMonthDay + "-" + lastMonthYear
-            );
-            cell.classList.add("prevMonth");
-          } else if (dayCount <= daysInMonth) {
-            // Days from the current month
-            cell.textContent = dayCount;
-            cell.setAttribute(
-              "data-date",
-              currMonth + "-" + dayCount + "-" + year
-            );
+                // Determine whether to display a day from the previous, current, or next month
+                if (i === 0 && j < daysFromPrevMonth) {
+                    // Days from the previous month
+                    const prevMonthDay = new Date(year, month, 0).getDate() - (daysFromPrevMonth - j) + 1;
+                    const lastMonth = new Date(year, month, 0).getMonth() + 1; // get previous month
+                    // cell.textContent = prevMonthDay;
+                    cell.innerHTML = `
+                        <span class="date-day">${prevMonthDay}</span>
+                    `;
+                    cell.setAttribute(
+                        "data-date",
+                        lastMonth + "-" + prevMonthDay + "-" + lastMonthYear
+                    );
+                    cell.classList.add("prevMonth");
+                } else if (dayCount <= daysInMonth) {
+                    // Days from the current month
+                    // cell.textContent = dayCount;
+                    cell.innerHTML = `
+                        <span class="date-day">${dayCount}</span>
+                    `;
+                    cell.setAttribute(
+                        "data-date",
+                        currMonth + "-" + dayCount + "-" + year
+                    );
 
-            // Highlight today's date
-            const today = new Date();
-            if (
-              year === today.getFullYear() &&
-              month === today.getMonth() &&
-              dayCount === today.getDate()
-            ) {
-              cell.classList.add("today");
+                    // Highlight today's date
+                    const today = new Date();
+                    if (
+                        year === today.getFullYear() &&
+                        month === today.getMonth() &&
+                        dayCount === today.getDate()
+                    ) {
+                        cell.classList.add("today");
+                    }
+
+                    dayCount++;
+                    weekHasDays = true;
+                } else {
+                    // Days from the next month
+                    const nextMonthDay = dayCount - daysInMonth;
+                    const nextMonth = new Date(year, month + 1, 1).getMonth() + 1; // get next month
+                    // cell.textContent = nextMonthDay;
+                    cell.innerHTML = `
+                        <span class="date-day">${nextMonthDay}</span>
+                    `;
+                    cell.setAttribute(
+                        "data-date",
+                        nextMonth + "-" + nextMonthDay + "-" + nextMonthYear
+                    );
+                    cell.classList.add("nextMonth");
+                    dayCount++;
+                }
+
+                row.appendChild(cell);
             }
 
-            dayCount++;
-            weekHasDays = true;
-          } else {
-            // Days from the next month
-            const nextMonthDay = dayCount - daysInMonth;
-            const nextMonth = new Date(year, month + 1, 1).getMonth() + 1; // get next month
-            cell.textContent = nextMonthDay;
-            cell.setAttribute(
-              "data-date",
-              nextMonth + "-" + nextMonthDay + "-" + nextMonthYear
-            );
-            cell.classList.add("nextMonth");
-            dayCount++;
-          }
-
-          row.appendChild(cell);
+            // Add the row only if it has days
+            if (weekHasDays) {
+                table.appendChild(row);
+            }
         }
 
-        // Add the row only if it has days
-        if (weekHasDays) {
-          table.appendChild(row);
-        }
-      }
-
-      calendar.appendChild(table);
-      setupClickEvents("week td", "request_date");
+        calendar.appendChild(table);
+        setupClickEvents("week td", "request_date");
     }
-  }
+}
 
-  const currentDate = new Date();
-  generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+const currentDate = new Date();
+generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
 
-  // Add event listeners for navigating months
-  let prevMonth = document.getElementById("prevMonth");
+// Add event listeners for navigating months
+document.addEventListener("click", function (event) {
+    if (event.target.id === "prevMonth") {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    } else if (event.target.id === "nextMonth") {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    }
+});
 
-  if (prevMonth) {
-    prevMonth.addEventListener("click", function () {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    });
-  }
 
-  let nextMonth = document.getElementById("nextMonth");
-  if (nextMonth) {
-    nextMonth.addEventListener("click", function () {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    });
-  }
+
 });
 
 function setupClickEvents(className, inputId) {
@@ -188,8 +202,8 @@ function setupClickEvents(className, inputId) {
       if (week) {
         week.parentElement.insertBefore(timePicker, week.nextSibling);
 
-        let timeWrapper = document.getElementById('time-wrapper');
-        timeWrapper.style.display = 'block';
+        let timeWrapper = document.querySelector('.time-picker');
+        timeWrapper.style.display = 'table-row';
 
         let day = document.querySelector(".day.selected");
         if (day) {
@@ -197,10 +211,10 @@ function setupClickEvents(className, inputId) {
 
                   // Toggle the visibility of the element with id "time-wrapper"
                   
-                  if (timeWrapper.style.display === 'block') {
+                  if (timeWrapper.style.display === 'table-row') {
                       timeWrapper.style.display = 'none';
                   } else {
-                      timeWrapper.style.display = 'block';
+                      timeWrapper.style.display = 'table-row';
                   }           
       });
     }
@@ -234,77 +248,6 @@ function setupClickEvents(className, inputId) {
 
 
         //Ajax
-
-        // let addRequestForm = document.getElementById('addRequestForm');
-
-        // addRequestForm.addEventListener('submit', (e) => {
-        //     e.preventDefault();
-            
-        //     // Reset the form messages
-        //     resetMessages();
-            
-        //     // Collect all the data
-        //     let data = {
-        //         name: addRequestForm.querySelector('[name="rqt-name"]').value,
-        //         email: addRequestForm.querySelector('[name="rqt-email"]').value,
-        //         phone: addRequestForm.querySelector('[name="phone"]').value,
-        //         description: addRequestForm.querySelector('[name="description"]').value,
-        //         rqt_start_time: addRequestForm.querySelector('[name="rqt_start_time"]').value,
-        //         rqt_end_time: addRequestForm.querySelector('[name="rqt_end_time"]').value,
-        //         request_date: addRequestForm.querySelector('[name="request_date"]').value,
-        //         time_hrs: addRequestForm.querySelector('[name="request_hrs"]').value,
-        //         time_mins: addRequestForm.querySelector('[name="request_mins"]').value,
-        //     };
-            
-        //     // Validate everything
-        //     if (!data.name) {
-        //         addRequestForm.querySelector('[data-error="invalidName"]').classList.add('show');
-        //         return;
-        //     }
-        
-        //     if (!validateEmail(data.email)) {
-        //         addRequestForm.querySelector('[data-error="invalidEmail"]').classList.add('show');
-        //         return;
-        //     }
-        
-        //     if (!data.description) {
-        //         addRequestForm.querySelector('[data-error="invalidMessage"]').classList.add('show');
-        //         return;
-        //     }
-        
-        //     // Ajax HTTP POST request
-        //     let url = addRequestForm.dataset.url;
-        //     let params = new URLSearchParams(new FormData(addRequestForm));
-        
-        //     addRequestForm.querySelector('.js-form-submission').classList.add('show');
-        
-        //     fetch(url, {
-        //         method: 'POST',
-        //         body: params,
-        //     })
-        //     .then((res) => res.json())
-        //     .then((response) => {
-        //         resetMessages();
-                
-        //         if (response === 0 || response.status === 'error') {
-        //             addRequestForm.querySelector('.js-form-error').classList.add('show');
-        //             return;
-        //         }
-        
-        //         addRequestForm.querySelector('.js-form-success').classList.add('show');
-        //         addRequestForm.reset();
-        
-        //         if (response.data && response.data.redirect_url) {
-        //             window.location.href = response.data.redirect_url;
-        //         } else {
-        //             console.log("No redirect URL provided");
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         resetMessages();
-        //         addRequestForm.querySelector('.js-form-error').classList.add('show');
-        //     });
-        // });
 
         let addRequestForm = document.getElementById('addRequestForm');
 
@@ -421,7 +364,7 @@ function setupClickEvents(className, inputId) {
 
           //Pass Date to modal form
         let modalDate = document.getElementById("modal-date");
-        modalDate.innerHTML = formattedDate; 
+        modalDate.innerHTML = "Date: " + formattedDate; 
 
         } else {
           console.log("Input element not found");
@@ -461,11 +404,16 @@ function setupClickEvents(className, inputId) {
         const timeRange = calculateTimeRange(selectedStartTime, selectedEndTime);
         console.log(`Hours: ${timeRange.hours}, Minutes: ${timeRange.minutes}`);
 
-        // Pass time in hours and minutes to hdden form fields 
+        // Pass time in hours and minutes to hidden form fields 
         let timeHours = document.getElementById("request_hrs");
         timeHours.value = timeRange.hours;
         let timeMins = document.getElementById("request_mins");
         timeMins.value = timeRange.minutes;
+
+        let timeHoursPrice = document.getElementById("request_hrs_price");
+        timeHoursPrice.value = timeRange.hours;
+        let timeMinsPrice = document.getElementById("request_mins_price");
+        timeMinsPrice.value = timeRange.minutes;
         
         // Display the time range in the modal (optional)
         let modalTimeRange = document.getElementById("modal-time-range");
@@ -473,9 +421,79 @@ function setupClickEvents(className, inputId) {
             modalTimeRange.innerHTML = `Time Range: ${timeRange.hours} hours and ${timeRange.minutes} minutes`;
         }
 
-        // Pass Price to modal form
-        let modalPrice = document.getElementById("modal-time");
-        modalTime.innerHTML = selectedStartTime + " - " + selectedEndTime; 
+
+        /////////
+          // Send the data via Fetch API
+        //   let priceRequestForm = document.getElementById('priceRequestForm');
+        //   let ajaxurl = priceRequestForm.dataset.url;
+        //   let priceRequestNonce = document.getElementById("price-request-nonce").value;
+          
+        //   fetch(ajaxurl, {
+        //       method: 'POST',
+        //       headers: {
+        //           'Content-Type': 'application/x-www-form-urlencoded',
+        //       },
+        //       body: new URLSearchParams({
+        //           action: 'price_request',  // Add the action parameter
+        //           request_hrs: timeHours.value,  // Ensure field names match
+        //           request_mins: timeMins.value,
+        //           nonce: priceRequestNonce  // Include the nonce if required
+        //       }),
+        //   })
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //       if (data.error) {
+        //           console.error("Error:", data.message);
+        //       } else {
+        //           // Handle successful response
+        //           console.log("Price:", data.price);
+        //           // Update your UI here
+        //           document.getElementById('modal-price').textContent = 'Price: ' + response.data.price;
+        //       }
+        //   })
+        //   .catch((error) => {
+        //       console.error("Error:", error);
+        //   });
+          
+        
+// Send the data via Fetch API
+let priceRequestForm = document.getElementById('priceRequestForm');
+let ajaxurl = priceRequestForm.dataset.url;
+let priceRequestNonce = document.getElementById("price-request-nonce").value;
+
+fetch(ajaxurl, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+        action: 'price_request',  // Add the action parameter
+        request_hrs: timeHours.value,  // Ensure field names match
+        request_mins: timeMins.value,
+        nonce: priceRequestNonce  // Include the nonce if required
+    }),
+})
+.then((response) => response.json())
+.then((data) => {
+    if (data.error) {
+        console.error("Error:", data.message);
+    } else {
+        // Handle successful response
+        console.log("Price:", data.data.price);
+        // Update your UI here
+        if(data.data.price){
+            document.getElementById('modal-price').textContent = 'Price: ' + data.data.currency + ' ' + data.data.price;
+        }
+        
+    }
+})
+.catch((error) => {
+    console.error("Error:", error);
+});
+
+
+
+        //////
     }
 
       document.getElementById("select-time").addEventListener("click", addTime);
@@ -485,97 +503,6 @@ function setupClickEvents(className, inputId) {
 
 
 // //Code to disable days in calendar
-  
-// function handleCalendarAndSettings() {
-//   const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-//   const isSettingsPage = document.querySelectorAll('input.day-settings').length > 0;
-//   const isCalendarPage = document.querySelectorAll('.day').length > 0;
-//   const rqtSelectDate = document.querySelectorAll('.rqt-select-date').length > 0;
-
-//   function applyCalendarLogic() {
-//       const today = new Date();
-//       today.setHours(0, 0, 0, 0);
-
-//       const checkboxStates = calendarSettings.disableDays;
-
-//       // Get the start and end dates directly from calendarSettings
-//       let startDate, endDate;
-//       if (checkboxStates.start_day) {
-//           startDate = new Date(checkboxStates.start_day);
-//           startDate.setHours(0, 0, 0, 0);
-//       }
-//       if (checkboxStates.end_day) {
-//           endDate = new Date(checkboxStates.end_day);
-//           endDate.setHours(23, 59, 59, 999); // Include the entire end day
-//       }
-
-//       document.querySelectorAll('.day').forEach(cell => {
-//           const cellDate = cell.getAttribute('data-date');
-//           const [month, day, year] = cellDate.split('-').map(Number);
-//           const cellDateObj = new Date(year, month - 1, day);
-
-//           const dayOfWeek = cellDateObj.getDay();
-
-//           let disable = false;
-
-//           // Disable days before today
-//           if (cellDateObj < today) {
-//               disable = true;
-//           }
-
-//           // Disable days based on start and end dates
-//           if (startDate && !endDate) {
-//               // Disable all days before the start date
-//               if (cellDateObj < startDate) {
-//                   disable = true;
-//               }
-//           } else if (!startDate && endDate) {
-//               // Disable all days after the end date
-//               if (cellDateObj > endDate) {
-//                   disable = true;
-//               }
-//           } else if (startDate && endDate) {
-//               // Disable all days outside the range between start and end dates
-//               if (cellDateObj < startDate || cellDateObj > endDate) {
-//                   disable = true;
-//               }
-//           }
-
-//           // Disable cell if the corresponding checkbox is checked
-//           if (checkboxStates[dayNames[dayOfWeek]]) {
-//               disable = true;
-//           }
-
-//           // Apply the disabled class if needed
-//           if (disable) {
-//               cell.classList.add('disabled');
-//           } else {
-//               cell.classList.remove('disabled');
-//           }
-//       });
-//   }
-
-//   if (isSettingsPage) {
-//       // Settings page logic (no changes needed here)
-
-//   } else if (isCalendarPage) {
-//       applyCalendarLogic();
-
-//       const calendarContainer = document.querySelector('#calendar');
-//       if (calendarContainer) {
-//           const observer = new MutationObserver(() => {
-//               applyCalendarLogic();
-//           });
-
-//           observer.observe(calendarContainer, { childList: true, subtree: true });
-//       } else {
-//           console.error('Calendar container not found. Please check the selector.');
-//       }
-//   }
-// }
-
-// // Call the function to initialize
-// handleCalendarAndSettings();
 
 function handleCalendarAndSettings() {
   const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -674,7 +601,4 @@ function handleCalendarAndSettings() {
 
 // Initialize the function
 handleCalendarAndSettings();
-
-
 }
-
