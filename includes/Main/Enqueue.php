@@ -44,16 +44,19 @@ class Enqueue extends Main
 
 
 			wp_localize_script('rqtcalendarscript', 'calendarSettings', array(
-				'disableDays' => array(
-					'sunday'     => get_option('sunday'),
-					'monday'     => get_option('monday'),
-					'tuesday'    => get_option('tuesday'),
-					'wednesday'  => get_option('wednesday'),
-					'thursday'   => get_option('thursday'),
-					'friday'     => get_option('friday'),
-					'saturday'   => get_option('saturday'),
-					'start_day'  => get_option('start_day'),
-					'end_day'    => get_option('end_day'),
+				'disableDays'       => array(
+					'sunday'                 => get_option('sunday'),
+					'monday'                 => get_option('monday'),
+					'tuesday'                => get_option('tuesday'),
+					'wednesday'              => get_option('wednesday'),
+					'thursday'               => get_option('thursday'),
+					'friday'                 => get_option('friday'),
+					'saturday'               => get_option('saturday'),
+					'start_day'              => get_option('start_day'),
+					'end_day'                => get_option('end_day'),
+					'start_time'             => get_option('start_time'),
+					'end_time'               => get_option('end_time'),
+					'allowed_buffer_time'    => get_option('allowed_buffer_time'),
 				)
 			));
 

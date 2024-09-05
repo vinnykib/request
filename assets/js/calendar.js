@@ -165,12 +165,12 @@ function setupClickEvents(className, inputId) {
     <div id="time-wrapper">
         <div>
             <label for="rqt">Start:</label>
-            <input type="time" id="form-start-time" name="rqt_start_time" value="09:00">
+            <input type="time" id="form-start-time" name="rqt_start_time">
         </div>
 
         <div>
             <label for="rqt">End:</label>
-            <input type="time" id="form-end-time" name="rqt_end_time" value="10:00">
+            <input type="time" id="form-end-time" name="rqt_end_time">
         </div>
 
         <div>
@@ -213,21 +213,23 @@ function setupClickEvents(className, inputId) {
                   
                   if (timeWrapper.style.display === 'table-row') {
                       timeWrapper.style.display = 'none';
+                      this.classList.remove("selected");
                   } else {
                       timeWrapper.style.display = 'table-row';
+                      this.classList.add("selected");
                   }           
       });
     }
   
 
         // Get the modal
-        var modal = document.getElementById("rqt-modal");
+        let modal = document.getElementById("rqt-modal");
 
         // Get the button that opens the modal
-        var btn = document.getElementById("select-time");
+        let btn = document.getElementById("select-time");
 
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        let span = document.getElementsByClassName("close")[0];
 
         // When the user clicks on the button, open the modal
         btn.onclick = function () {
@@ -314,7 +316,17 @@ function setupClickEvents(className, inputId) {
                   if (response.data.message) {
                     console.log(response.data.message);
                 } 
-                    console.log("No redirect URL provided");
+                let modal = document.getElementById("rqt-modal");
+
+                // Add the fade-out class to trigger the animation
+                modal.classList.add("fade-out");
+
+                // Set a delay before hiding the modal to match the animation duration
+                setTimeout(function() {
+                    modal.style.display = "none";
+                    modal.classList.remove("fade-out"); // Remove the class for next time
+                }, 2000); // Duration should match the animation duration (0.5s)
+                console.log("No redirect URL provided");
                 }
             })
             .catch((error) => {
@@ -420,41 +432,6 @@ function setupClickEvents(className, inputId) {
         if (modalTimeRange) {
             modalTimeRange.innerHTML = `Time Range: ${timeRange.hours} hours and ${timeRange.minutes} minutes`;
         }
-
-
-        /////////
-          // Send the data via Fetch API
-        //   let priceRequestForm = document.getElementById('priceRequestForm');
-        //   let ajaxurl = priceRequestForm.dataset.url;
-        //   let priceRequestNonce = document.getElementById("price-request-nonce").value;
-          
-        //   fetch(ajaxurl, {
-        //       method: 'POST',
-        //       headers: {
-        //           'Content-Type': 'application/x-www-form-urlencoded',
-        //       },
-        //       body: new URLSearchParams({
-        //           action: 'price_request',  // Add the action parameter
-        //           request_hrs: timeHours.value,  // Ensure field names match
-        //           request_mins: timeMins.value,
-        //           nonce: priceRequestNonce  // Include the nonce if required
-        //       }),
-        //   })
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //       if (data.error) {
-        //           console.error("Error:", data.message);
-        //       } else {
-        //           // Handle successful response
-        //           console.log("Price:", data.price);
-        //           // Update your UI here
-        //           document.getElementById('modal-price').textContent = 'Price: ' + response.data.price;
-        //       }
-        //   })
-        //   .catch((error) => {
-        //       console.error("Error:", error);
-        //   });
-          
         
 // Send the data via Fetch API
 let priceRequestForm = document.getElementById('priceRequestForm');
@@ -479,7 +456,6 @@ fetch(ajaxurl, {
         console.error("Error:", data.message);
     } else {
         // Handle successful response
-        console.log("Price:", data.data.price);
         // Update your UI here
         if(data.data.price){
             document.getElementById('modal-price').textContent = 'Price: ' + data.data.currency + ' ' + data.data.price;
@@ -492,15 +468,12 @@ fetch(ajaxurl, {
 });
 
 
-
-        //////
     }
 
       document.getElementById("select-time").addEventListener("click", addTime);
     });
   }
   
-
 
 // //Code to disable days in calendar
 
@@ -602,3 +575,28 @@ function handleCalendarAndSettings() {
 // Initialize the function
 handleCalendarAndSettings();
 }
+
+//Profile tabs js
+document.addEventListener("DOMContentLoaded",function(){
+    let tabs = document.querySelectorAll(".profile-tabs-list li");
+
+    for(let i =0; i < tabs.length; i++){
+        tabs[i].addEventListener("click", switchTab);
+
+        function switchTab(event){
+
+            event.preventDefault();
+
+            document.querySelector(".profile-tabs-list li.active").classList.remove("active");
+            document.querySelector(".profile-tab-content .tab-pane.active").classList.remove("active");
+
+            let clickedTab = event.currentTarget;
+            let anchor = event.target;
+            let activePaneID = anchor.getAttribute("href");
+
+            clickedTab.classList.add("active");
+            document.querySelector(activePaneID).classList.add("active");
+        }
+    }
+
+});

@@ -8,7 +8,7 @@ class Shortcode extends Main
 {
     public function register()
     {
-        add_shortcode('request-shortcode', array($this, 'request_shortcode'));
+        add_shortcode('request_shortcode', array($this, 'request_shortcode'));
         
         add_action('wp_ajax_submit_request', array($this, 'submit_request'));
         add_action('wp_ajax_nopriv_submit_request', array($this, 'submit_request')); // Ensure non-logged in users can also submit
@@ -17,10 +17,12 @@ class Shortcode extends Main
 
         add_action('wp_ajax_price_request', array($this, 'price_request'));
         add_action('wp_ajax_nopriv_price_request', array($this, 'price_request')); // For non-logged-in users
+
+        add_shortcode('profile_shortcode', array($this, 'profile_shortcode'));
         
     }
 
-      /**
+    /**
      * 
      * Shortcode
      * 
@@ -97,7 +99,6 @@ class Shortcode extends Main
                         );
                     }
     
-                    // Ensure that the collected variants are sorted by hours and minutes
                     usort($available_variants, function($a, $b) {
                         if ($a['hours'] == $b['hours']) {
                             return $a['minutes'] - $b['minutes'];
@@ -105,20 +106,17 @@ class Shortcode extends Main
                         return $a['hours'] - $b['hours'];
                     });
     
-                    // Function to find the next available time slot, always rounding forward
                     function find_next_variant($request_hrs, $request_mins, $available_variants) {
                         foreach ($available_variants as $variant) {
                             if ($variant['hours'] > $request_hrs || ($variant['hours'] == $request_hrs && $variant['minutes'] >= $request_mins)) {
                                 return $variant;
                             }
                         }
-                        return end($available_variants); // Return the last variant if no exact match is found
+                        return end($available_variants);
                     }
     
-                    // Find the next available variant
                     $selected_variant = find_next_variant($request_hrs, $request_mins, $available_variants);
     
-                    // If no matching variant is found, use the last available variant
                     if (!$selected_variant) {
                         $selected_variant = end($available_variants);
                     }
@@ -131,7 +129,6 @@ class Shortcode extends Main
             }
     
             if ($product_id) {
-                // Store the form data in the session
                 WC()->session->set('request_form_data', array(
                     'user_name' => $user_name,
                     'user_email' => $user_email,
@@ -146,7 +143,6 @@ class Shortcode extends Main
                     'request_mins' => $rounded_minutes,
                 ));
     
-                // Add the product to the cart
                 $cart_item_data = array(
                     'rqt_start_time' => $rqt_start_time,
                     'rqt_end_time' => $rqt_end_time,
@@ -157,15 +153,20 @@ class Shortcode extends Main
                 );
                 WC()->cart->add_to_cart($product_id, 1, $variation_id, array(), $cart_item_data);
     
-                // Return the checkout URL for redirection
                 wp_send_json_success(array('redirect_url' => wc_get_checkout_url()));
             } else {
-                // Create the user immediately if no product is found
+                // Check if user exists
                 $user = get_user_by('email', $user_email);
     
                 if ($user) {
                     $user_id = $user->ID;
+                    $login_info = '<p><a href="' . wp_login_url() . '">Click here to log in</a></p>';
+    
+                    // Use existing user email template
+                    $email_template = get_option('create_request_email_textarea', '');
+    
                 } else {
+                    // Create new user
                     $random_password = wp_generate_password(12, false);
                     $user_id = wp_create_user($user_name, $random_password, $user_email);
     
@@ -179,6 +180,13 @@ class Shortcode extends Main
                     $user->remove_role('subscriber');
                     $user->add_role('request_customer');
                     update_user_meta($user_id, 'phone', $phone);
+    
+                    $login_info = '<p><strong>Username:</strong> ' . $user_name . '</p>';
+                    $login_info .= '<p><strong>Password:</strong> ' . $random_password . '</p>';
+                    $login_info .= '<p><a href="' . wp_login_url() . '">Click here to log in</a></p>';
+    
+                    // Use new user email template
+                    $email_template = get_option('create_new_request_email_textarea', '');
                 }
     
                 // Create the post
@@ -197,30 +205,78 @@ class Shortcode extends Main
                     update_post_meta($post_id, 'request_date', $request_date);
                 }
     
-                // Return a success message or redirect URL if desired
+                // Replace placeholders in the email template
+                $email_content_plain = str_replace(
+                    array('%name%', '%date%', '%time%', '%credentials%'),
+                    array($user_name, $request_date, $rqt_start_time . ' - ' . $rqt_end_time, $login_info),
+                    $email_template
+                );
+    
+                // Apply styling to the email
+                $message = '
+                <html>
+                <head>
+                    <style>
+                        .email-content {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                        }
+                        .email-header {
+                            font-size: 18px;
+                            font-weight: bold;
+                            color: #333;
+                        }
+                        .email-body {
+                            margin-top: 10px;
+                        }
+                        .email-footer {
+                            margin-top: 20px;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-content">
+                        <div class="email-header">Request Creation Notification</div>
+                        <div class="email-body">
+                            ' . nl2br($email_content_plain) . '
+                        </div>
+                        <div class="email-footer">
+                            <p>Thank you,</p>
+                            <p>Your Company Name</p>
+                        </div>
+                    </div>
+                </body>
+                </html>';
+    
+                $headers = array('Content-Type: text/html; charset=UTF-8');
+                wp_mail($user_email, 'New Request Created', $message, $headers);
+    
                 wp_send_json_success(array('message' => 'Request created successfully.'));
             }
         } else {
             wp_send_json_error(array('message' => 'Missing required fields.'));
         }
         exit;
-    }    
+    }
+    
+    
      /**
      *
      * Create user after checkout
      * 
     */
-
     public function create_user_and_post_after_checkout($order_id) {
         if (!$order_id) {
             return;
         }
-
+    
         $session_data = WC()->session->get('request_form_data');
         if (!$session_data) {
             return;
         }
-
+    
         $user_name = sanitize_user($session_data['user_name']);
         $user_email = sanitize_email($session_data['user_email']);
         $phone = sanitize_text_field($session_data['phone']);
@@ -228,26 +284,43 @@ class Shortcode extends Main
         $rqt_start_time = sanitize_text_field($session_data['rqt_start_time']);
         $rqt_end_time = sanitize_text_field($session_data['rqt_end_time']);
         $request_date = sanitize_text_field($session_data['request_date']);
-
+    
+        // Check if the user exists
         $user = get_user_by('email', $user_email);
-
+    
         if ($user) {
             $user_id = $user->ID;
+            $login_info = '<p><a href="' . wp_login_url() . '">Click here to log in</a></p>';
+    
+            // Retrieve the email template for existing users
+            $email_template = get_option('create_request_email_textarea', '');
+            $email_subject = get_option('create_request_email_input', 'Request Received');
+    
         } else {
+            // Create new user
             $random_password = wp_generate_password(12, false);
             $user_id = wp_create_user($user_name, $random_password, $user_email);
-
+    
             if (is_wp_error($user_id)) {
                 return;
             }
-
+    
             $user = new \WP_User($user_id);
             $user->remove_role('subscriber');
             $user->add_role('request_customer');
-
+    
             update_user_meta($user_id, 'phone', $phone);
+    
+            $login_info = '<p><strong>Username:</strong> ' . $user_name . '</p>';
+            $login_info .= '<p><strong>Password:</strong> ' . $random_password . '</p>';
+            $login_info .= '<p><a href="' . wp_login_url() . '">Click here to log in</a></p>';
+    
+            // Retrieve the email template for new users
+            $email_template = get_option('create_new_request_email_textarea', '');
+            $email_subject = get_option('create_new_request_email_input', 'New Request Created');
         }
-
+    
+        // Create the post
         $new_post = array(
             'post_title' => 'New Request',
             'post_content' => $description,
@@ -256,15 +329,66 @@ class Shortcode extends Main
             'post_status' => 'pending'
         );
         $post_id = wp_insert_post($new_post);
-
+    
         if ($post_id) {
             update_post_meta($post_id, 'rqt_start_time', $rqt_start_time);
             update_post_meta($post_id, 'rqt_end_time', $rqt_end_time);
             update_post_meta($post_id, 'request_date', $request_date);
         }
-
+    
+        // Replace placeholders with actual values
+        $email_content_plain = str_replace(
+            array('%name%', '%date%', '%time%', '%credentials%'),
+            array($user_name, $request_date, $rqt_start_time . ' - ' . $rqt_end_time, $login_info),
+            $email_template
+        );
+    
+        // Apply styling to the email
+        $message = '
+    <html>
+    <head>
+        <style>
+            .email-content {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            .email-header {
+                font-size: 18px;
+                font-weight: bold;
+                color: #333;
+            }
+            .email-body {
+                margin-top: 10px;
+            }
+            .email-footer {
+                margin-top: 20px;
+                font-size: 12px;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-content">
+            <div class="email-header">Request Creation Notification</div>
+            <div class="email-body">
+                ' . nl2br($email_content_plain) . '
+            </div>
+            <div class="email-footer">
+                <p>Thank you,</p>
+                <p>Your Company Name</p>
+            </div>
+        </div>
+    </body>
+    </html>';
+    
+        // Send the email
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        wp_mail($user_email, $email_subject, $message, $headers);
+    
+        // Clear session data
         WC()->session->__unset('request_form_data');
     }
+    
 
 
 
@@ -371,6 +495,22 @@ class Shortcode extends Main
         return end($available_variants); // Return the last variant if no exact match is found
     }
     
+    
+     /**
+     *
+     * Profile Shortcode
+     * 
+    */
+
+
+    public function profile_shortcode()
+    {
+        ob_start();
+        
+        require_once("$this->plugin_path/shortcodes/profile.php");
+    
+        return ob_get_clean();
+    }
     
     
     

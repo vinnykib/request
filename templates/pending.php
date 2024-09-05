@@ -61,20 +61,28 @@
 
         $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
         $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
+
+        $phone = $user_id->phone;
+        $desciption = $post->post_content;  
             
             ?>
+
+            
+
             <tr>
             <td>
             <?php echo $user_id->display_name; ?>
+            <div class="hidden-content-description" data-hiddencontent="<?php echo $desciption; ?>"></div>
             </td>
             <td>
             <?php echo $user_id->user_email; ?>
+            <div class="hidden-content-phone" data-hiddencontent="<?php echo $phone; ?>"></div>
             </td>
             <td>
             <?php echo $formattedDate; ?>
             </td>
             <td>
-            <?php echo $rqt_start_time.' - '.$rqt_end_time; ?>
+            <?php echo '<span>' .$rqt_start_time.'</span> - <span>'.$rqt_end_time. '</span>' ; ?>
             </td>
             <?php
             if($post->post_status=='pending'):
@@ -113,6 +121,9 @@
                 <input type="hidden" name="nonce" value="'. wp_create_nonce('cancel-nonce') .'">
 
             </form>';
+
+            // View         
+            echo '<button type="submit" class="pendingViewButton" data-postid="'. $post->ID .'">View</button>';
 
 
           }
@@ -181,3 +192,51 @@
 
       
   </div>
+
+
+
+
+  <!-- The Modal -->
+<div id="pending-view-modal" class="rqt-modal">
+
+<!-- Modal content -->
+<div class="rqt-modal-content">
+<div id="pending-view-modal-content">
+  <span class="close">&times;</span>
+  <h4>View details</h4>
+
+  <div class="view-modal-item inline-item">
+    <p class="view-modal-label">Status:</p>
+    <p class="view-modal-value view-modal-status"></p>
+</div>
+
+  <div class="view-modal-item inline-item">
+    <p class="view-modal-label">Full name:</p>
+    <p class="view-modal-value view-modal-name"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Email:</p>
+    <p class="view-modal-value view-modal-email"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Phone Number:</p>
+    <p class="view-modal-value view-modal-phone"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Date:</p>
+    <p class="view-modal-value view-modal-date"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Time:</p>
+    <p class="view-modal-value view-modal-time"></p>
+</div>
+<div class="view-modal-item view-modal-description-container">
+    <p class="view-modal-label">Description:</p>
+    <p class="view-modal-value view-modal-description"></p>
+</div>
+
+
+</div>
+</div>
+
+</div>

@@ -46,7 +46,6 @@
 
         $request_user_id = $post->post_author;
         $user_id = get_userdata($request_user_id);
-
  
 
         $request_date = get_post_meta( $post->ID,'request_date',true);
@@ -56,14 +55,22 @@
 
         $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
         $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
-            
+
+        $phone = $user_id->phone;
+        $desciption = $post->post_content;   
             ?>
+            
+
+
             <tr>
+           
             <td>
             <?php echo $user_id->display_name; ?>
+            <div class="hidden-content-description-edit" data-hiddencontent="<?php echo $desciption; ?>"></div>
             </td>
             <td>
             <?php echo $user_id->user_email; ?>
+            <div class="hidden-content-phone-edit" data-hiddencontent="<?php echo $phone; ?>"></div>
             </td>
             <td data-postdate="<?php echo $request_date; ?>">
             <?php echo $formattedDate; ?>
@@ -102,7 +109,12 @@
 
               </form>';
 
+              // View         
+            echo '<button type="submit" class="viewButton" data-postid="'. $post->ID .'">View</button>';
+
             }
+
+            
 
           ?>
 
@@ -147,13 +159,15 @@
       
   </div>
 
-<!-- The Modal -->
+
+<!-- The update Modal -->
 <div id="update-modal" class="rqt-modal">
 
 <!-- Modal content -->
 <div class="rqt-modal-content">
+<div id="update-modal-content">
   <span class="close">&times;</span>
-  <p>Update details..</p>
+  <h4>Update details..</h4>
 
   <form method="post" id="update-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
 
@@ -197,8 +211,55 @@
   </form>
 
 </div>
-
 </div>
 
 </div>
 
+<!-- The view Modal -->
+<div id="view-modal" class="rqt-modal-view">
+
+<!-- Modal content -->
+<div class="rqt-modal-content">
+<div id="view-modal-content">
+  <span class="close">&times;</span>
+  <h4>View details</h4>
+
+  <div class="view-modal-item inline-item">
+    <p class="view-modal-label">Status:</p>
+    <p class="view-modal-value view-modal-status"></p>
+</div>
+
+  <div class="view-modal-item inline-item">
+    <p class="view-modal-label">Full name:</p>
+    <p class="view-modal-value view-modal-name"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Email:</p>
+    <p class="view-modal-value view-modal-email"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Phone Number:</p>
+    <p class="view-modal-value view-modal-phone"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Date:</p>
+    <p class="view-modal-value view-modal-date"></p>
+</div>
+<div class="view-modal-item inline-item">
+    <p class="view-modal-label">Time:</p>
+    <p class="view-modal-value view-modal-time"></p>
+</div>
+<div class="view-modal-item view-modal-description-container">
+    <p class="view-modal-label">Description:</p>
+    <p class="view-modal-value view-modal-description"></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+
+</div>

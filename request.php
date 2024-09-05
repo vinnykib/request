@@ -611,3 +611,39 @@ function selected_product_id_callback() {
     }
 }
 
+
+// Exclude "Request Plugin Product" from WooCommerce product queries (e.g., shop, category, tag pages)
+add_action('woocommerce_product_query', 'exclude_request_plugin_products');
+function exclude_request_plugin_products($query) {
+    if (is_admin()) {
+        return;
+    }
+    
+    $meta_query = $query->get('meta_query');
+    
+    $meta_query[] = array(
+        'key' => '_request_plugin_product',
+        'value' => 'yes',
+        'compare' => '!='
+    );
+    
+    $query->set('meta_query', $meta_query);
+}
+
+// Exclude "Request Plugin Product" from WordPress search results
+add_action('pre_get_posts', 'exclude_request_plugin_products_from_search');
+function exclude_request_plugin_products_from_search($query) {
+    if (is_admin() || !$query->is_main_query() || !$query->is_search()) {
+        return;
+    }
+    
+    $meta_query = $query->get('meta_query');
+    
+    $meta_query[] = array(
+        'key' => '_request_plugin_product',
+        'value' => 'yes',
+        'compare' => '!='
+    );
+    
+    $query->set('meta_query', $meta_query);
+}

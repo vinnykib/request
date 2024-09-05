@@ -121,6 +121,16 @@ submit_button();
         <div id="tab-4" class="tab-pane">
         <div class="rqt-body-container">
           <h3>Emails</h3>
+
+          <form method="post" action="options.php">
+  
+  <?php 
+    settings_fields( 'emails_options_group' );
+    do_settings_sections( 'emails-settings' );
+    submit_button();
+  ?>
+</form>
+
         </div>
         </div>
 
@@ -161,8 +171,9 @@ submit_button();
         </div>
         <div id="tab-6" class="tab-pane">
         <div class="rqt-body-container">
-          <h3>Shortcode</h3>
-          <code>[requestform]</code>
+          <h3>Shortcodes</h3>
+          <code>[request_shortcode]</code><br><br><br>
+          <code>[profile_shortcode]</code>
         </div>
         </div>
 

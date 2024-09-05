@@ -14,9 +14,13 @@ class Main
 
 	public $weeks = array();
 
-	public $colors = array();
-
 	public $filterdays = array();
+
+	public $allowedtime = array();
+
+	public $buffertime = array();
+
+	public $emails = array();
 
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( dirname( __FILE__, 2 ) );
@@ -36,6 +40,30 @@ class Main
 		$this->filterdays = array(
 			'start_day' => 'Start day',
 			'end_day' => 'End day'
+			
+		);
+
+		$this->allowedtime = array(
+			'start_time' => 'Start time',
+			'end_time' => 'End time'
+			
+		);
+
+		$this->buffertime = array(
+			'allowed_buffer_time' => 'Allowed Buffer Time'
+			
+		);
+
+		$this->emails = array(
+			'create_new_request_email_input' => 'Email Subject',
+			'create_new_request_email_textarea' => 'Request Email for new user',
+			'create_request_email_input' => 'Email Subject',
+			'create_request_email_textarea' => 'Request Email for existing user',
+			'approve_email_input' => 'Email Subject',
+			'approve_email_textarea' => 'Approve Email',
+			'cancel_email_input' => 'Email Subject',
+			'cancel_email_textarea' => 'Cancel Email'
+			
 		);
 	}
 }

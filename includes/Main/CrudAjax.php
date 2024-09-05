@@ -19,36 +19,6 @@ class CrudAjax extends Main
 
         add_action('wp_ajax_save_dynamic_data', array($this, 'save_dynamic_data'));
     }
-    // public function save_dynamic_data() {
-    //     error_log('Request data: ' . print_r($_POST, true));
-    
-    //     if (!isset($_POST['nonce']) || !check_ajax_referer('selected-dates-nonce', 'nonce', false)) {
-    //         error_log('Invalid nonce');
-    //         wp_send_json_error(array('message' => 'Invalid nonce.'));
-    //         wp_die();
-    //     }
-    
-    //     if (isset($_POST['selected_dates']) && is_array($_POST['selected_dates'])) {
-    //         $selected_dates = $_POST['selected_dates'];
-    //         $stored_dates = array_map('sanitize_text_field', $selected_dates);
-    
-    //         error_log('Saving dates: ' . print_r($stored_dates, true));
-    
-    //         $result = update_option('dynamic_dates', $stored_dates);
-    
-    //         if ($result !== false) {
-    //             wp_send_json_success('Data saved successfully!');
-    //         } else {
-    //             error_log('Failed to save data');
-    //             wp_send_json_error(array('message' => 'Failed to save data.'));
-    //         }
-    //     } else {
-    //         error_log('No dates provided');
-    //         wp_send_json_error(array('message' => 'No dates provided.'));
-    //     }
-    
-    //     wp_die();
-    // }
 
     public function save_dynamic_data() {
         error_log('Request data: ' . print_r($_POST, true));
@@ -116,64 +86,63 @@ class CrudAjax extends Main
             $update_result = wp_update_post($updated_post);
 
             if ($update_result !== 0) {
-                // Get post author's email
-                $post = get_post($id);
-                $post_author_email = get_the_author_meta('user_email', $post->post_author);
+              // Get post author's email
+$post = get_post($id);
+$post_author_email = get_the_author_meta('user_email', $post->post_author);
+$post_author = get_the_author_meta('display_name', $post->post_author);
 
-                $request_date = get_post_meta( $post->ID,'request_date',true);
+$request_date = get_post_meta($post->ID, 'request_date', true);
+$dateTimestamp = strtotime($request_date);
+$formattedDate = date("l, F j, Y", $dateTimestamp);
 
-                $dateTimestamp = strtotime($request_date);
-                $formattedDate = date("l, F j, Y", $dateTimestamp);
+$rqt_start_time = get_post_meta($post->ID, 'rqt_start_time', true);
+$rqt_end_time = get_post_meta($post->ID, 'rqt_end_time', true);
 
-                $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
-                $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
-                
-                // Send email notification
-                $to = $post_author_email;
-                $subject = 'Request approved';
-                $message = '
-                <html>
-                <head>
-                    <style>
-                        .email-content {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                        }
-                        .email-header {
-                            font-size: 18px;
-                            font-weight: bold;
-                            color: #333;
-                        }
-                        .email-body {
-                            margin-top: 10px;
-                        }
-                        .email-footer {
-                            margin-top: 20px;
-                            font-size: 12px;
-                            color: #777;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="email-content">
-                        <div class="email-header">Request Approval Notification</div>
-                        <div class="email-body">
-                            <p>Your request has been approved. Below are the details:</p>
-                            <p><strong>Email:</strong> ' . $post_author_email . '</p>
-                            <p><strong>Date:</strong> ' . $formattedDate . '</p>
-                            <p><strong>Time:</strong> ' . $rqt_start_time . ' - ' . $rqt_end_time . '</p>
-                        </div>
-                        <div class="email-footer">
-                            <p>Thank you,</p>
-                            <p>Your Company Name</p>
-                        </div>
-                    </div>
-                </body>
-                </html>';
+// Retrieve the plain text email template from the options table
+$email_template = get_option('approve_email_textarea', '');
 
-                $headers = array('Content-Type: text/html; charset=UTF-8');
-                
-                wp_mail($to, $subject, $message, $headers);
+// Replace placeholders with actual values
+$email_content_plain = str_replace(
+    array('%name%', '%date%', '%time%'),
+    array($post_author, $formattedDate, $rqt_start_time . ' - ' . $rqt_end_time),
+    $email_template
+);
+
+// Apply styling
+$email_content = '
+<html>
+<head>
+    <style>
+        .email-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .email-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .email-body {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="email-content">
+        <div class="email-header">Request Approval Notification</div>
+        <div class="email-body">' . nl2br($email_content_plain) . '</div>
+    </div>
+</body>
+</html>';
+
+// Prepare and send the email
+$to = $post_author_email;
+$subject = get_option('approve_email_input', '');
+$headers = array('Content-Type: text/html; charset=UTF-8');
+
+wp_mail($to, $subject, $email_content, $headers);
+
                 echo json_encode(array("success" => true));
             } else {
                 echo json_encode(array("success" => false, "error" => "Failed to approve request."));
@@ -202,65 +171,62 @@ class CrudAjax extends Main
             $update_result = wp_update_post($updated_post);
 
             if ($update_result !== 0) {
+// Get post author's email
+$post = get_post($id);
+$post_author_email = get_the_author_meta('user_email', $post->post_author);
+$post_author = get_the_author_meta('display_name', $post->post_author);
 
-                // Get post author's email
-                $post = get_post($id);
-                $post_author_email = get_the_author_meta('user_email', $post->post_author);
 
-                $request_date = get_post_meta( $post->ID,'request_date',true);
+$request_date = get_post_meta($post->ID, 'request_date', true);
+$dateTimestamp = strtotime($request_date);
+$formattedDate = date("l, F j, Y", $dateTimestamp);
 
-                $dateTimestamp = strtotime($request_date);
-                $formattedDate = date("l, F j, Y", $dateTimestamp);
+$rqt_start_time = get_post_meta($post->ID, 'rqt_start_time', true);
+$rqt_end_time = get_post_meta($post->ID, 'rqt_end_time', true);
 
-                $rqt_start_time = get_post_meta( $post->ID,'rqt_start_time',true);
-                $rqt_end_time = get_post_meta( $post->ID,'rqt_end_time',true);
+// Retrieve the plain text email template from the options table
+$email_template = get_option('cancel_email_textarea', '');
 
-                // Send email notification
-                $to = $post_author_email;
-                $subject = 'Request Cancelled';
-                $message = '
-                <html>
-                <head>
-                    <style>
-                        .email-content {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                        }
-                        .email-header {
-                            font-size: 18px;
-                            font-weight: bold;
-                            color: #333;
-                        }
-                        .email-body {
-                            margin-top: 10px;
-                        }
-                        .email-footer {
-                            margin-top: 20px;
-                            font-size: 12px;
-                            color: #777;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="email-content">
-                        <div class="email-header">Request Cancellation Notification</div>
-                        <div class="email-body">
-                            <p>Your request has been cancelled. Below are the details:</p>
-                            <p><strong>Email:</strong> ' . $post_author_email . '</p>
-                            <p><strong>Date:</strong> ' . $formattedDate . '</p>
-                            <p><strong>Time:</strong> ' . $rqt_start_time . ' - ' . $rqt_end_time . '</p>
-                        </div>
-                        <div class="email-footer">
-                            <p>Thank you,</p>
-                            <p>Your Company Name</p>
-                        </div>
-                    </div>
-                </body>
-                </html>';
+// Replace placeholders with actual values
+$email_content_plain = str_replace(
+    array('%name%', '%date%', '%time%'),
+    array($post_author, $formattedDate, $rqt_start_time . ' - ' . $rqt_end_time),
+    $email_template
+);
 
-                $headers = array('Content-Type: text/html; charset=UTF-8');
-                
-                wp_mail($to, $subject, $message, $headers);
+// Apply styling
+$email_content = '
+<html>
+<head>
+    <style>
+        .email-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .email-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .email-body {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-content">
+        <div class="email-body">' . nl2br($email_content_plain) . '</div>
+    </div>
+</body>
+</html>';
+
+// Prepare and send the email
+$to = $post_author_email;
+$subject = get_option('cancel_email_input', '');
+$headers = array('Content-Type: text/html; charset=UTF-8');
+
+wp_mail($to, $subject, $email_content, $headers);
+
 
                 echo json_encode(array("success" => true));
             } else {

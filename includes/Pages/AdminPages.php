@@ -137,6 +137,53 @@ class AdminPages extends Main
         );
     }
 
+	// Prepare allowed time
+    foreach ($this->allowedtime as $key => $value) {
+        $args[] = array(
+            'option_group' => 'requests_options_group',
+            'option_name' => $key,
+            'callback' => array($this->settings_callbacks, 'allowedTimeSanitize')
+        );
+    }
+
+	// Prepare buffer time
+    foreach ($this->buffertime as $key => $value) {
+        $args[] = array(
+            'option_group' => 'requests_options_group',
+            'option_name' => $key,
+            'callback' => array($this->settings_callbacks, 'bufferTimeSanitize')
+        );
+    }
+
+	foreach ($this->emails as $key => $value) {
+		if (strpos($key, '_input') !== false) {
+			// This is an input field
+			$args[] = array(
+				'option_group' => 'emails_options_group',
+				'option_name' => $key,
+				'callback' => array($this->settings_callbacks, 'emailsSanitize'),
+				'args' => array(
+					'label_for' => $key,
+					'class' => 'emails-settings',
+					'field_type' => 'input'
+				)
+			);
+		} elseif (strpos($key, '_textarea') !== false) {
+			// This is a textarea field
+			$args[] = array(
+				'option_group' => 'emails_options_group',
+				'option_name' => $key,
+				'callback' => array($this->settings_callbacks, 'emailsSanitize'),
+				'args' => array(
+					'label_for' => $key,
+					'class' => 'emails-settings',
+					'field_type' => 'textarea'
+				)
+			);
+		}
+	}
+	
+
     // Register all settings
     foreach ($args as $arg) {
         register_setting($arg['option_group'], $arg['option_name'], $arg['callback']);
@@ -161,8 +208,27 @@ public function setSections()
             'title' => 'Set start and end date for requests',
             'callback' => array($this->settings_callbacks, 'filterSectionManager'),
             'page' => 'settings'
+        ),
+		array(
+            'id' => 'allowed_time_admin_index',
+            'title' => 'Set allowed time for requests',
+            'callback' => array($this->settings_callbacks, 'allowedTimeSectionManager'),
+            'page' => 'settings'
+        ),
+		array(
+            'id' => 'buffer_time_admin_index',
+            'title' => 'Set Buffer time for requests',
+            'callback' => array($this->settings_callbacks, 'bufferTimeSectionManager'),
+            'page' => 'settings'
+        ),
+		array(
+            'id' => 'emails_admin_index',
+            'title' => 'Set Emails for requests',
+            'callback' => array($this->settings_callbacks, 'emailsSectionManager'),
+            'page' => 'emails-settings'
         )
     );
+
 
     $this->settings->setSections($args);
 }
@@ -202,6 +268,61 @@ public function setFields()
             )
         );
     }
+
+	// Prepare fields for allowed time
+	foreach ($this->allowedtime as $key => $value) {
+		$args[] = array(
+			'id' => $key,
+			'title' => $value,
+			'callback' => array($this->settings_callbacks, 'allowedTimeCheckboxField'),
+			'page' => 'settings',
+			'section' => 'allowed_time_admin_index',
+			'args' => array(
+				'label_for' => $key,
+				'class' => 'time-settings'
+			)
+		);
+	}
+
+	// Prepare fields for buffer time
+	foreach ($this->buffertime as $key => $value) {
+		$args[] = array(
+			'id' => $key,
+			'title' => $value,
+			'callback' => array($this->settings_callbacks, 'bufferTimeCheckboxField'),
+			'page' => 'settings',
+			'section' => 'buffer_time_admin_index',
+			'args' => array(
+				'label_for' => $key,
+				'class' => 'time-settings'
+			)
+		);
+	}
+
+	// Prepare fields for emails
+	
+
+		foreach ($this->emails as $key => $value) {
+			// Determine the field type based on the key
+			$field_type = (strpos($key, '_textarea') !== false) ? 'textarea' : 'input';
+		
+			// Define the arguments array
+			$args[] = array(
+				'id' => $key,
+				'title' => $value,
+				'callback' => array($this->settings_callbacks, 'emailsField'),
+				'page' => 'emails-settings',
+				'section' => 'emails_admin_index',
+				'args' => array(
+					'label_for' => $key,
+					'field_type' => $field_type,
+					'class' => 'emails-settings'
+				)
+			);
+		
+		
+	}
+	
 
     // Set the fields
     $this->settings->setFields($args);

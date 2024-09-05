@@ -15,11 +15,11 @@
   border-collapse: collapse;
 }
 .rqt-table tr:nth-child(even) {
-  background-color: #f4f3f3;
+  background-color: #e2e2e2;
 }
 
 .rqt-table tr:hover {
-  background-color: #ddd;
+  background-color: #c6cbc9;
 }
 
 .rqt-table th{
@@ -82,6 +82,20 @@ overflow: auto; /* Enable scroll if needed */
 background-color: rgb(0,0,0); /* Fallback color */
 background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
+/* The Modal (background) */
+.rqt-modal-view {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
 
 /* Modal Content/Box */
 .rqt-modal-content {
@@ -194,6 +208,15 @@ cursor: pointer;
   padding: 5px;
 }
 
+button.viewButton, button.pendingViewButton{
+  background-color: #3995c0;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
 button.remove-btn, button.deleteButton, button.cancelButton{
   background-color: #f44336;
   color: white;
@@ -269,9 +292,13 @@ button.remove-btn:hover {
 .calendar-header #nextMonth {
   float: right;
 }
+#calendar .week-header th {
+  border-style: none;
+}
 @media (min-width: 768px) {
 #calendar .calendar-header th {
   padding: 0 20px;
+  border-style: none;
 }
 }
 .calendar-header .current-date {
@@ -296,12 +323,13 @@ button.remove-btn:hover {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  margin: 0;
 }
 
 #calendar td {
-  /* padding: 5px; */
   text-align: center;
   cursor: pointer;
+  border-style: none;
   height: auto; /* Remove the calc for height */
   width: 14.28%; /* Ensure each cell takes up 1/7th of the width */
 }
@@ -512,6 +540,64 @@ CSS to still review
   border-radius: 4px; /* Rounded corners */
   box-shadow: none;
 }
+/*Profile CSS*/
+
+.profile-tabs-list li {
+  margin: 0 2px;
+  flex: 1; /* Make each tab take equal space */
+  text-align: center;
+  }
+  
+  .profile-tabs-list li.active{
+  background: #e7e7e7;
+  }
+  
+  .profile-tab-content .tab-pane {
+  display: none;
+  }
+  
+  .profile-tab-content .tab-pane.active {
+  display: block;
+  background: #e7e7e7;
+  box-shadow: 0 1px 3px -1px rgb(24 23 23 / 30%);
+  }
+.profile-tab {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #f8f9fa; /* Light background color */
+  border-bottom: 2px solid #ddd; /* Add a border below the tabs */
+}
+
+.profile-tabs-list {
+  display: flex;
+  justify-content: space-between; /* Distribute tabs evenly */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.profile-tabs-list li a {
+  display: block;
+  text-decoration: none;
+  color: #2bb2bb; /* Primary color for links */
+  font-weight: 600;
+  font-size: 18px;
+  padding: 10px;
+  transition: color 0.3s, background-color 0.3s; /* Smooth hover effect */
+}
+
+.profile-tabs-list li a:hover,
+.profile-tabs-list li.active a {
+  background-color: #e7e7e7; /* Background color on hover/active */
+  color: #2bb2bb; /* Text color on hover/active */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: none;
+}
+
+/*End Profile CSS*/
 
 .rqt-body-container code {
   padding: 10px;
@@ -521,4 +607,88 @@ CSS to still review
   font-size: 18px;
   border-radius: 4px;
   margin-top: 10px;
+}
+/* Fade-out animation */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-out {
+  animation: fadeOut 2s ease-out forwards;
+}
+
+
+/**
+View modal CSS
+**/
+.rqt-modal-content #view-modal-content, .rqt-modal-content #pending-view-modal-content {
+  width: 400px;
+}
+.view-modal-item.inline-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.inline-item .view-modal-label {
+  font-weight: bold;
+  color: #555;
+  flex-basis: 50%;
+}
+
+.inline-item .view-modal-value {
+  flex-basis: 50%;
+  color: #333;
+  font-weight: normal;
+}
+
+.view-modal-description-container .view-modal-label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.view-modal-description-container .view-modal-value {
+  text-align: left;
+  word-wrap: break-word; /* Ensures long texts wrap neatly */
+  line-height: 1.5;
+}
+
+.modal-content {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-width: 600px; /* Limit the width to ensure better readability */
+  margin: 0 auto; /* Center the modal */
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+      padding: 15px;
+  }
+
+  .view-modal-item.inline-item {
+      padding: 8px 0;
+  }
+}
+
+
+/*Email CSS**/
+
+textarea.emails-settings {
+  width: 100%; /* Make the textarea full width */
+  min-height: 300px; /* Increase the minimum height */
+  height: auto; /* Allow the height to adjust automatically */
+  overflow: auto; /* Allow the content to flow without cutting off */
+  box-sizing: border-box; /* Include padding in width and height calculations */
+  padding: 10px; /* Add padding for readability */
+}
+
+input.emails-settings {
+  width: 100%; /* Make the textarea full width */
+  height: auto; /* Allow the height to adjust automatically */
+  padding: 10px; /* Add padding for readability */
 }

@@ -172,6 +172,11 @@ updateForm.addEventListener("submit", function (event) {
      const name = row.querySelector("td:nth-child(1)").textContent;
      const email = row.querySelector("td:nth-child(2)").textContent;
      const dateStr = row.querySelector("td:nth-child(3)").textContent;
+    
+
+     const phoneEdit = row.querySelector('.hidden-content-phone-edit').dataset.hiddencontent;
+     const descriptionEdit = row.querySelector('.hidden-content-description-edit').dataset.hiddencontent;
+
      // Parse the date string
      let date = new Date(dateStr);
      // Get the components (month, day, year)
@@ -200,15 +205,16 @@ updateForm.addEventListener("submit", function (event) {
      // Populate the form inputs with the data from the row
      form.querySelector('input[name="rqt-upd-name"]').value = name.trim();
      form.querySelector('input[name="rqt-upd-email"]').value = email.trim();
+     form.querySelector('input[name="rqt-upd-phone"]').value = phoneEdit.trim();
      form.querySelector('input[name="rqt-upd-request-date"]').value = formattedDates.trim();
      form.querySelector('input[name="rqt-upd-start-time"]').value = startTime.trim();
      form.querySelector('input[name="rqt-upd-end-time"]').value = endTime.trim();
+     form.querySelector('textarea[name="rqt-upd-description"]').value = descriptionEdit.trim();
      form.querySelector('select[name="rqt-upd-status"]').value = status.trim();
 
-     console.log(status);
+     
 
-     // Submit the form (if you want to do this automatically, or you can let the user modify data and submit manually)
-     // form.submit();
+
    });
  });
 
@@ -260,6 +266,176 @@ updateForm.addEventListener("submit", function (event) {
       }
     });
   }
+
+
+
+  /**
+   * 
+   * 
+   * 
+   * Start of view modal
+   * 
+   * 
+  */
+
+  //Pending
+let viewPendingItem = document.querySelectorAll(".pendingViewButton");
+
+// Step 3: Add event listeners for view buttons
+for (let i = 0; i < viewPendingItem.length; i++) {
+  viewPendingItem[i].addEventListener("click", function () {
+        let pendingViewId = this.dataset.postid; // Use 'this' to refer to the current button
+        console.log("View ID:", pendingViewId);
+
+        // Get the modal
+        let pendingViewModal = document.getElementById("pending-view-modal");
+
+        // When the user clicks on the view button, open the modal
+        pendingViewModal.style.display = "block";
+
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+          pendingViewModal.style.display = "none";
+        };
+        // When the user clicks outside the modal, close the modal
+        // pendingViewModal.onclick = function () {
+        //   pendingViewModal.style.display = "none";
+        // };
+    });
+}
+
+
+ // Get all the "view" buttons in the table
+ const viewPendingButtons = document.querySelectorAll(".pendingViewButton");
+
+ // Add a click event listener to each "view" button
+ viewPendingButtons.forEach((button) => {
+   button.addEventListener("click", function () {
+     // Find the row that contains the clicked button
+     const row = button.closest("tr");
+
+     // Get the data from the row
+     const name = row.querySelector("td:nth-child(1)").textContent;
+     const email = row.querySelector("td:nth-child(2)").textContent;
+     const dateStr = row.querySelector("td:nth-child(3)").textContent;
+
+     const phone = row.querySelector('.hidden-content-phone').dataset.hiddencontent;
+     const description = row.querySelector('.hidden-content-description').dataset.hiddencontent;
+
+     const startTime = row.querySelector(
+       "td:nth-child(4) span:nth-child(1)"
+     ).textContent;
+     const endTime = row.querySelector(
+       "td:nth-child(4) span:nth-child(2)"
+     ).textContent;
+     let status = row.querySelector("td:nth-child(5)").textContent;
+
+     // Get the form you want to populate (e.g., using its ID)
+     const viewDiv = document.getElementById("pending-view-modal-content");
+
+     // Populate the form inputs with the data from the row
+     viewDiv.querySelector(".view-modal-name").textContent = name.trim();
+     viewDiv.querySelector(".view-modal-email").textContent = email.trim();
+     viewDiv.querySelector(".view-modal-phone").textContent = phone.trim();
+     viewDiv.querySelector(".view-modal-date").textContent = dateStr.trim();
+     viewDiv.querySelector(".view-modal-time").textContent = startTime.trim() + ' - ' + endTime.trim();
+     viewDiv.querySelector(".view-modal-description").textContent = description.trim();
+     viewDiv.querySelector(".view-modal-status").textContent = status.trim();
+     
+
+   });
+ });
+
+   /**
+    * 
+    * All request list
+    * 
+   */
+let viewItems = document.querySelectorAll(".viewButton");
+
+// Step 3: Add event listeners for view buttons
+for (let i = 0; i < viewItems.length; i++) {
+  viewItems[i].addEventListener("click", function () {
+        let viewId = this.dataset.postid; // Use 'this' to refer to the current button
+        console.log("View ID:", viewId);
+
+        // Get the modal
+        let viewModal = document.getElementById("view-modal");
+
+        // When the user clicks on the view button, open the modal
+        viewModal.style.display = "block";
+
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[1];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+          viewModal.style.display = "none";
+        };
+
+        // When the user clicks outside the modal, close the modal
+        // viewModal.onclick = function () {
+        //   viewModal.style.display = "none";
+        // };
+        
+    });
+}
+
+ // Get all the "view" buttons in the table
+ const viewButtons = document.querySelectorAll(".viewButton");
+
+ // Add a click event listener to each "view" button
+ viewButtons.forEach((button) => {
+   button.addEventListener("click", function () {
+     // Find the row that contains the clicked button
+     const row = button.closest("tr");
+
+     // Get the data from the row
+     const name = row.querySelector("td:nth-child(1)").textContent;
+     const email = row.querySelector("td:nth-child(2)").textContent;
+     const dateStr = row.querySelector("td:nth-child(3)").textContent;
+     const phone = row.querySelector('.hidden-content-phone-edit').dataset.hiddencontent;
+     const description = row.querySelector('.hidden-content-description-edit').dataset.hiddencontent;
+
+     const startTime = row.querySelector(
+       "td:nth-child(4) span:nth-child(1)"
+     ).textContent;
+     const endTime = row.querySelector(
+       "td:nth-child(4) span:nth-child(2)"
+     ).textContent;
+     let status = row.querySelector("td:nth-child(5)").textContent;
+
+     // Get the form you want to populate (e.g., using its ID)
+     const viewDiv = document.getElementById("view-modal-content");
+
+     // Populate the form inputs with the data from the row
+     viewDiv.querySelector(".view-modal-name").textContent = name.trim();
+     viewDiv.querySelector(".view-modal-email").textContent = email.trim();
+     viewDiv.querySelector(".view-modal-phone").textContent = phone.trim();
+     viewDiv.querySelector(".view-modal-date").textContent = dateStr.trim();
+     viewDiv.querySelector(".view-modal-time").textContent = startTime.trim() + ' - ' + endTime.trim();
+     viewDiv.querySelector(".view-modal-description").textContent = description.trim();
+     viewDiv.querySelector(".view-modal-status").textContent = status.trim();
+     
+
+   });
+ });
+
+
+
+  /***
+   * 
+   * 
+   * 
+   * End of view modal
+   * 
+   * 
+   * 
+   * 
+  */
 
 //Export
 // Get the button by ID
