@@ -144,17 +144,30 @@ function rqt_enqueue_script() {
 
 
     wp_localize_script('rqtcalendarscript', 'calendarSettings', array(
-        'disableDays' => array(
-            'sunday'    => get_option('sunday'),
-            'monday'    => get_option('monday'),
-            'tuesday'   => get_option('tuesday'),
-            'wednesday' => get_option('wednesday'),
-            'thursday'  => get_option('thursday'),
-            'friday'    => get_option('friday'),
-            'saturday'  => get_option('saturday'),
-            'start_day'  => get_option('start_day'),
-            'end_day'  => get_option('end_day'),
-        )
+            'disableDays'       => array(
+                'sunday'                 => get_option('sunday'),
+                'monday'                 => get_option('monday'),
+                'tuesday'                => get_option('tuesday'),
+                'wednesday'              => get_option('wednesday'),
+                'thursday'               => get_option('thursday'),
+                'friday'                 => get_option('friday'),
+                'saturday'               => get_option('saturday'),
+                'start_day'              => get_option('start_day'),
+                'end_day'                => get_option('end_day'),
+            ),
+            'disableTime'       => array(
+                'start_time'             => get_option('start_time'),
+                'end_time'               => get_option('end_time'),
+            ),
+            'bufferTime'       => array(
+                'allowed_buffer_time'    => get_option('allowed_buffer_time'),
+            ),
+            'disableFields'       => array(
+                'setting_phone_field'          => get_option('setting_phone_field'),
+                'setting_description_field'    => get_option('setting_description_field'),
+                'is_phone_required'            => get_option('is_phone_required'),
+                'is_description_required'      => get_option('is_description_required'),
+            )
     ));
 
     // Saved dates
@@ -537,7 +550,6 @@ function save_custom_fields_on_variants($variation_id, $i) {
     }
 }
 
-
 // Settings for selected product
 function register_custom_settings() {
     register_setting('custom_settings_group', 'selected_product_id');
@@ -559,15 +571,27 @@ function register_custom_settings() {
 }
 add_action('admin_init', 'register_custom_settings');
 
+// Section description callback
 function custom_settings_section_callback() {
     echo '<p>' . __('Select a product to save as a setting.', 'textdomain') . '</p>';
 }
 
-
-
+// Product dropdown field callback
 function selected_product_id_callback() {
+    // Retrieve the selected product ID from the database
     $selected_product_id = get_option('selected_product_id', '');
-    
+
+    // Check if WooCommerce is active
+    if (!class_exists('WooCommerce')) {
+        // If WooCommerce is inactive, display a warning and show the selected product ID (if available)
+        echo '<p style="color: red;">' . __('Please activate WooCommerce.', 'textdomain') . '</p>';
+        if ($selected_product_id) {
+            echo '<p>' . sprintf(__('Previously selected product ID: %s', 'textdomain'), esc_html($selected_product_id)) . '</p>';
+        }
+        return;
+    }
+
+    // Query for WooCommerce products with '_request_plugin_product' meta key set to 'yes'
     $args = array(
         'post_type' => 'product',
         'meta_query' => array(
@@ -581,33 +605,39 @@ function selected_product_id_callback() {
 
     $query = new \WP_Query($args);
 
+    // Check if any products are found
     if ($query->have_posts()) {
         echo '<select name="selected_product_id" id="selected_product_id">';
         echo '<option value="">' . __('Select a product', 'textdomain') . '</option>'; // Initial option
+
+        // Loop through products
         while ($query->have_posts()) {
             $query->the_post();
             $product_id = get_the_ID();
             $product_title = get_the_title();
             $product = wc_get_product($product_id);
-            
+
+            // Handle variable products and get price range
             if ($product->is_type('variable')) {
-                // Get all variation prices
                 $variation_prices = $product->get_variation_prices();
                 $min_price = min($variation_prices['price']);
                 $max_price = max($variation_prices['price']);
-                
                 $product_price = wc_price($min_price) . ' - ' . wc_price($max_price);
             } else {
+                // Get the price for simple products
                 $product_price = wc_price($product->get_price());
             }
 
+            // Check if this product is the selected one
             $selected = ($product_id == $selected_product_id) ? 'selected' : '';
+
+            // Output the product option in the select dropdown
             echo '<option value="' . esc_attr($product_id) . '" ' . $selected . '>' . esc_html($product_title) . ' - ' . $product_price . '</option>';
         }
         echo '</select>';
         wp_reset_postdata();
     } else {
-        echo '<p>' . __('No products available', 'textdomain') . '</p>';
+        echo '<p>' . __('No products available. Please ensure products are created with the "_request_plugin_product" meta field.', 'textdomain') . '</p>';
     }
 }
 

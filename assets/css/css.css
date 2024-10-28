@@ -352,6 +352,10 @@ button.remove-btn:hover {
   text-decoration: line-through;
 }
 
+#addRequestForm .hideField {
+  display: none;
+}
+
 .day td.inactive {
   color: #aaa;
 }

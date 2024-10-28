@@ -12,10 +12,12 @@
           <li><a href="#tab-4">Email</a></li>
           <li><a href="#tab-5">Exports</a></li>
           <li><a href="#tab-6">Shortcodes</a></li>
+          <li><a href="#tab-7">Extra Fields</a></li>
         </ul>
       </div>
 
       <div class="settings-tab-content">
+        
         <div id="tab-1" class="active tab-pane">
         <div class="rqt-body-container">
           <h3>General</h3>
@@ -34,6 +36,7 @@
         </div>
           
         </div>
+        
         <div id="tab-2" class="tab-pane">
         <div class="rqt-body-container">
         <h3>Date/Time</h3>
@@ -50,13 +53,13 @@
 	</form>
           <h3>Select specific dates to disable in the calendar</h3>
 
-  <div id="admin-calendar" class="admin-calendar">
+<div id="admin-calendar" class="admin-calendar">
 
 <div class="admin-month">
-          <button id="admin-prev">&#10094;</button>
-          <h1 id="admin-month-year"></h1>
-          <button id="admin-next">&#10095;</button>
-      </div>
+    <button id="admin-prev">&#10094;</button>
+    <h1 id="admin-month-year"></h1>
+    <button id="admin-next">&#10095;</button>
+</div>
   <div class="admin-weekdays">
       <div>Sun</div>
       <div>Mon</div>
@@ -69,6 +72,7 @@
   <div id="admin-days" class="admin-days">
       <!-- Calendar days will go here -->
   </div>
+
 </div>
 
 
@@ -95,43 +99,37 @@
 
 </div>
 
-
-
-  
-        </div>
-        <div id="tab-3" class="tab-pane">
-        <div class="rqt-body-container">
-          <h3>Payments</h3>
-          <?php
-
-?>
-
-<form method="post" action="options.php">
-<?php
-settings_fields('custom_settings_group');
-do_settings_sections('custom-settings-page');
-submit_button();
-?>
-</form>
 </div>
 
 
+        <div id="tab-3" class="tab-pane">
+          <div class="rqt-body-container">
+            <h3>Payments</h3>
 
+            <form method="post" action="options.php">
+            <?php
+              settings_fields('custom_settings_group');
+              do_settings_sections('custom-settings-page');
+              submit_button();
+            ?>
+            </form>
+          </div>
         </div>
+       
         <div id="tab-4" class="tab-pane">
-        <div class="rqt-body-container">
-          <h3>Emails</h3>
+          <div class="rqt-body-container">
+            <h3>Emails</h3>
 
-          <form method="post" action="options.php">
-  
-  <?php 
-    settings_fields( 'emails_options_group' );
-    do_settings_sections( 'emails-settings' );
-    submit_button();
-  ?>
-</form>
+            <form method="post" action="options.php">
+    
+            <?php 
+              settings_fields( 'emails_options_group' );
+              do_settings_sections( 'emails-settings' );
+              submit_button();
+            ?>
+          </form>
 
-        </div>
+          </div>
         </div>
 
         <div id="tab-5" class="tab-pane">
@@ -169,11 +167,28 @@ submit_button();
 
                </div>
         </div>
+
         <div id="tab-6" class="tab-pane">
         <div class="rqt-body-container">
           <h3>Shortcodes</h3>
           <code>[request_shortcode]</code><br><br><br>
           <code>[profile_shortcode]</code>
+        </div>
+        </div>
+
+        <div id="tab-7" class="tab-pane">
+        <div class="rqt-body-container">
+          <h3>Extra fields Settings</h3>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('extra_fields_options_group');
+            do_settings_sections('extra-fields-settings');
+
+            submit_button();
+           
+            ?>
+
+        </form>
         </div>
         </div>
 

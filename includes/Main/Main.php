@@ -22,6 +22,8 @@ class Main
 
 	public $emails = array();
 
+	public $extrafields = array();
+
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( dirname( __FILE__, 2 ) );
 		$this->plugin_url = plugin_dir_url( dirname( __FILE__, 2 ) );
@@ -64,6 +66,13 @@ class Main
 			'cancel_email_input' => 'Email Subject',
 			'cancel_email_textarea' => 'Cancel Email'
 			
+		);
+
+		$this->extrafields = array(
+			'setting_phone_field' => 'Disable Phone field',
+			'is_phone_required' => 'Make Phone field required',
+			'setting_description_field' => 'Disable Description field',
+			'is_description_required' => 'Make Description area required'			
 		);
 	}
 }

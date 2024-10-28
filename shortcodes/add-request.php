@@ -19,18 +19,27 @@
 
                <label for="name">Full name:</label><br>
                 <input type="text" class="name" name="rqt-name"><br>
-                <small class="field-msg error" data-error="invalidName">Your Name is Required</small>
+                <small class="field-msg error" data-error="invalidName">Your Name is Required</small><br>
 
                 <label for="email">Email:</label><br>
                 <input type="email" class="email" name="rqt-email"><br>
-                <small class="field-msg error" data-error="invalidEmail">The Email address is not valid</small>
+                <small class="field-msg error" data-error="invalidEmail">The Email address is not valid</small><br>
 
-                <label for="phone">Phone Number:</label><br>
-                <input type="number" class="phone" name="phone"><br>
+                <div id="front_phone_field_div">
+                    <label for="phone">Phone Number:</label><br>
+                    <input type="number" id="front_phone_field" class="phone" name="phone"><br>
+                    <small class="field-msg error" data-error="invalidPhone">The Phone field is Required</small><br>
+                </div>
 
-                <label for="description">Description:</label><br>
-                <textarea class="description" name="description"></textarea><br>
-                <small class="field-msg error" data-error="invalidMessage">A Description is Required</small><br>
+                <div id="front_description_field_div">
+                    <label for="description">Description:</label><br>
+                    <textarea id="front_description_field" class="description" name="description"></textarea><br>
+                    <small class="field-msg error" data-error="invalidMessage">A Description is Required</small><br>
+                </div>
+
+                
+
+               
 
                 <input type="hidden" id="start-time" name="rqt_start_time">
                 <input type="hidden" id="end-time" name="rqt_end_time">

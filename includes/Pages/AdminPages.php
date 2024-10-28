@@ -155,6 +155,7 @@ class AdminPages extends Main
         );
     }
 
+	// Prepare settings for emails
 	foreach ($this->emails as $key => $value) {
 		if (strpos($key, '_input') !== false) {
 			// This is an input field
@@ -183,6 +184,14 @@ class AdminPages extends Main
 		}
 	}
 	
+	// Prepare settings for extra fields
+    foreach ($this->extrafields as $key => $value) {
+        $args[] = array(
+            'option_group' => 'extra_fields_options_group',
+            'option_name' => $key,
+            'callback' => array($this->settings_callbacks, 'checkboxSanitize')
+        );
+    }
 
     // Register all settings
     foreach ($args as $arg) {
@@ -226,6 +235,12 @@ public function setSections()
             'title' => 'Set Emails for requests',
             'callback' => array($this->settings_callbacks, 'emailsSectionManager'),
             'page' => 'emails-settings'
+        ),
+		array(
+            'id' => 'extra_fields_admin_index',
+            'title' => 'Set extra fields for requests',
+            'callback' => array($this->settings_callbacks, 'emailsSectionManager'),
+            'page' => 'extra-fields-settings'
         )
     );
 
@@ -300,8 +315,6 @@ public function setFields()
 	}
 
 	// Prepare fields for emails
-	
-
 		foreach ($this->emails as $key => $value) {
 			// Determine the field type based on the key
 			$field_type = (strpos($key, '_textarea') !== false) ? 'textarea' : 'input';
@@ -322,6 +335,24 @@ public function setFields()
 		
 		
 	}
+
+		// Prepare fields for extra fields
+		foreach ($this->extrafields as $key => $value) {
+			$args[] = array(
+				'id' => $key,
+				'title' => $value,
+				'callback' => array($this->settings_callbacks, 'checkboxField'),
+				'page' => 'extra-fields-settings',
+				'section' => 'extra_fields_admin_index',
+				'args' => array(
+					'label_for' => $key,
+					'class' => 'extra-fields-settings'
+				)
+			);
+	
+			
+		}
+
 	
 
     // Set the fields

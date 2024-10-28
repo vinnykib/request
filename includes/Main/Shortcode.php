@@ -255,7 +255,7 @@ class Shortcode extends Main
     
                 wp_send_json_success(array('message' => 'Request created successfully.'));
             }
-        } else {
+        } else {//////
             wp_send_json_error(array('message' => 'Missing required fields.'));
         }
         exit;
